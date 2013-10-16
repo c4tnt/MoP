@@ -1,0 +1,611 @@
+actor MDoomImp : DoomImp replaces DoomImp 
+{
+  health 60
+  radius 20
+  height 56
+  mass 100
+  speed 8
+ 
+  PainChance "Control", 255
+  
+  
+  // Takes Damage From
+  DamageFactor "MarineDamage", 1
+  DamageFactor "Control", 1
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  // immune to
+  DamageFactor "ImpBallDamage", 0
+
+  states
+  {
+  Spawn:
+    TROO A 10 A_Look
+    TROO B 10 
+    loop
+  See:
+    TROO AABBCCDD 3 A_Chase
+    loop	
+  Death:
+    TROO I 8
+    TROO J 8 A_Scream
+    TROO K 6
+    TROO L 6 A_NoBlocking
+    TROO M -1
+    stop
+  XDeath:
+    TROO N 5
+    TROO O 5 A_XScream
+    TROO P 5
+    TROO Q 5 A_NoBlocking
+    TROO RST 5
+    TROO U -1
+    stop
+  }
+}
+
+actor MDoomImpBall : DoomImpBall replaces DoomImpBall
+{
+  DamageType "ImpBallDamage"
+}
+
+// DarkImp Nami
+
+actor MDarkImp : DoomImp 5003
+{
+    game Doom
+    spawnid 155 // [RT] I think this is the right Spawnid, change if it isn't
+    obituary "$OB_DARKIMP"
+    hitobituary "$OB_DARKIMP_MELEE"
+    health 120
+    Speed 10
+    PainChance 200
+    seesound "darkimp/see"
+    painsound "darkimp/pain"
+    deathsound "darkimp/death"
+    activesound "darkimp/active"
+    MONSTER 
+    +FLOORCLIP
+	
+    MeleeSound "imp/melee"
+    Obituary "%o was cursed by a dark imp."
+    HitObituary "%o was touched by a dark imp."
+    MissileType MDarkSeeker
+    MeleeDamage 4
+	
+	PainChance "Control", 255
+  
+  
+    // Takes Damage From
+    DamageFactor "MarineDamage", 1
+    DamageFactor "Control", 1
+    DamageFactor "ZombiesDamage", 0.5
+    DamageFactor "CacoDamage", 0.5
+    DamageFactor "SkelDamage", 0.5
+    DamageFactor "FatsoDamage", 0.5
+    DamageFactor "KnightDamage", 0.5
+    DamageFactor "ArachDamage", 0.5
+    DamageFactor "viledamage", 0.5
+    // immune to
+    DamageFactor "ImpBallDamage", 0
+	
+    States
+    {
+    Spawn:
+        DRKI A 10 A_Look
+        DRKI B 10
+        Loop
+    See:
+        DRKI AABBCCDD 3 A_Chase
+        loop	
+    Melee:
+    Missile:
+        DRKI E 4 A_FaceTarget
+        DRKI F 4 A_FaceTarget
+        DRKI G 4 bright A_ComboAttack
+        DRKI G 0 A_Jump(127,1)
+        Goto See
+        DRKI G 1 A_SpidRefire
+        Goto Missile+1  
+    Pain:
+        DRKI H 2
+        DRKI H 2 A_Pain
+        Goto See
+    Death:
+        DRKI I 8
+        DRKI J 8 A_Scream
+        DRKI K 6
+        DRKI L 6 A_Fall
+        DRKI M -1
+        Stop
+    XDeath:
+        DRKI N 5
+        DRKI O 5 A_XScream
+        DRKI P 5
+        DRKI Q 5 A_Fall
+        DRKI RST 5
+        DRKI U -1
+        Stop
+    Raise:
+        DRKI ML 8
+        DRKI KJI 6
+        Goto See
+    }
+}
+
+actor MDarkSeeker
+{
+    Radius 6
+    Height 6
+    Speed 15
+    Damage 4
+	scale 0.65
+    +SEEKERMISSILE
+    PROJECTILE
+    RENDERSTYLE ADD
+    ALPHA 0.90
+    SeeSound "imp/attack"
+    DeathSound "imp/shotx"
+	DamageType "ImpBallDamage"
+    States
+    {
+    Spawn:
+        DKB1 ABAB 1 Bright A_CStaffMissileSlither
+		DKB1 B 0 Bright A_SeekerMissile(2,3)
+        Loop
+    Death:
+        DKB1 CDE 3 Bright
+        Stop
+    }
+}
+
+/////////////
+
+//Shadow
+ACTOR MShadow 20002
+{
+	Health 160
+	Radius 20
+	Height 56
+	Mass 100
+	Speed 14
+	PainChance 127
+	Monster
+	RenderStyle "Translucent"
+	Alpha 0.7
+	+FLOORCLIP
+	PainSound "Shadow/pain"
+	DeathSound "Shadow/death"
+	ActiveSound "Shadow/active"
+	Obituary "%o was assassinated by a shadow."
+	MissileType ShadowBall
+	PainChance "Control", 255
+    // Takes Damage From
+    DamageFactor "MarineDamage", 1
+    DamageFactor "Control", 1
+    DamageFactor "ZombiesDamage", 0.5
+    DamageFactor "CacoDamage", 0.5
+    DamageFactor "SkelDamage", 0.5
+    DamageFactor "FatsoDamage", 0.5
+    DamageFactor "KnightDamage", 0.5
+    DamageFactor "ArachDamage", 0.5
+    DamageFactor "viledamage", 0.5
+    // immune to
+    DamageFactor "ImpBallDamage", 0
+	
+	States
+	{
+	Spawn:
+	    SHDW E 10 A_look
+	    loop
+	See:
+		SHDW AAA 1 A_FastChase
+		SHDW A 0 A_SpawnItemEx("ShadowGhostA", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW BBB 1 A_FastChase
+		SHDW B 0 A_SpawnItemEx("ShadowGhostB", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW CCC 1 A_FastChase
+		SHDW C 0 A_SpawnItemEx("ShadowGhostC", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW DDD 1 A_FastChase
+		SHDW D 0 A_SpawnItemEx("ShadowGhostD", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW AAA 1 A_FastChase
+		SHDW A 0 A_SpawnItemEx("ShadowGhostA", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW BBB 1 A_FastChase
+		SHDW B 0 A_SpawnItemEx("ShadowGhostB", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW CCC 1 A_FastChase
+		SHDW C 0 A_SpawnItemEx("ShadowGhostC", 0, 0, 0, 0, 0, 0, 0, 128)
+		SHDW DDD 1 A_FastChase
+		SHDW D 0 A_SpawnItemEx("ShadowGhostD", 0, 0, 0, 0, 0, 0, 0, 128)
+	    loop	
+	Missile:
+		SHDW E 8 A_FaceTarget
+		SHDW F 5 
+		SHDW G 5 BRIGHT A_MissileAttack
+		SHDW F 5 A_JumpIf (health < 60, 3)
+		SHDW F 0 A_Jump(127,2)
+		SHDW E 6
+		Goto See
+		SHDW E 6 
+		SHDW E 1 A_SpidRefire
+		Goto Missile+1  
+	Pain:
+		SHDW H 4
+		SHDW H 4 A_Pain
+		Goto See+1
+	Death:
+		SHDW I 6 A_Scream
+		SHDW J 5
+		SHDW K 5 A_SpawnItemEx("Shadowtorso", 0, 0, 0, 1, 0, 0, 0, 128)
+		SHDW L 5 A_Fall
+		SHDW MNO 6 
+		SHDW P -1
+		Stop
+	XDeath:
+		SHDX A 8
+		SHDX B 6 A_XScream
+		SHDX C 6 
+		SHDX D 6 A_Fall
+ 		SHDX E 6
+ 		SHDX F 6
+		SHDX G -1
+		Stop
+	Raise:
+		SHDW M 8
+		SHDW KLJI 8
+		Goto See
+	}
+}
+
+ACTOR ShadowBall
+{
+	Radius 6
+	Height 8
+	Speed 17
+	Damage 4
+	Projectile
+	+RANDOMIZE
+	RenderStyle "ADD"
+	Alpha 0.75
+	SeeSound "Shadow/attack"
+	DeathSound "imp/shotx"
+	DamageType "ImpBallDamage"
+	Decal DoomImpScorch
+	States
+	{
+	Spawn: 
+		SBAL ABC 3 BRIGHT A_SpawnItemEx("ShadowTrail", 0, 0, 0, 0, 0, 0, 0, 128)
+		Loop
+	Death:
+		SBAL C 5 Bright
+		SBAL DEFGH 4 BRIGHT
+		Stop
+	}
+}
+
+ACTOR ShadowGhostA
+{
+	Radius 4
+	Height 8
+	Speed 0
+	Damage 0
+	Mass 75
+	RenderStyle "Translucent"
+	Alpha 0.3
+	PROJECTILE
+	States
+	{
+	Spawn:
+		TROX A 5
+		Stop
+	}
+}
+
+ACTOR ShadowGhostB : ShadowGhostA
+{
+	States
+	{
+	Spawn:
+		SHDX B 10
+		Stop
+	}
+}
+
+ACTOR ShadowGhostC : ShadowGhostA
+{
+	States
+	{
+	Spawn:
+		SHDX C 10
+		Stop
+	}
+}
+
+ACTOR ShadowGhostD : ShadowGhostA
+{
+	States
+	{
+	Spawn:
+		SHDX D 10
+		Stop
+	}
+}
+
+ACTOR Shadowtorso
+{
+	Radius 12
+	Height 15
+	Speed 1
+	Mass 100
+	RenderStyle "Translucent"
+	Alpha 0.7
+	+Doombounce
+      States
+	{
+	Spawn:
+         SHDW QRS 5
+         SHDW T 5 A_Fall
+         SHDW U 5
+	RemoveLoop:	 
+         SHDW V 1 A_CheckSight("Remove")
+         loop
+	Remove:	 
+		 TNT1 A 0 Thing_Remove (0)
+	     stop	 
+ 
+	}
+}
+
+actor ShadowTrail
+{
+    Radius 1
+    Height 1
+    Speed 0
+    PROJECTILE
+    RENDERSTYLE ADD
+    ALPHA 0.6
+    +NOCLIP
+    States
+    {
+    Spawn:
+     SHTR ABCDEF 4 Bright
+        Stop       
+    }
+}
+
+// SoulHarvester
+
+actor MSoulHarvester 20001
+{
+    Health 100
+    Radius 20
+    Height 56
+    Speed 10
+    PainChance 160
+    MONSTER 
+    +FLOORCLIP
+    SeeSound "harvester/sight"
+    PainSound "imp/pain"
+    DeathSound "harvester/death"
+    ActiveSound "imp/active"
+    MeleeSound "imp/melee"
+    Obituary "%o couldn't evade the soul harvester's attack."
+    MissileType SoulHarvesterBall
+    MeleeDamage 3
+	
+	PainChance "Control", 255
+    // Takes Damage From
+    DamageFactor "MarineDamage", 1
+    DamageFactor "Control", 1
+    DamageFactor "ZombiesDamage", 0.5
+    DamageFactor "CacoDamage", 0.5
+    DamageFactor "SkelDamage", 0.5
+    DamageFactor "FatsoDamage", 0.5
+    DamageFactor "KnightDamage", 0.5
+    DamageFactor "ArachDamage", 0.5
+    DamageFactor "viledamage", 0.5
+    // immune to
+    DamageFactor "ImpBallDamage", 0
+	
+    States
+    {
+    Spawn:
+        SLHV AB 10 A_Look
+        Loop
+    See:
+        SLHV AABBCCDD 3 A_Chase
+        loop	
+    Melee:
+    Missile:
+        SLHV EFG 3 A_FaceTarget
+        SLHV HIJK 4 Bright A_FaceTarget
+        SLHV L 6 Bright A_MissileAttack
+        SLHV M 8
+        Goto See
+    Pain:
+    	SLHV N 3
+    	SLHV N 3 A_Pain
+    	Goto See
+    Death:
+        SLHV O 7 A_Scream
+        SLHV P 7
+        SLHV QR 7 
+        SLHV S 6 A_CustomMissile("SoulHarvesterGhost", 32, 0, 0)
+        SLHV T 5 A_Fall
+        SLHV UV 5
+        SLHV W -1
+        Stop
+    XDeath:
+        SLHV X 6 A_Xscream
+        SLHV Y 6 A_CustomMissile("SoulHarvesterGhost", 32, 0, 0)
+        SLHV Z 6
+        SLHV [ 6 A_Fall
+        SLHV ] 6
+        SLHX A -1
+        Stop
+    Raise:
+        SLHV WVUTSRQPO 5
+        Goto See
+    }
+}
+
+actor SoulHarvesterBall
+{
+    Radius 8
+    Height 6
+    Scale 0.4
+    Speed 10
+    Damage 9
+    +SEEKERMISSILE
+    PROJECTILE
+    Renderstyle ADD
+    SeeSound "harvester/scream"
+    DeathSound "imp/shotx"
+	DamageType "ImpBallDamage"
+	Decal DoomImpScorch
+    States
+    {
+    Spawn:
+    	SHBA A 0 Bright A_CustomMissile("SoulBallTrail", 0, 0, 180)
+        SHBA AB 2 Bright A_SeekerMissile (10,20)
+        Loop
+    Death:
+        SHBA CDEFGHIJKL 4 Bright
+        Stop
+    }
+}
+	
+actor SoulHarvesterGhost
+{
+    Radius 1
+    Height 1
+    Speed 0
+    PROJECTILE
+    RENDERSTYLE ADD
+    ALPHA 0.7
+    +NOCLIP
+    SeeSound "harvester/ghost"
+    States
+    {
+    Spawn:
+    Death:
+        SHGH ABCDEFG 4 Bright
+        Stop
+    }
+}
+
+actor SoulBallTrail
+{
+    Radius 1
+    Height 1
+    Speed 0
+    PROJECTILE
+    RENDERSTYLE ADD
+    ALPHA 0.5
+    +NOCLIP
+    States
+    {
+    Spawn:
+    Death:
+    	SBTR H 6 
+        SBTR ABCDEFG 3 Bright
+        Stop
+    }
+}
+ACTOR MFlyingImp 25011
+{
+  OBITUARY "%o was blasted by an flying imp."
+  HITOBITUARY "%o was slashed by an flying imp."
+  Health 60
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 8
+  PainChance 200
+//  MissileType "FlyingImpBall"
+  MissileType "MDoomImpBall"
+  SEESOUND "imp/sight"
+  PAINSOUND "imp/pain"
+  DEATHSOUND "imp/death"
+  ACTIVESOUND "imp/active"
+  MONSTER
+  +Float
+  +NoGravity
+
+    PainChance "Control", 255
+// Takes Damage From
+  DamageFactor "MarineDamage", 1
+  DamageFactor "Control", 1
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+// immune to
+  DamageFactor "ImpBallDamage", 0
+
+  states
+  {
+  Spawn:
+    AEIM ABCD 10 A_Look
+    Loop
+  See:
+    AEIM AABBCCDD 3 A_Chase
+    Loop
+  Missile:
+    AEIM E 4 A_FaceTarget
+    AEIM F 6 A_MissileAttack
+    AEIM E 4 A_FaceTarget
+    AEIM F 6 A_MissileAttack
+    AEIM E 4 A_FaceTarget
+    AEIM F 6 A_MissileAttack
+    Goto See
+  Pain:
+    AEIM G 2
+    AEIM G 2 A_Pain
+    Goto See
+  Death:
+    AEIM H 8
+    AEIM I 8 A_Scream
+    AEIM J 6
+    AEIM K 6 A_NoBlocking
+    AEIM L 6
+    AEIM M 6
+    AEIM N -1
+    Stop
+  Raise:
+    AEIM NMLKJIH 2
+    Goto See
+  }
+}
+
+actor FlyingImpBall
+{
+  radius 6
+  height 8
+  speed 10
+  damage 3
+  renderstyle Add
+  seesound "imp/attack"
+  deathsound "imp/shotx"
+  PROJECTILE
+  +RANDOMIZE
+//
+  DamageType "ImpBallDamage"
+//
+  Decal DoomImpScorch
+  states
+  {
+  Spawn:
+    DRFX ABCDEF 4 bright
+    loop
+  Death:
+    DRFX GHIJKL 6 bright
+    stop
+  }
+}

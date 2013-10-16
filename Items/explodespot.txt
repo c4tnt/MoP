@@ -1,0 +1,70 @@
+actor ExplodeSpot300 6082
+{
+	//$Category MOP_MarineItems
+	PainChance 255
+	Radius 10
+	Height 10
+	Health 300
+	Mass 0x7fffffff
+	damagefactor "Telefrag", 0.0
+
+	+SHOOTABLE
+	+NOBLOOD
+	+NEVERRESPAWN
+	States
+	{
+	Spawn:
+		TNT1 A 1 HealThing(300)
+		loop
+	Death:
+		TNT1 A 1
+		stop
+	}
+}
+
+actor ExplodeSpot140 6083
+{
+	//$Category MOP_MarineItems
+	PainChance 255
+	Radius 10
+	Height 10
+	Health 140
+	Mass 0x7fffffff
+	damagefactor "Telefrag", 0.0
+
+	+SHOOTABLE
+	+NOBLOOD
+	+NEVERRESPAWN
+	States
+	{
+	Spawn:
+		TNT1 A 1 HealThing(140)
+		loop
+	Death:
+		TNT1 A 1
+		stop
+	}
+}
+
+actor ExplodeSpot4000NR 6084
+{
+ //$Category MOP_MarineItems
+ PainChance 255
+ Radius 10
+ Height 10
+ Health 4000
+ damagefactor "Telefrag", 0
+ Mass 0x7fffffff
+ +SHOOTABLE
+ +NOBLOOD
+ +NEVERRESPAWN
+ States
+ {
+ Spawn:
+  TNT1 A -1
+  stop
+ Death:
+  TNT1 A 1
+  stop
+ }
+}

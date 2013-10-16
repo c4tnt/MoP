@@ -1,0 +1,463 @@
+
+ACTOR ZombieManClass : PlayerPawn
+{
+  Health 20
+  Speed 0.35
+  Radius 20
+  Height 56
+  Mass 100
+  PainChance 200
+
+  Player.MorphWeapon ZombieRifle
+  Player.DisplayName "ZombieMan"
+  Player.WeaponSlot 1, ZombieRifle
+  Player.MaxHealth 45
+  Player.ViewHeight 47
+  Player.SoundClass Brainless
+  Player.JumpZ 5
+
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	POSS AB 10 
+    Loop
+  See:
+    POSS A 0 
+    POSS A 0 A_Jump (240,2)
+	POSS A 0 A_PlaySoundEx ("grunt/active","body")
+    POSS ABCD 4 
+    Loop
+  Missile:
+	POSS F 5
+	POSS E 8 bright
+    POSS F 8 
+    Goto spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    POSS L -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    POSS U -1
+    stop
+  }
+}
+
+// Weapon 
+ACTOR ZombieRifle : Weapon 
+{ 
+  weapon.kickback 100
+  attacksound "weapons/pistol"
+  obituary "%o was killed by %k."
+  +NOEXTREMEDEATH
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Ready:
+    POGN A 5 A_WeaponReady
+	POGN A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	POGN A 0 HealThing(1)
+	goto ready 
+  Select:
+	POGN A 1 A_Raise 
+    loop
+  DeSelect:
+    POGN A 1 A_Lower
+    Loop
+  Fire:
+    POGN B 4 bright
+    POGN C 3 bright A_FireBullets (1.0,1.0,1,8,"FBulletPuff",1)
+    POGN C 0 A_Refire
+	POGN A 5
+    Goto Ready
+  AltFire:
+    POGN A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready
+  }
+}
+
+// ChainSaw Zombieman Class
+
+ACTOR ChainsawZombieClass : PlayerPawn
+{
+  Health 100
+  Speed 0.9
+  Radius 20
+  Height 56
+  Mass 100
+  PainChance 200
+  Player.MorphWeapon ZombieChainSaw
+  Player.DisplayName "ChainsawZombieMan"
+  Player.WeaponSlot 1, ZombieChainSaw
+  Player.MaxHealth 100
+  Player.ViewHeight 47
+  Player.SoundClass Brainless
+  Player.JumpZ 5
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	CHAN AB 8 
+    Loop
+  See:
+    CHAN A 0 
+    CHAN A 0 A_Jump (240,2)
+	CHAN A 0 A_PlaySoundEx ("grunt/active","body")
+    CHAN ABCD 4 
+    Loop
+  Missile:
+    CHAN EF 4 
+    Goto spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    CHAN N -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    CHAN W -1
+    stop
+  }
+}
+
+// Weapon 
+
+
+ACTOR ZombieChainSaw : Chainsaw 
+{ 
+  obituary "%o was sliced by a madman %k with a chainsaw!"
+  +NOEXTREMEDEATH
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Ready:
+    SAWG CD 3 A_WeaponReady
+	SAWG A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	SAWG A 0 HealThing(1)
+	goto ready 
+  Select:
+	SAWG C 1 A_Raise 
+    loop
+  DeSelect:
+    SAWG C 1 A_Lower
+    Loop
+  Fire:
+    SAWG AB 3 A_Saw ("weapons/sawfull","weapons/sawhit",2,"FBulletPuff")
+    SAWG B 0 A_ReFire
+    goto Ready
+  AltFire:
+    SAWG A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready
+  Spawn:
+    CSAW A 1 Thing_remove(0)
+    stop
+  }
+}
+
+// Plasma Zombie
+
+ACTOR PlasmaZombieClass : PlayerPawn
+{
+  Health 50
+  Speed 0.4
+  Radius 20
+  Height 56
+  Mass 100
+  PainChance 200
+  Player.MorphWeapon PlasmaZombieRifle
+  Player.DisplayName "Plasma Zombie"
+  Player.WeaponSlot 1, PlasmaZombieRifle
+  Player.MaxHealth 50
+  Player.ViewHeight 41
+  Player.SoundClass Brainless
+  Player.JumpZ 9
+
+  DamageFactor "MarineDamage", 0.75
+  DamageFactor "BFGSplash", 0.75
+  DamageFactor "MarineRLDamage", 0.75
+  DamageFactor "CybRLDamage", 0.25
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    ZMAY AB 10 
+    Loop
+  See:
+    ZMAY A 0 
+    ZMAY A 0 A_Jump (240,2)
+    ZMAY A 0 A_PlaySoundEx ("grunt/active","body")
+    ZMAY ABCD 4 
+    Loop
+  Missile:
+    ZMAY E 1
+    ZMAY F 2 bright
+    ZMAY E 1
+    ZMAY F 2 bright
+    ZMAY E 1
+    ZMAY F 2 bright
+    ZMAY E 10 
+    Goto spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    ZMAY L -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    ZMAY V -1
+    stop
+  }
+}
+
+// Weapon 
+
+
+ACTOR PlasmaZombieRifle : Weapon 
+{ 
+  weapon.kickback 100
+  attacksound "weapons/pistol"
+  obituary "%o was plasmaed by John Stalve-- uhm, %k."
+  +NOEXTREMEDEATH
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Select:
+    PLSG A 1 A_Raise 
+    loop
+  DeSelect:
+    PLSG A 1 A_Lower
+    Loop
+  Ready:
+    PLSG A 7 A_WeaponReady
+    TNT1 A 0 A_JumpIfInventory ("Mskull",0,3)
+    PLSG A 7 A_WeaponReady
+    TNT1 A 0 A_JumpIfInventory ("Mskull",3,1)
+    Loop
+    TNT1 A 0 HealThing(1)
+    goto ready
+  Fire:
+    PLSG A 1 A_GunFlash
+    PLSG A 2 A_FireCustomMissile ("ZPlasmaBall")
+    PLSG A 1
+    PLSG A 2 A_FireCustomMissile ("ZPlasmaBall")
+    PLSG A 1
+    PLSG A 2 A_FireCustomMissile ("ZPlasmaBall")
+    PLSG BC 2
+    PLSG D 3
+    PLSG E 7
+    PLSG DCB 4
+    Goto Ready
+  Flash:
+    PLSF A 1 Bright A_Light1
+    PLSF B 2 Bright A_Light2
+    PLSF A 1 Bright A_Light1
+    PLSF B 2 Bright A_Light2
+    PLSF A 1 Bright A_Light1
+    PLSF B 2 Bright A_Light2
+    PLSF A 0 A_Light0
+    Stop
+  AltFire:
+    PLSG A 5 ACS_ExecuteAlways (991,0,3,0)
+    goto ready
+  Spawn:
+    TNT1 A 1 Thing_Remove (0)
+    Stop
+  }
+}
+
+ACTOR RocketZombieClass : PlayerPawn
+{
+  Health 20
+  Speed 0.35
+  Radius 20
+  Height 56
+  Mass 100
+  PainChance 200
+
+  Player.MorphWeapon ZombieRL
+  Player.DisplayName "RocketZombie"
+  Player.WeaponSlot 1, ZombieRL
+  Player.MaxHealth 45
+  Player.ViewHeight 47
+  Player.SoundClass Brainless
+  Player.JumpZ 5
+
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    MPOS AB 10 
+    Loop
+  See:
+    MPOS A 0 
+    MPOS A 0 A_Jump (240,2)
+    MPOS A 0 A_PlaySoundEx ("grunt/active","body")
+    MPOS ABCD 4 
+    Loop
+  Missile:
+    MPOS F 5
+    MPOS E 8 bright
+    MPOS F 8 
+    Goto spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    MPOS M -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    MPOS V -1
+    stop
+  }
+}
+
+// Weapon 
+ACTOR ZombieRL : Weapon 
+{ 
+  weapon.kickback 100
+  attacksound "weapons/pistol"
+  obituary "%o was killed by %k."
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Ready:
+    MISG A 5 A_WeaponReady
+    MISG A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+    MISG A 0 HealThing(1)
+    goto ready 
+  Select:
+    MISG A 1 A_Raise 
+    loop
+  DeSelect:
+    MISG A 1 A_Lower
+    Loop
+  Fire:
+    MISG B 8 A_GunFlash
+    MISG B 12 bright A_FireCustomMissile ("PCybRocket")
+    MISG B 10
+    MISG B 0 A_Refire
+    MISG B 5
+    Goto Ready
+  Flash:
+    MISF A 3 Bright A_Light1
+    MISF B 4 Bright
+    MISF CD 4 Bright A_Light2
+    Goto LightDone
+  AltFire:
+    POGN A 5 ACS_ExecuteAlways (991,0,3,0)
+    goto ready
+  }
+}

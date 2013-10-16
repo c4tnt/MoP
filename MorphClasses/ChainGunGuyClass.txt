@@ -1,0 +1,236 @@
+ACTOR ChainGunGuyClass : PlayerPawn
+{
+  Health 70
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 0.35
+  PainChance 170
+  Player.MorphWeapon "ChainGuyGun"
+  Player.WeaponSlot 1, ChainGuyGun
+  Player.DisplayName "Chaingunner"
+  Player.MaxHealth 70   
+  Player.ViewHeight 50
+  Player.SoundClass Brainless
+  Player.JumpZ 10
+ 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+
+  +NOPAIN
+  -PICKUP
+  +NOSKIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    CPOS AB 10
+    loop
+  See:
+    CPOS A 0 
+	CPOS A 0 A_Jump (240,2)
+	CPOS A 0 A_PlaySoundEx ("chainguy/active","body")	
+    CPOS ABCD 4 
+    Loop
+  Missile:
+    CPOS E 5 bright
+    CPOS FE 5 bright
+	Goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    CPOS N -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    CPOS T -1
+    stop
+  }
+}
+
+ACTOR ChainGuyGun : Weapon
+{
+  OBITUARY "%o was perforated by %k."
+  ATTACKSOUND "weapons/shotgf"
+  weapon.kickback 100
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Ready:
+    CHGG A 5 A_WeaponReady	
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect: 
+    CHGG A 1 A_Lower
+    Loop
+  Select:
+    CHGG A 1 A_Raise
+	goto ready
+  Fire:
+	CHGG A 0 A_GunFlash
+    CHGG A 2 
+    CHGG B 3 A_FireBullets (3.2, 1.2, -1, 4, "FBulletPuff")
+	CHGG C 2
+	CHGG D 3 A_FireBullets (3.2, 1.2, -1, 4, "FBulletPuff")
+	CHGG B 0 A_Refire	
+    goto Ready
+  AltFire:
+    CHGG A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready
+  Flash:
+	CHGF A 2 bright A_Light1
+    CHGF B 3 bright A_Light2
+	CHGF A 5 bright A_Light1
+	CHGF A 0 bright A_Light0
+    Goto Lightdone
+
+  }
+}
+
+ACTOR ChainGunGuy2Class : PlayerPawn
+{
+  Health 150
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 0.30
+  PainChance 170
+  Player.MorphWeapon "DoubleChainGun"
+  Player.WeaponSlot 1, DoubleChainGun
+  Player.DisplayName "DoubleChaingunner"
+  Player.MaxHealth 150  
+  Player.ViewHeight 50
+  Player.SoundClass Brainless
+  Player.JumpZ 10
+ 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  +NOPAIN
+  -PICKUP
+  +NOSKIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    DPOS AB 10
+    loop
+  See:
+    DPOS A 0 
+	DPOS A 0 A_Jump (240,2)
+	DPOS A 0 A_PlaySoundEx ("chainguy/active","body")	
+    DPOS ABCD 4 
+    Loop
+  Missile:
+    DPOS E 5 bright
+    DPOS FE 5 bright
+	Goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    DPOS N -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    DPOS T -1
+    stop
+  }
+}
+
+ACTOR DoubleChainGun : Weapon
+{
+  OBITUARY "%o was perforated by %k."
+  ATTACKSOUND "weapons/shotgf"
+  weapon.kickback 100
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Ready:
+    DCGN A 5 A_WeaponReady	
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect: 
+    DCGN A 1 A_Lower
+    Loop
+  Select:
+    DCGN A 1 A_Raise
+	goto ready
+	Fire:
+	DCGN B 5 A_FireBullets (3.2, 1.2, -1, 5, "FBulletPuff")
+	DCGN A 0 A_FireBullets (5.2, 1.2, -1, 5, "FBulletPuff")
+	DCGN C 5 A_FireBullets (3.2, 1.2, -1, 5, "FBulletPuff")
+	DCGN A 0 A_FireBullets (5.2, 1.2, -1, 5, "FBulletPuff")
+	goto Ready
+/*  Fire:
+	DCGG A 0 A_GunFlash
+    DCGG A 5 A_FireBullets (3.2, 1.2, -1, 5, "FBulletPuff")
+	DCGG A 0 A_FireBullets (5.2, 1.2, -1, 5, "FBulletPuff")
+    DCGG B 5 A_FireBullets (3.2, 1.2, -1, 5, "FBulletPuff")
+	DCGG B 0 A_FireBullets (5.2, 1.2, -1, 5, "FBulletPuff")
+	DCGG B 0 A_Refire	
+    goto Ready 
+	*/
+  AltFire:
+    DCGN A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready
+  Flash:
+	DCGF A 5 bright A_Light1
+    DCGF B 5 bright A_Light2
+	DCGF A 0 bright A_Light0
+    Goto Lightdone
+  }
+}

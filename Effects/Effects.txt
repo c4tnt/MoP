@@ -1,0 +1,149 @@
+actor FBulletPuff : BulletPuff
+{
+ DamageType "ZombiesDamage"
+}
+
+ACTOR MBloodSplashBase : BloodSplashBase replaces BloodSplashBase
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    BSPH EFGHIJK 4
+    Stop
+  }
+}
+
+ACTOR MWaterSplashBase : WaterSplashBase replaces WaterSplashBase
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    SPSH EFGHIJK 4
+    Stop
+  }
+}
+
+ACTOR MSludgeSplashBase : SludgeSplash replaces SludgeSplash
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    SLDG EFGH 4
+    Stop
+  }
+}
+
+ACTOR MSlimeSplash : SlimeSplash replaces SlimeSplash
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    SLIM EFGH 4
+    Stop
+  }
+}
+
+ACTOR MLavaSplash : LavaSplash replaces LavaSplash
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    LVAS ABCDEF 5 Bright
+    Stop
+  }
+}
+
+ACTOR MBloodSplash : BloodSplash replaces BloodSplash
+{
+   scale 0.8
+   States
+   {
+      Spawn:
+         BSPH ABCD 6
+         Stop
+      Death:
+         BSPH D 6
+         Stop
+   }
+}
+
+ACTOR MWaterSplash : WaterSplash replaces WaterSplash
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    SPSH ABCD 6
+    Stop
+  Death:
+    SPSH D 6
+    Stop
+  }
+}
+
+ACTOR MSludgeChunk : SludgeChunk replaces SludgeChunk
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    SLDG ABCD 6
+    Stop
+  Death:
+    SLDG D 6
+    Stop
+  }
+}
+
+ACTOR MSlimeChunk : SlimeChunk replaces SlimeChunk
+{
+  scale 0.8
+  States
+  {
+  Spawn:
+    SLIM ABCD 6
+    Stop
+  Death:
+    SLIM D 6
+    Stop
+  }
+}
+
+ACTOR MLavaSmoke : LavaSmoke replaces LavaSmoke
+{
+  scale 0.6
+  States
+  {
+  Spawn:
+    LVAS GHIJK 5 Bright
+    Stop
+  }
+}
+
+
+ACTOR RezzakPuff
+{
+  +NOBLOCKMAP
+  +NOGRAVITY
+  +RANDOMIZE
+  VSpeed 1
+  Mass 5
+  DamageType Cutting
+  States
+  {
+  Spawn:
+    PUFF E 4 bright
+    PUFF F 4
+    // Intentional fall-through
+  Melee:
+    PUFF EFGH 4
+    Stop
+  }
+}
+ACTOR TNT1Puff
+{}

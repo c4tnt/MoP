@@ -1,0 +1,59 @@
+// made by silva (com1337@gmail.com)
+
+ MarineAmmoFontSm
+   {
+       0 mmsnum0
+       1 mmsnum1
+       2 mmsnum2
+       3 mmsnum3
+       4 mmsnum4
+       5 mmsnum5
+       6 mmsnum6
+       7 mmsnum7
+       8 mmsnum8
+       9 mmsnum9
+       NOTRANSLATION 160
+   }
+
+ MarineAmmoFont
+   {
+       0 mmdnum0
+       1 mmdnum1
+       2 mmdnum2
+       3 mmdnum3
+       4 mmdnum4
+       5 mmdnum5
+       6 mmdnum6
+       7 mmdnum7
+       8 mmdnum8
+       9 mmdnum9
+       NOTRANSLATION 160
+   }
+ MarineHpFont
+   {
+       0 mmbnum0
+       1 mmbnum1
+       2 mmbnum2
+       3 mmbnum3
+       4 mmbnum4
+       5 mmbnum5
+       6 mmbnum6
+       7 mmbnum7
+       8 mmbnum8
+       9 mmbnum9
+       NOTRANSLATION 160
+   }  
+ MarineArFont
+   {
+       0 mmcnum0
+       1 mmcnum1
+       2 mmcnum2
+       3 mmcnum3
+       4 mmcnum4
+       5 mmcnum5
+       6 mmcnum6
+       7 mmcnum7
+       8 mmcnum8
+       9 mmcnum9
+       NOTRANSLATION 160
+   }  

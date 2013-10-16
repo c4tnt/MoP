@@ -1,0 +1,36 @@
+ACTOR MBossEye : BossEye replaces BossEye
+{
+  DamageFactor "Control", 0
+  States
+  {
+  Spawn:
+    SSWV A 5 A_Look
+	SSWV A 5
+    Loop
+  }
+}
+
+ACTOR MBossBrain : BossBrain replaces BossBrain
+{
+  DamageFactor "Control", 0
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  States
+  {
+  Spawn:
+    BBRN A 1 
+    loop
+  }
+}
+
+ACTOR MExplosiveBarrel : ExplosiveBarrel replaces ExplosiveBarrel
+ {
+ DamageFactor "Control", 0
+ }

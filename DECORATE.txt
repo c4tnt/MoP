@@ -1,0 +1,88 @@
+// made by silva (com1337@gmail.com)
+
+// Weapons
+
+#include "Weapons/MasterGuns.txt"
+#include "Weapons/MarineGuns.txt"
+
+// Player Classes
+
+#include "Classes/MarineClass.txt"
+#include "Classes/MonsterMasterClass.txt"
+
+// Items 
+
+#include "Items/MopItems.txt"
+#include "Items/doomitems.txt" 
+#include "Items/explodespot.txt" 
+
+// Effects
+
+#include "Effects/Effects.txt"
+
+//Decorations
+
+#include "Decorations/Decorations.txt"
+#include "Decorations/Interactive.txt"
+
+// Monsters
+
+#include "Monsters/ZombieMan.txt"
+#include "Monsters/ZombieMarine.txt"
+#include "Monsters/DoomImp.txt"
+#include "Monsters/ShotGunGuy.txt"
+#include "Monsters/ChainGunGuy.txt"
+#include "Monsters/LostSoul.txt"
+#include "Monsters/Demon.txt"
+#include "Monsters/PainElemental.txt"
+#include "Monsters/CacoDemon.txt"
+#include "Monsters/Revenant.txt"
+#include "Monsters/Fatso.txt"
+#include "Monsters/HellKnight.txt"
+#include "Monsters/BaronOfHell.txt"
+#include "Monsters/Arachnotron.txt"
+#include "Monsters/Archvile.txt"
+#include "Monsters/SpiderMasterMind.txt"
+#include "Monsters/CyberDemon.txt"
+#include "Monsters/BossEye.txt"
+#include "Monsters/WolfensteinSS.txt"
+#include "Monsters/Newmonsters.txt"
+#include "Monsters/Tornado.txt"
+#include "Monsters/Fallen.txt"
+#include "Monsters/Hellion.txt"
+#include "Monsters/Hellhound.txt"
+#include "Monsters/Shadowbeast.txt"
+#include "Monsters/PyroImp.txt"
+
+// Morph Classes
+
+#include "MorphClasses/CommonClasses.txt"
+#include "MorphClasses/ZombieManClass.txt"
+#include "MorphClasses/ZombieMarineClass.txt"
+#include "MorphClasses/DoomImpClass.txt"
+#include "MorphClasses/ShotGunGuyClass.txt"
+#include "MorphClasses/ChainGunGuyClass.txt"
+#include "MorphClasses/DemonClass.txt"
+#include "MorphClasses/SpectreClass.txt" 
+#include "MorphClasses/RevenantClass.txt"
+#include "MorphClasses/HellKnightClass.txt"
+#include "MorphClasses/BaronOfHellClass.txt" 
+#include "MorphClasses/CacoDemonClass.txt"
+#include "MorphClasses/FatsoClass.txt"
+#include "MorphClasses/ArachnotronClass.txt"
+#include "MorphClasses/CyberDemonClass.txt" 
+#include "MorphClasses/MasterMindClass.txt"
+#include "MorphClasses/ArchvileClass.txt"
+#include "MorphClasses/WolfensteinSSClass.txt"
+#include "MorphClasses/PainElementalClass.txt" 
+#include "MorphClasses/LostSoulClass.txt"  
+#include "MorphClasses/TornadoClass.txt"  
+#include "MorphClasses/FallenClass.txt"
+#include "MorphClasses/HellhoundClass.txt"
+#include "MorphClasses/HellionClass.txt"
+#include "MorphClasses/ShadowbeastClass.txt"
+#include "MorphClasses/NightmareClass.txt"
+#include "MorphClasses/BarrelClass.txt"
+
+// Include spawners
+#include "Monsters/Spawners.txt"

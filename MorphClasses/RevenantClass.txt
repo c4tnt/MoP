@@ -1,0 +1,343 @@
+actor RevenantClass : PlayerPawn
+{
+  health 300
+  radius 20
+  height 56
+  mass 500
+  speed 0.50
+  painchance 100
+  MaxStepHeight 36
+  Player.DisplayName "Revenant"
+  Player.MaxHealth 300
+  Player.ViewHeight 58
+  Player.SoundClass "MSkeleton"
+  Player.JumpZ 7
+  Player.MorphWeapon "RevenantGun"
+  Player.WeaponSlot 1, RevenantGun
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -PICKUP
+  +LONGMELEERANGE
+  +MISSILEMORE
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	SKEL AB 10 
+    loop
+  See:
+    SKEL A 0
+    SKEL A 0 A_Jump (240,2)
+	SKEL A 0 A_PlaySoundEx ("Skeleton/active","body")
+    SKEL AABBCCDDEEFF 2 
+    loop
+  Missile:
+    SKEL A 6 
+    SKEL A 0 A_JumpIfInventory ("SKELCH",1,"Melee")   
+    SKEL J 7  
+	SKEL K 7 bright 
+    SKEL K 7 
+    goto See
+  Melee:
+    SKEL G 5 
+    SKEL H 5 
+    SKEL I 4
+	SKEL A 0 A_TakeInventory ("SKELCH",1)
+    goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SKEL Q -1
+    stop
+  }
+}
+
+ACTOR RevenantGun : Weapon
+{
+  obituary "%o couldn't evade %k fireball."
+  hitobituary "%o was punched by %k."
+  weapon.kickback 60
+  attacksound "skeleton/melee"
+  +ammo_optional
+  +WEAPON.NOALERT
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    REVP A 1 A_Raise
+    Goto Ready
+  Ready:
+    REVP A 3 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    REVP A 1 A_Lower
+    Loop
+  Fire:      
+    REVP A 0 A_JumpIfCloser (90,"Melee")
+	NULL A 0 SetPlayerProperty (0, 1, 0)
+	REVP A 0 A_JumpIfInventory ("SKELCH2",1,"RightGunShot")
+    REVP I 6 bright A_FireCustomMissile ("HomingMissile",0,0,-2,16,1)
+    REVP K 7
+    REVP L 8
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+    REVP A 3 A_GiveInventory ("SKELCH2",1)
+    Goto Ready
+  RightGunShot:
+    REVP M 6 bright A_FireCustomMissile ("HomingMissile",0,0,2,16,1)
+    REVP N 7
+    REVP O 8
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+    REVP A 3 A_TakeInventory ("SKELCH2",1)
+    Goto Ready
+  Melee:
+    REVP B 2 
+    REVP C 4 A_GiveInventory ("SKELCH",1) 
+    REVP D 4 A_PlaySound ("SKELLPUNCH")
+    REVP E 3 A_CustomPunch (12,0,0,"FBulletPuff",110)
+    REVP FG 3 
+	Goto Ready
+  Altfire:
+    REVP A 5 ACS_ExecuteAlways (991,0,3,0)
+    Goto Ready  
+  }
+}
+
+// Revenant Guns Check
+
+actor SKELCH3 : Inventory
+{
+  inventory.amount 1
+  inventory.maxamount 1
+  states
+  {
+  Spawn:
+    TNT1 A -1
+    stop
+  }
+}
+
+//  Revenant Guns animation check
+
+actor SKELCH2 : Inventory
+{
+  inventory.amount 1
+  inventory.maxamount 1
+  states
+  {
+  Spawn:
+    TNT1 A -1
+    stop
+  }
+}
+
+//  Revenant animation check(range or melee)
+
+actor SKELCH : Inventory
+{
+  inventory.amount 1
+  inventory.maxamount 1
+  states
+  {
+  Spawn:
+    TNT1 A -1
+    stop
+  }
+}
+
+actor HomingMissile
+{
+  radius 12
+  height 8
+  speed 16
+  damage 11
+  renderstyle "Add"
+  scale 1
+  seesound "skeleton/attack"
+  deathsound "skeleton/tracex"
+  DamageType "SkelDamage"
+  PROJECTILE
+  +SEEKERMISSILE
+  states
+  {
+  Spawn:
+    FATB AB 2 bright A_SeekerMissile (45,90)
+	FATB A 0 A_SpawnItem("TracerSmoke",0)
+    loop
+  Death:
+    FBXP A 8 bright
+    FBXP B 6 bright 
+    FBXP C 4 bright 
+    stop
+  }
+}
+
+//    Projectile "Fx"
+
+actor TracerSmoke
+{
+  renderstyle Translucent
+  alpha 0.5
+  +NOBLOCKMAP
+  +NOGRAVITY
+  states
+  {
+  Spawn:
+    PUFF BCBCD 3
+    stop
+  }
+}
+
+actor RevenantorClass : PlayerPawn
+{
+  health 800
+  radius 24
+  height 72
+  mass 600
+  speed 0.50
+  painchance 100
+  Scale 1.2
+
+  Translation "16:40=208:223", "41:47=232:235", "168:185=208:223", "186:191=232:235", "232:235=220:223", "4:4=128:128", "80:95=128:143", "209:210=129:129"
+
+  MaxStepHeight 36
+  Player.DisplayName "Revenant Terminator"
+  Player.MaxHealth 800
+  Player.ViewHeight 58
+  Player.SoundClass "MSkeleton"
+  Player.JumpZ 5
+  Player.MorphWeapon "RevenantorGun"
+  Player.WeaponSlot 1, RevenantorGun
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+
+  -PICKUP
+  +LONGMELEERANGE
+  +MISSILEMORE
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+
+  states
+  {
+  Spawn:
+	SKEL AB 10 
+    loop
+  See:
+    SKEL A 0
+    SKEL A 0 A_Jump (240,2)
+	SKEL A 0 A_PlaySoundEx ("rvnntor/active","body")
+    SKEL AABBCCDDEEFF 2 
+    loop
+  Missile:
+    SKEL A 6 
+    SKEL A 0 A_JumpIfInventory ("SKELCH",1,"Melee")   
+    SKEL J 7  
+	SKEL K 7 bright 
+    SKEL K 7 
+    goto See
+  Melee:
+    SKEL G 5 
+    SKEL H 5 
+    SKEL I 4
+	SKEL A 0 A_TakeInventory ("SKELCH",1)
+    goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SKEL Q -1
+    stop
+  }
+}
+
+ACTOR RevenantorGun : Weapon
+{
+  obituary "%o couldn't evade %k fireball."
+  hitobituary "%o was punched by %k."
+  weapon.kickback 200
+  attacksound "skeleton/melee"
+  +ammo_optional
+  +WEAPON.NOALERT
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    REVP A 1 A_Raise
+    Goto Ready
+  Ready:
+    REVP A 3 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    REVP A 1 A_Lower
+    Loop
+  Fire:      
+    REVP A 0 A_JumpIfCloser (90,"Melee")
+	NULL A 0 SetPlayerProperty (0, 1, 0)
+	NULL A 0 A_PlaySound ("rvnntor/launch")
+    REVP I 6 bright A_FireCustomMissile ("Rocket",0,0,0,12,1)
+    REVP K 7
+    REVP L 8
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+    REVP A 3
+    Goto Ready
+  Melee:
+    REVP B 2 
+    REVP C 4 A_GiveInventory ("SKELCH",1) 
+    REVP D 4 A_PlaySound ("SKELLPUNCH")
+    REVP E 3 A_CustomPunch (12,0,0,"FBulletPuff",110)
+    REVP FG 3 
+	Goto Ready
+  Altfire:
+    REVP A 5 ACS_ExecuteAlways (991,0,3,0)
+    Goto Ready  
+  }
+}

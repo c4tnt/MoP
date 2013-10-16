@@ -1,0 +1,118 @@
+actor MArachnotron : Arachnotron replaces Arachnotron
+{
+  health 500
+  radius 56
+  height 56
+  mass 600
+  speed 12
+  
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+  
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  // immune to
+  DamageFactor "ArachDamage", 0
+  states
+  {
+  Spawn:
+    BSPI A 10 A_Look 
+    BSPI B 10 
+    loop
+  See:
+    BSPI A 20
+    BSPI A 3 A_BabyMetal
+    BSPI ABBCC 3 A_Chase
+    BSPI D 3 A_BabyMetal
+    BSPI DEEFF 3 A_Chase
+    goto see+1
+  Death:
+    BSPI J 20 A_Scream
+    BSPI K 7 A_NoBlocking
+    BSPI LMNO 7
+    BSPI P -1 A_BossDeath
+    stop	
+  }
+}
+
+actor MArachnotronPlasma : ArachnotronPlasma replaces ArachnotronPlasma
+{
+  DamageType "ArachDamage"
+}
+
+actor MArachGunner
+{
+  obituary "%o was filled full of lead by an Arachno-Gunner."
+  health 400
+  radius 56
+  height 56
+  mass 600
+  speed 12
+  painchance 128
+  seesound "CSPI/Sight"
+  painsound "baby/pain"
+  deathsound "CSPI/Death"
+  activesound "baby/active"
+  attackSound "weapons/pistol"
+  decal "bulletchip"
+  MONSTER
+  +FLOORCLIP
+
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  // immune to
+  DamageFactor "ArachDamage", 0
+  states
+  {
+  Spawn:
+    CSPI AB 10 A_Look
+    loop
+  See:
+    CSPI A 20
+    CSPI A 3 A_BabyMetal
+    CSPI ABBCC 3 A_Chase
+    CSPI D 3 A_BabyMetal
+    CSPI DEEFF 3 A_Chase
+    goto See+1	
+  Missile:
+    CSPI A 20 A_FaceTarget
+    CSPI H 2 bright A_CustomBulletAttack (15, 5, 2, 4, "FArachPuff")
+    CSPI G 2
+    CSPI H 2 bright A_CustomBulletAttack (15, 5, 2, 4, "FArachPuff")
+    CSPI G 2
+    CSPI G 1 bright A_SpidRefire
+    goto Missile+1
+  Pain:
+    CSPI I 3
+    CSPI I 3 A_Pain
+    goto See+1
+  Death:
+    CSPI J 20 A_Scream
+    CSPI K 7 A_NoBlocking
+    CSPI LMNO 7
+    CSPI P -1 A_BossDeath
+    stop
+  Raise:
+    CSPI PONMLKJ 5
+    goto See+1
+  }
+}
+
+actor FArachPuff : FBulletPuff
+{
+  DamageType "ArachDamage"
+}

@@ -1,0 +1,1219 @@
+actor MFist : Weapon
+{
+  Game Doom
+  Weapon.SelectionOrder 3700
+  Weapon.Kickback 100
+  +WEAPON.WIMPY_WEAPON
+  +WEAPON.MELEEWEAPON
+  +INVENTORY.UNDROPPABLE
+  Weapon.PreferredSkin "FistMarine"
+  Tag "Fists"
+  Obituary "$OB_MPFIST" // "%o chewed on %k's fist."
+  States
+  {
+  Ready:
+    PUNG A 1 A_WeaponReady
+    loop
+  Deselect:
+    PUNG A 1 A_Lower
+    loop
+  Select: 
+    PUNG A 1 A_Raise
+    loop
+  Fire:
+    PUNG B 4
+	PUNG A 0 A_JumpIfInventory("PowerStrength",1,5)
+    PUNG C 4 A_CustomPunch (3,0,0,"MFistPuff",60)
+    PUNG D 5
+    PUNG C 4
+    PUNG B 5 A_ReFire
+    goto Ready
+	PUNG C 4 A_CustomPunch (25,0,0,"MFistPuff",60)
+	PUNG D 5
+    PUNG C 4
+    PUNG B 5 A_ReFire
+    goto Ready
+  }
+}
+
+actor MFists : Fist 
+{
+  +WEAPON.WIMPY_WEAPON
+  +WEAPON.MELEEWEAPON
+  +INVENTORY.UNDROPPABLE
+  Weapon.SelectionOrder 2200
+  attacksound "marine/fists"
+  Weapon.PreferredSkin "FistMarine"
+  Obituary "$OB_MPFIST" // "%o chewed on %k's fist."
+  
+  States
+  {
+  Ready:
+    MPNG A 1 A_WeaponReady
+    loop
+  Deselect:
+    MPNG A 1 A_Lower
+    loop
+  Select: 
+    MPNG A 1 A_Raise
+    loop
+  Fire:
+    MPNG A 0 A_JumpIfInventory("MLeftFist",1,"Right")
+	MPNG BCD 1
+	MPNG A 0 A_JumpIfInventory("PowerStrength",1,6)
+	MPNG E 1 A_CustomPunch (3,0,0,"MFistPuff",60)
+	MPNG FGH 2
+	MPNG A 2 A_GiveInventory("MLeftFist",1)
+	Goto Ready
+	MPNG E 1 A_CustomPunch (23,0,0,"MFistPuff",60)
+	MPNG FGH 2
+	MPNG A 2 A_GiveInventory("MLeftFist",1)
+	Goto Ready
+  Right:	
+	MPNG IJK 1
+	MPNG A 0 A_JumpIfInventory("PowerStrength",1,6)
+	MPNG L 1 A_CustomPunch (3,0,0,"MFistPuff",60)
+	MPNG MNO 2
+	MPNG A 2 A_TakeInventory("MLeftFist",1)
+	Goto Ready
+	MPNG L 1 A_CustomPunch (23,0,0,"MFistPuff",60)
+	MPNG MNO 2
+	MPNG A 2 A_TakeInventory("MLeftFist",1)
+	Goto Ready
+  }
+}
+
+Actor MFistPuff
+{
++NOBLOCKMAP
++NOGRAVITY
++PUFFONACTORS
+-ALLOWPARTICLES
+DamageType "MarineDamage" 
+attacksound "marine/fistswall"
+}
+
+
+ACTOR MLeftFist : Inventory
+ {
+  Inventory.Amount 0
+  Inventory.MaxAmount 1
+  States
+   {
+    Spawn:
+    TNT1 A -1
+    Loop 
+   }
+ }
+
+// ChainSaw
+
+actor MChainsaw : Chainsaw replaces Chainsaw
+{
+  Weapon.SelectionOrder 3700
+  Weapon.PreferredSkin "ChainSawMarine"
+  States
+  {
+  Fire:
+    SAWG AB 4 A_Saw ("weapons/sawfull","weapons/sawhit",2,"MBulletPuff")
+    SAWG B 0 A_ReFire
+    goto Ready
+  Spawn:
+    CSAW A -1
+    stop
+  }
+}
+
+// Pistol
+
+actor MPistol : Pistol replaces Pistol
+{
+  Weapon.AmmoType "MClip"
+  Weapon.PreferredSkin "PistolMarine"
+  States
+  {
+  Fire:
+    PISG A 4
+	PISG B 0 A_FireBullets (5.6, 0, 1, 5, "MBulletPuff")
+    PISG B 6 A_GunFlash
+    PISG C 4
+    PISG B 5 A_ReFire
+    Goto Ready
+  }
+}
+
+// Advanced Pistol
+
+actor ADMPistol : Weapon 6204
+{
+  //$Category MOP_MarineWeapons
+  Weapon.Kickback 100
+  Weapon.SelectionOrder 1900
+  Weapon.AmmoUse 1
+  Weapon.AmmoUse2 1
+  Weapon.AmmoGive 8
+  Weapon.AmmoType "MClip"
+  Weapon.AmmoType2 "MClip"
+  Obituary "$OB_MPPISTOL" // 
+  attacksound "weapons/adpistol"
+  Weapon.PreferredSkin "PistolMarine"
+  +WEAPON.WIMPY_WEAPON
+  Inventory.Pickupmessage "$PICKUP_PISTOL_DROPPED" // 
+  States
+  {
+  Ready:
+    ADPS A 1 A_WeaponReady
+    Loop
+  Deselect:
+    ADPS A 1 A_Lower
+    Loop
+  Select:
+    ADPS A 1 A_Raise
+    Loop
+  Fire:
+    ADPS B 3 
+	ADPF A 3 Bright A_FireBullets (0.7,0.7, 1, 9, "MBulletPuff")
+    ADPS C 4 
+	ADPS C 0 A_ReFire
+	ADPS DCB 3
+    Goto Ready
+  AltFire:
+    ADPS B 1 
+	ADPF A 2 Bright A_FireBullets (3.5,3.5, -1, 9, "MBulletPuff")
+	ADPS B 1
+	ADPF A 2 Bright A_FireBullets (3.5,3.5, -1, 9, "MBulletPuff")
+	ADPS B 1
+	ADPF A 2 Bright A_FireBullets (3.5,3.5, -1, 9, "MBulletPuff")
+	ADPS C 4 
+	ADPS DCB 4
+    Goto Ready
+  Spawn:
+    COLP A -1
+    stop
+  }
+}
+
+// Advanced Shotgun (Assault Shotgun)
+
+ACTOR AssaultShotgun : Shotgun 6203
+{
+	//$Category MOP_MarineWeapons
+	Inventory.PickupMessage "AssaultShotgun"
+	Weapon.SelectionOrder 40
+	Weapon.AmmoType1 "MShell"
+	Weapon.AmmoGive1 8
+	Weapon.AmmoUse1 1
+	Weapon.Kickback 120
+	AttackSound "weapons/Ashotgun/fire"
+	Weapon.PreferredSkin "ShotGunMarine"
+	States
+	{
+	Ready:
+		D3SG A 1 A_WeaponReady
+		loop
+	Deselect:
+		D3SG A 1 A_Lower
+		loop
+	Select:
+		D3SG A 1 A_Raise
+		Loop
+	Fire:
+		D3SG A 0 A_FireBullets(3.1, 3.1, 7, 6, "MBulletPuff", 1)
+		D3SG A 5 A_GunFlash
+		D3SG B 4 A_PlaySound("weapons/Ashotgun/cock/back")
+		D3SG C 6
+		D3SG B 4 A_PlaySound("weapons/Ashotgun/cock/forward")
+		D3SG A 3
+		Goto Ready
+	Flash:
+		D3SF A 3 BRIGHT 
+		D3SF B 2 BRIGHT 
+		Stop
+	Spawn:
+		D3SA A -1
+		Stop
+	}
+}
+
+
+// Shotgun
+
+actor MShotgun : Shotgun replaces Shotgun
+{
+  Weapon.AmmoType "MShell"
+  Weapon.PreferredSkin "ShotGunMarine"
+  States
+  {
+  Fire:
+    SHTG A 2
+    SHTG A 0 A_FireBullets (5.6, 0, 7, 5, "MBulletPuff")
+    SHTG A 7 A_GunFlash
+    SHTG BCDEFG 2
+    SHTG H 3
+    SHTG GFEDCB 2
+    SHTG A 3
+    SHTG A 3 A_ReFire
+    Goto Ready
+  }
+}
+
+// SuperShotGun
+
+actor MSuperShotgun : SuperShotgun replaces SuperShotgun
+{
+  Weapon.AmmoType "MShell"
+  Weapon.PreferredSkin "SSGMarine"
+  States
+  {
+  Fire:
+    SHT2 A 3
+	SHT2 A 0 A_FireBullets (11.2, 7.1, 20, 5, "MBulletPuff")
+    SHT2 A 7 A_GunFlash
+    SHT2 B 0 A_CheckReload
+	SHT2 BCDEF 3
+    SHT2 F 0 A_OpenShotgun2
+    SHT2 HUVKL 3
+    SHT2 L 0 A_LoadShotgun2
+    SHT2 OPQR 3
+	SHT2 R 0 A_CloseShotgun2 
+    SHT2 RST 3 
+    SHT2 A 5 A_ReFire
+    Goto Ready
+  }
+}
+
+// AssaultRifle 
+
+actor AssaultRifle : Weapon  6202
+{
+   //$Category MOP_MarineWeapons
+   Weapon.SelectionOrder 600
+   Weapon.AmmoUse 1
+   Weapon.AmmoUse2 1 
+   Weapon.AmmoGive 30
+   Weapon.AmmoType "MClip"
+   Weapon.AmmoType2 "MClip"
+   attacksound "weapon/msmgfire"
+   Inventory.PickupMessage "$GOTCHAINGUN" // "You got the chaingun"
+   Obituary "$OB_MPCHAINGUN" // "%o was mowed down by %k's chaingun."
+   States
+   {
+   Spawn:
+     MMCP A -1
+     Stop
+   Ready:
+     MMCG A 1 A_WeaponReady
+     Loop
+   Deselect:
+     MMCG A 1 A_Lower
+     Loop
+   Select:
+     MMCG A 1 A_Raise
+     Loop
+   Fire:
+     MMCG B 1
+	 MMCG C 2 bright A_FireBullets (4.7, 1.2, 1, 10, "MBulletPuff")
+	 MMCG A 0 A_ReFire
+	 MMCG D 2 bright
+	 MMCG E 2 bright
+     Goto Ready
+   AltFire:
+     MMCG B 1
+	 MMCG C 2 bright A_FireBullets (1, 1, -1, 10, "MBulletPuff")
+	 MMCG B 1
+	 MMCG C 2 bright A_FireBullets (1, 1, -1, 10, "MBulletPuff")
+	 MMCG B 1
+	 MMCG C 2 bright A_FireBullets (1, 1, -1, 10, "MBulletPuff")
+	 MMCG B 1
+	 MMCG C 2 bright A_FireBullets (1, 1, -1, 10, "MBulletPuff")
+	 MMCG DE 3 bright
+	 MMCG B 4
+	 Goto Ready
+   }
+}
+
+// ChainGun
+
+actor MChaingun : Chaingun replaces Chaingun
+{
+   Weapon.AmmoType "MClip"
+   Weapon.PreferredSkin "ChainGunMarine"
+   States
+   {
+   Fire:
+     CHGG A 2
+	 CHGG A 0 A_Gunflash
+	 CHGG B 2 A_FireBullets (5.6, 0, 1, 5, "MBulletPuff")
+	 CHGG C 2 
+     CHGG D 2 A_FireBullets (5.6, 0, 1, 5, "MBulletPuff")
+	 CHGG A 0 A_ReFire
+	 CHGG ABCD 2
+	 CHGG ABCD 3 
+     Goto Ready
+	 Flash: 
+	 CHGF A 2 bright A_Light1
+	 CHGF B 2 bright A_Light2
+	 CHGF A 2 bright A_Light1
+	 CHGF A 0 bright A_Light0
+	 Goto LightDone
+   }
+}
+
+// Rocket Luncher
+
+actor MRocketLauncher : RocketLauncher replaces RocketLauncher
+{
+  Weapon.Selectionorder 2400
+  Weapon.AmmoType "MRocketAmmo"
+  Weapon.AmmoType2 "MRocketAmmo"
+  Weapon.AmmoUse2 1
+  Weapon.PreferredSkin "RLMarine"
+  +WEAPON.NOAUTOAIM
+  States
+  {
+  Fire:
+    MISG B 8 A_GunFlash
+    MISG B 12 A_FireCustomMissile ("MMarineRocket")
+    MISG B 0 A_ReFire
+    Goto Ready
+  AltFire:
+    MISG B 8 A_GunFlash
+	MISG B 0 A_PlaySoundEx ("weapons/mgren","weapon")
+    MISG B 12 A_FireCustomMissile ("MGrenade",0,1,0,0,0,9)
+    MISG B 0 A_ReFire
+    Goto Ready
+  }
+}
+
+// PlasmaRifle
+
+actor MPlasmaRifle : PlasmaRifle replaces PlasmaRifle
+{
+  Weapon.PreferredSkin "PlsmMarine"
+  Weapon.AmmoType "MCell"
+  States
+  {
+  Fire:
+    PLSG A 1
+	PLSG A 0 A_GunFlash
+    PLSG A 2 A_FireCustomMissile ("MPlasmaBall",0,1,0,0,0)
+    PLSG B 0 A_ReFire
+	PLSG BCDE 4
+	PLSG F 8
+	PLSG EDCBA 2
+    Goto Ready
+   Flash:
+    PLSF A 2 Bright A_Light1
+    PLSF B 2 Bright A_Light0
+    Goto LightDone	
+  }
+}
+
+// Bfg 9000
+
+actor MBFG9000 : BFG9000 replaces BFG9000
+{
+  Weapon.AmmoType "MCell"
+  Weapon.PreferredSkin "BFGMarine"
+}
+
+
+actor MMarineRocket : Rocket
+{
+ DamageType "MarineRLDamage"
+}
+
+ACTOR MGrenade : Grenade
+{
+	Radius 8
+	Height 8
+	Speed 25
+	Damage 20
+	Projectile
+    BounceCount 9
+	-NOGRAVITY
+	-NOTELEPORT
+	+DOOMBOUNCE
+	+DEHEXPLOSION
+	+ROCKETTRAIL
+	//+GRENADETRAIL
+	+EXPLODEONDEATH
+	+USESTBOUNCESOUND
+	SeeSound "weapons/mgrenbounce"
+	DeathSound "weapons/rocklx"
+	Obituary "$OB_GRENADE"
+	DamageType "MarineRLDamage"
+	States
+	{
+	Spawn:
+		GRN2 ABCDEFGHIJK 3  
+		loop
+	Death:
+		MISL B 8 bright A_Explode
+		MISL C 6 bright
+		MISL D 4 bright
+		stop
+	}
+
+}
+
+actor MBulletPuff : BulletPuff
+{
+ DamageType "MarineDamage"
+ +NOEXTREMEDEATH
+}
+
+actor MPlasmaBall : PlasmaBall replaces PlasmaBall 
+{
+ DamageType "MarineDamage"
+}
+
+actor MBFGBall : BFGBall replaces BFGBall
+{
+  DamageType "MarineDamage"
+  States
+  {
+  Death:
+    BFE1 AB 8 bright
+    BFE1 C 8 bright A_BFGSpray("MBFGExtra")
+    BFE1 DEF 8 bright
+    stop
+  }
+}
+
+actor MBFGExtra : BFGExtra 
+{
+DamageType "MarineDamage"
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Skulltag Weapons
+
+ACTOR Vulcan : Weapon 5014
+{
+	Game Doom
+	Weapon.AmmoType "Clip" 
+	Weapon.AmmoGive 20
+	Weapon.AmmoUse 1
+	Weapon.Selectionorder 700
+	Weapon.Kickback 100
+	Inventory.PickupMessage "$PICKUP_MINIGUN"
+	Obituary "$OB_MINIGUN"
+	AttackSound "weapons/minigun"
+	SpawnID 214
+	Radius 20
+	Height 16
+	Weapon.AmmoType "MClip"
+	Weapon.PreferredSkin "MinigunMarine"
+	+WEAPON.DONTBOB
+
+	States
+	{
+	Ready:
+		MNGG A 1 A_WeaponReady
+		MNGG A 0 A_JumpIfInventory ("Mspinch",0,1)
+		Loop
+		MNGG A 0 A_PlaySoundEx ("weapon/VulcanCannonLoop","weapon",0)
+		MNGG BA 2
+		goto ready
+	Select: 
+		MNGG A 1 A_Raise
+		MNGG A 0 A_JumpIfInventory ("Mspinch",0,1)
+		Loop
+		MNGG A 0 A_PlaySoundEx ("weapon/VulcanCannonLoop","weapon",0)
+		goto Ready
+	Deselect: 
+		MNGG A 0 A_TakeInventory("Mspinch",1)
+		MNGG A 0 A_TakeInventory("Mspinch2",1)
+		MNGG A 0 ACS_ExecuteAlways(991,0,1,128)
+		MNGG A 0 A_StopSoundEx ("Weapon")
+		MNGG A 1 A_Lower
+		Loop
+	Fire:
+		MNGG A 1
+		MNGG A 0 ACS_ExecuteAlways(991,0,1,32)
+		MNGG A 0 A_JumpIfInventory ("Mspinch",0,"Fire2")
+		MNGG A 0 A_JumpIfInventory ("Mspinch2",0,18)
+		MNGG A 0 A_PlaySoundEx ("weapon/VulcanCannonUp","weapon",0)
+		MNGG ABABA 4 
+		MNGG BABAB 3
+		MNGG ABABA 2
+		MNGG A 0 A_GiveInventory("Mspinch2",1)
+		MNGG A 0 A_GunFlash
+		MNGG A 2 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG A 0 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG B 2 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG B 0 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG A 1 A_ReFire
+		MNGG A 0 A_JumpIfInventory ("Mspinch",0,"Ready")
+		MNGG A 0 ACS_ExecuteAlways(991,0,1,128)
+		MNGG A 0 A_PlaySoundEx ("weapon/VulcanCannonDown","weapon",0)
+		MNGG ABABA 2 
+		MNGG BABAB 3
+		MNGG ABABA 4
+		MNGG A 0 A_TakeInventory("Mspinch2",1)
+		goto Ready
+	Fire2:
+		MNGG A 0 A_GunFlash
+		MNGG A 2 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG A 0 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG B 2 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG B 0 A_FireBullets(5.6, 2.5, -1, 13, "MBulletPuff")
+		MNGG A 1 A_ReFire
+		MNGG A 0 ACS_ExecuteAlways(991,0,1,64)
+		goto Ready
+	spawn:
+		MNGN A -1
+		Loop
+	AltFire:
+		MNGG A 0 A_JumpIfInventory ("Mspinch",0,"stopspin")
+		MNGG A 0 ACS_ExecuteAlways(991,0,1,64)
+		MNGG A 0 A_PlaySoundEx ("weapon/VulcanCannonUp","weapon",0)
+		MNGG ABABA 4 
+		MNGG BABAB 3
+		MNGG ABABA 2
+		MNGG A 0 A_GiveInventory("Mspinch",1)
+		goto ready
+	StopSpin:
+		MNGG A 0 A_TakeInventory("Mspinch",1)
+		MNGG A 0 ACS_ExecuteAlways(991,0,1,128)
+		MNGG A 0 A_PlaySoundEx ("weapon/VulcanCannonDown","weapon",0)
+		MNGG ABABA 2 
+		MNGG BABAB 3
+		MNGG ABABA 4
+		goto ready
+	Flash: 
+		MNGF A 2 BRIGHT A_Light1 
+		MNGF B 2 BRIGHT A_Light0
+		Goto LightDone 	
+	}
+}
+
+ACTOR Mspinch : Inventory
+ {
+  Inventory.Amount 0
+  Inventory.MaxAmount 1
+  States
+   {
+    Spawn:
+    TNT1 A -1
+    Loop 
+   }
+ }
+ACTOR Mspinch2 : Inventory
+ {
+  Inventory.Amount 0
+  Inventory.MaxAmount 1
+  States
+   {
+    Spawn:
+    TNT1 A -1
+    Loop 
+   }
+ }
+
+// Items 
+
+// Plasm Cells
+
+ACTOR MCell : Ammo replaces Cell
+{
+  Inventory.PickupMessage "$GOTCELL" // "Picked up an energy cell."
+  Inventory.Amount 20
+  Inventory.MaxAmount 200
+  Ammo.BackpackAmount 15
+  Ammo.BackpackMaxAmount 400
+  Inventory.Icon "ICONC"
+  States
+  {
+  Spawn:
+    CELL A -1
+    Stop
+  }
+}
+
+ACTOR MCellPack : MCell replaces CellPack
+{
+  Inventory.PickupMessage "$GOTCELLBOX" // "Picked up an energy cell pack."
+  Inventory.Amount 70
+  States
+  {
+  Spawn:
+    CELP A -1
+    Stop
+  }
+}
+
+// Rockets
+
+ACTOR MRocketAmmo : Ammo replaces RocketAmmo
+{
+  Inventory.PickupMessage "$GOTROCKET" // "Picked up a rocket."
+  Inventory.Amount 1
+  Inventory.MaxAmount 30
+  Ammo.BackpackAmount 1
+  Ammo.BackpackMaxAmount 50
+  Inventory.Icon "ICONR"
+  States
+  {
+  Spawn:
+    ROCK A -1
+    stop  }
+}
+
+ACTOR MRocketBox : MRocketAmmo replaces RocketBox
+{
+  Inventory.PickupMessage "$GOTROCKBOX" // "Picked up a box of rockets."
+  Inventory.Amount 5
+  States
+  {
+  Spawn:
+    BROK A -1
+    Stop
+  }
+}
+
+// Shells
+
+ACTOR MShell : Ammo replaces Shell
+{
+  Inventory.PickupMessage "$GOTSHELLS" // "Picked up 4 shotgun shells."
+  Inventory.Amount 4
+  Inventory.MaxAmount 50
+  Ammo.BackpackAmount 4
+  Ammo.BackpackMaxAmount 80
+  Inventory.Icon "ICONS"
+  States
+  {
+  Spawn:
+    SHEL A -1
+    Stop
+  }
+}
+
+ACTOR MShellBox : MShell replaces ShellBox
+{
+  Inventory.PickupMessage "$GOTSHELLBOX" // "Picked up a box of shotgun shells."
+  Inventory.Amount 16
+  States
+  {
+  Spawn:
+    SBOX A -1
+    Stop
+  }
+}
+
+// CLip 
+
+ACTOR MClip : Ammo replaces Clip
+{
+  Inventory.PickupMessage "$GOTCLIP" // "Picked up a clip."
+  Inventory.Amount 8
+  Inventory.MaxAmount 400
+  Ammo.BackpackAmount 8
+  Ammo.BackpackMaxAmount 600
+  Inventory.Icon "ICONB"
+  States
+  {
+  Spawn:
+    CLIP A -1
+    Stop
+  }
+}
+
+actor MClipBox : MClip replaces ClipBox
+{
+  Inventory.PickupMessage "$GOTCLIPBOX" // "Picked up a box of bullets."
+  Inventory.Amount 48
+  States
+  {
+  Spawn:
+    AMMO A -1
+    Stop
+  }
+}
+
+
+///////////////
+///NEW WEAPONS
+///////////////
+Actor CutterSpot 6080
+{
+  //$Category MOP_MarineItems
+  radius 20
+  height 16
+
+  States
+  {
+  Spawn:
+   TFOG A 0 A_PlaySound("misc/teleport")
+   TFOG A 0 A_SpawnItem("Cutter", 0, 0)
+   TFOG ABCDEFGHIJ 8
+   Stop
+  }
+}
+
+ACTOR Cutter : Weapon
+{
+  SpawnId 203
+  Weapon.SelectionOrder 99999
+  +WEAPON.WIMPY_WEAPON
+  +WEAPON.MELEEWEAPON 
+  +WEAPON.NOALERT
+  Weapon.KickBack 250
+  Weapon.UpSound "weapons/sawup"
+  Weapon.ReadySound "weapons/sawidle"
+  Inventory.Pickupmessage "Picked up Cutter."
+  States
+  {
+  Ready:
+    MAGS CD 4 A_WeaponReady
+    Loop
+  Deselect:
+    MAGS CD 1 A_Lower
+    TNT1 A 0 A_TakeInventory("Rtarget")
+    Loop
+  Select:
+    MAGS CD 1 A_Raise
+    Loop
+  Fire:
+    TNT1 A 0 A_GiveInventory("Rtarget")
+    MAGS A 3 A_CustomPunch (10, 1, 0, RezzakPuff, 64)
+    MAGS B 3 A_PlaySound("weapons/sawhit")
+    TNT1 A 0 A_ReFire
+    TNT1 A 0 A_TakeInventory("Rtarget")
+    Goto Ready
+  Spawn:
+    MAGS E -1
+    Stop
+  }
+}
+
+Actor HackDeviceSpot 6081
+{
+  //$Category MOP_MarineItems
+  radius 20
+  height 16
+
+  States
+  {
+  Spawn:
+   TNT1 A 0 A_JumpIf(ACS_ExecuteWithResult(989,0,0,0) <= 0,"Make")
+   TNT1 A 100
+   Loop
+  Make:
+   TFOG A 0 A_PlaySound("misc/teleport")
+   TFOG ABCDEFGHIJ 8
+   goto Spawn
+  }
+}
+
+ACTOR HackDevice : Weapon
+{
+  SpawnId 202
+  Weapon.SelectionOrder 99998
+  +WEAPON.WIMPY_WEAPON
+  +WEAPON.MELEEWEAPON 
+  +WEAPON.NOALERT
+  Inventory.Pickupmessage "Picked up Hacking Device."
+  States
+  {
+  Ready:
+    HACK H 4 A_WeaponReady
+    TNT1 A 0 A_Jump (1, "Pong")
+    Loop
+  Pong:
+    HACK IJ 5 A_WeaponReady
+    TNT1 A 0 A_PlaySound("misc/pong")
+    HACK KLM 5 A_WeaponReady
+    TNT1 A 0 A_PlaySound("misc/pong")
+    HACK NO 5 A_WeaponReady
+    TNT1 A 0 A_PlaySound("misc/pong")
+    HACK PQR 5 A_WeaponReady
+    TNT1 A 0 A_PlaySound("misc/pong")
+    HACK S 5 A_WeaponReady
+    Loop
+  Deselect:
+    HACK H 1 A_Lower
+    TNT1 A 0 A_TakeInventory("Htarget",0)
+    Loop
+  Select:
+    HACK H 1 A_Raise
+    Loop
+  Fire:
+    TNT1 A 0 A_JumpIfInventory("Htarget", 1,4)
+    HACK G 7 A_CustomPunch (0, 0, 0, TNT1Puff, 48)
+    HACK H 7 A_PlaySound("misc/pong")
+    TNT1 A 0 A_ReFire
+    Goto Ready
+    HACK ABCDE 4 A_CustomPunch (0, 0, 0, TNT1Puff, 48)
+    HACK F 4 A_PlaySound("misc/hackng")
+    TNT1 A 0 A_ReFire
+    TNT1 A 0 A_TakeInventory("Htarget",0)
+    goto Ready
+  Spawn:
+    3PDA A 1024
+    Stop
+  Stay:
+    3PDA A 1
+    Loop
+  }
+}
+
+ACTOR NUKELauncher : Weapon 6201
+{
+  //$Category MOP_MarineWeapons
+  SpawnId 200
+  Weapon.SelectionOrder 9000
+  Weapon.KickBack 10000
+  Weapon.AmmoUse 1
+  Weapon.AmmoGive 0
+  Weapon.AmmoType "MNuclearMissile"
+  Weapon.PreferredSkin "NukeMarine"
+  +WEAPON.NOAUTOFIRE
+  Inventory.PickupMessage "You got the Big Fucking Nuke missile launcher!"
+  States
+  {
+  Ready:
+    PYRG A 1 A_WeaponReady
+    Loop
+  Deselect:
+    PYRG A 1 A_Lower
+    Loop
+  Select:
+    PYRG A 1 A_Raise
+    Loop
+  Fire:
+    PYRG ABC 5 Bright
+    PYRG D 5 Bright A_FireCustomMissile("NuclearMissileShot", 0, 1, 0, 6, 1)
+    PYRG EFG 5 Bright
+    goto Ready
+  Spawn:
+    WPYR A -1
+    Stop
+  }
+}
+
+ACTOR MNuclearMissile : Ammo 6200
+{
+   //$Category MOP_MarineItems
+   SpawnId 201
+   Inventory.Amount 1
+   Inventory.MaxAmount 4
+   Ammo.BackpackAmount 1
+   Ammo.BackpackMaxAmount 2
+   Inventory.PickupMessage "Picked up a nuclear missile."
+   Inventory.PickupSound "weapons/ammo06"
+   Inventory.Icon "ICONN"
+   States
+   {
+   Spawn:
+      NUKA A -1
+      Stop
+   }
+}
+
+
+ACTOR NuclearMissileShot
+{
+   Radius 13
+   Height 8
+   Speed 35
+   Damage 220
+   PROJECTILE
+   +NOTARGET
+   +FULLVOLDEATH
+   +THRUGHOST
+   +FORCERADIUSDMG
+
+   ExplosionDamage 256
+   ExplosionRadius 512
+   DeathSound "weapons/nuclearmissileexplode"
+   Obituary "%o was annihilated by a Nuclear Missile."
+   States
+   {
+   Spawn:
+      NKS1 A 2 Bright
+      Loop
+   Death:
+      NKS1 A 0 A_Scream
+      NKS1 A 0 A_SpawnItem("NuclearMissileExplo",0,0)
+      NKS1 A 0 A_SpawnItem("NukeFireBurst",0,0)
+      Stop
+   }
+}
+
+ACTOR NuclearMissileExplo
+{
+   +NOTARGET
+   +FULLVOLDEATH
+   +THRUGHOST
+   +FORCERADIUSDMG
+   +NODAMAGETHRUST
+   ExplosionDamage 128
+   ExplosionRadius 300
+
+   States
+   {
+   Spawn:
+    PYXP ABCDEFGHIJKLMNOPQRSTU 4 Bright A_Explode
+    Stop
+   }
+}
+
+ACTOR NukeFireBurst
+{
+   Radius 13
+   Height 8
+   Speed 35
+   Damage 220
+   PROJECTILE
+   +NOTARGET
+   +FULLVOLDEATH
+   +THRUGHOST
+   +FORCERADIUSDMG 
+   States
+   {
+   Spawn:
+      PYXP A 0 A_Burst("NukeBurst")
+      PYXP A 0 A_Burst("NukeBurst")
+      PYXP A 0 A_Burst("NukeBurst")
+      PYXP A 0 A_Burst("NukeBurst")
+      stop
+   }
+}
+
+ACTOR NukeBurst
+{
+   Radius 13
+   Height 8
+   Speed 35
+   Damage 220
+   PROJECTILE
+   +NOTARGET
+   +FULLVOLDEATH
+   +THRUGHOST
+   +FORCERADIUSDMG 
+   States
+   {
+   Spawn:
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      PYXP A 0 A_SpawnItemEx("NukeFire", 0, 0, 0, random(-15,15), random(-15,15), -10, 0, 0, 0)
+      stop
+  }
+}
+
+ACTOR NukeFire
+{
+   Radius 8
+   Height 20
+   Mass 3000
+   Damage 123
+   +RANDOMIZE
+   +FLOORCLIP
+   +NOBLOOD
+   +NOTARGET
+   +FIREDAMAGE
+   +THRUGHOST
+   +NOTELEPORT
+   Renderstyle Add
+   Alpha 0.6
+   ExplosionDamage 64
+   ExplosionRadius 80
+   Obituary "%o was burned by the Nuclear fire."
+   DeathSound "weapons/nuclearmissileburn"
+   States
+   {
+   Spawn:
+      FLME A 0 A_Jump(64,6)
+      FLME A 0 A_Jump(64,4)
+      FLME A 0 A_Jump(64,2)
+      FLME A 1 Bright
+      FLME A 1 Bright
+      FLME A 1 Bright
+      FLME A 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME A 4 Bright A_Explode
+      FLME BC 4 Bright
+      FLME D 4 Bright A_Explode
+      FLME EF 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      FLME G 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME G 4 Bright A_Explode
+      FLME HI 4 Bright
+      FLME J 4 Bright A_Explode
+      FLME KL 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      FLME M 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME M 4 Bright A_Explode
+      FLME NA 4 Bright
+      FLME B 4 Bright A_Explode
+      FLME CD 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      FLME E 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME E 4 Bright A_Explode
+      FLME FG 4 Bright
+      FLME H 4 Bright A_Explode
+      FLME IJ 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      FLME K 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME K 4 Bright A_Explode
+      FLME LM 4 Bright
+      FLME N 4 Bright A_Explode
+      FLME AB 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      FLME C 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME C 4 Bright A_Explode
+      FLME DE 4 Bright
+      FLME F 4 Bright A_Explode
+      FLME GH 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      FLME I 0 A_PlaySound("weapons/nuclearmissileburn")
+      FLME I 4 Bright A_Explode
+      FLME JK 4 Bright
+      FLME L 4 Bright A_Explode
+      FLME MN 4 Bright
+      TNT1 A 0 A_Jump(128, "Death")
+      Goto Spawn+6
+   Death:
+      FLME O 5 Bright
+      FLME P 7 Bright
+      FLME Q 10 Bright
+      Stop
+   }
+}
+
+ACTOR NukeLosion
+{
+   Radius 13
+   Height 8
+   Speed 15
+   Damage 220
+   PROJECTILE
+   +NOTARGET
+   +FULLVOLDEATH
+   +THRUGHOST
+   +FORCERADIUSDMG 
+   -NOGRAVITY
+   +DOOMBOUNCE
+   States
+   {
+   Spawn:
+      TNT1 A 1 A_SpawnItemEx("BlotSmoke", 0, 0, 0, 0, 0, 0, 0, 0, 0)
+      TNT1 A 0 A_SpawnItemEx("BlotSmoke", 0, 0, 0, 0, 0, 5, 0, 0, 0)
+      TNT1 A 0 A_SpawnItemEx("NukeLosion2", 0, 0, 0, 0, -10, 0, 0, 0, 0)
+      TNT1 A 0 A_SpawnItemEx("NukeLosion2", 0, 0, 0, 0, 10, 0, 0, 0, 0)
+      TNT1 A 0 A_Recoil(-1)
+      Loop
+   Death:
+      TNT1 A -1
+      Stop
+  }
+}
+
+ACTOR NukeLosion2
+{
+   Radius 13
+   Height 8
+   Speed 10
+   Damage 220
+   PROJECTILE
+   +NOTARGET
+   +FULLVOLDEATH
+   +THRUGHOST
+   +FORCERADIUSDMG 
+   -NOGRAVITY
+   +DOOMBOUNCE
+   States
+   {
+   Spawn:
+      TNT1 A 1 A_SpawnItemEx("BlotSmoke", 0, 0, 0, 0, 0, 0, 0, 0, 0)
+      TNT1 A 0 A_SpawnItemEx("BlotSmoke", 0, 0, 0, 0, 0, 5, 0, 0, 0)
+      TNT1 A 0 A_Recoil(-1)
+      Loop
+   Death:
+      TNT1 A -1
+      Stop
+  }
+}
+
+
+ACTOR MDynamiteW : Weapon 6205
+{
+   //$Category MOP_MarineWeapons
+   Inventory.PickupSound "misc/w_pkup"
+   Inventory.PickupMessage "You got a dynamite."
+   Weapon.AmmoType "MDynamite"
+   Weapon.AmmoGive 1
+   Weapon.AmmoUse 1
+   Weapon.Kickback 0
+   Weapon.SelectionOrder 9000
+   Weapon.PreferredSkin "FistMarine"
+   Scale 0.2
+  +WEAPON.NOAUTOFIRE
+
+   States
+   {
+   Spawn:
+      PIPB A -1
+      Loop
+   Ready:
+      PIPE A 1 A_WeaponReady
+      Loop
+   Deselect:
+      PIPE A 1 A_Lower
+      Loop
+   Select:
+      PIPE A 1 A_Raise
+      Loop
+   Fire:
+      PIPE ABCDEFGH 1
+      NULL A 0 A_PlaySound("weapons/dynamitethrow")
+      NULL A 0 A_SpawnItem("Dynamite")
+      NULL A 0 A_TakeInventory("MDynamiteW", 255)
+      Goto Ready
+   }
+}
+
+ACTOR Dynamite
+{ 
+    Scale 0.2
+    ExplosionDamage 350
+    ExplosionRadius 128
+    SeeSound "weapons/pbbounce"
+    DeathSound "weapons/pbbounce"
+    States
+    {
+    Spawn:
+      PIPB A 175
+    Death:
+      PIPB A 1 A_Explode
+      PIPB A 0 A_SpawnItem("NuclearMissileExplo",0,0)
+      PIPB A 0 A_SpawnItem("NukeFireBurst",0,0)
+      stop
+    }
+}
+
+actor MDynamite : Ammo
+{
+  inventory.amount 1
+  inventory.maxamount 1
+  inventory.PickupMessage "You got a dynamite."
+  inventory.icon "ICOND"
+  ammo.backpackamount 0
+  ammo.backpackmaxamount 1
+  Scale 0.2
+  states
+  {
+  Spawn:
+    PIPB A -1
+    stop
+  }
+}

@@ -1,0 +1,408 @@
+ACTOR CacodemonClass : PlayerPawn
+{
+  
+  Health 400
+  Speed 0.40
+  Radius 31
+  Height 56
+  Mass 400
+  PainChance 128
+  Player.DisplayName "CacoDemon"
+  Player.MaxHealth 400
+  Player.ViewHeight 40
+  Player.SoundClass Cacodemon
+  Player.JumpZ 0
+  Player.MorphWeapon "CacoBaller"
+  Player.WeaponSlot 1, CacoBaller
+  BloodColor "blue" 
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  
+  States
+  {
+  Spawn:
+	HEAD A 5 
+    Loop
+  See:
+    HEAD A 0 
+    HEAD A 0 A_Jump (240,2)
+	HEAD A 0 A_PlaySoundEx ("caco/active","body")
+    HEAD A 15
+    Loop
+  Missile:
+    HEAD B 2 
+    HEAD C 6 BRIGHT
+    HEAD D 8 BRIGHT
+    HEAD C 6 BRIGHT
+    HEAD B 2
+    Goto See
+  Melee:
+    HEAD A 0
+    Goto Missile
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    HEAD L -1
+    stop
+  }
+}
+
+// Weapons etc
+
+ACTOR CacoBaller : Weapon
+{ 
+  OBITUARY "%o was smitten by %k."
+  HITOBITUARY "%o got too close to &k."
+  weapon.kickback 60
+  attacksound "caco/pain"
+  +WEAPON.NOALERT
+  +Ammo_Optional
+  +Alt_Ammo_Optional
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    CACO A 0 Thing_Remove (0)
+    Stop
+  Select:
+     CACO A 1 A_Raise
+     Goto Ready
+  Ready:
+     CACO A 5 A_WeaponReady
+     NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+     Loop
+	 NULL A 0 HealThing(1)
+	 goto ready 
+  DeSelect:
+     CACO A 1 A_Lower
+     Loop
+  Fire:
+     CACO A 0 A_JumpIfCloser (60,"Melee")
+	 CACO ABC 3
+	 CACO A 0 A_SetBlend ("BLUE",0.45,25)
+	 CACO A 0 A_FireCustomMissile ("Cacodemonball2",0,0,0,5)
+	 CACO C 9
+	 CACO CBA 3
+     Goto Ready 
+  Melee:
+    CACO A 4
+	CACO B 4 A_CustomPunch (8,0,1,"FBulletPuff",80)
+    CACO C 4
+	goto Ready	
+  Altfire:
+    CACO A 5 ACS_ExecuteAlways (991,0,3,0) 
+  	goto Ready	 
+  }
+}
+
+//    Projectile
+
+actor CacodemonBall2 
+{
+  radius 6
+  height 8
+  speed 25
+  damage 12
+  renderstyle Add
+  seesound "caco/attack"
+  deathsound "caco/shotx"
+  DamageType "CacoDamage"
+  PROJECTILE
+  +RANDOMIZE
+  states
+  {
+  Spawn:
+    BAL2 AB 2 bright
+    loop
+  Death:
+    BAL2 CDE 3 bright
+    stop
+  }
+}
+
+// Cacolanter
+
+ACTOR CacoLanternClass : PlayerPawn
+{
+  
+  Health 800
+  Speed 0.40
+  Radius 31
+  Height 56
+  Mass 400
+  PainChance 128
+  Player.DisplayName "CacoLantern"
+  Player.MaxHealth 400
+  Player.ViewHeight 40
+  Player.SoundClass Cacodemon
+  Player.JumpZ 0
+  Player.MorphWeapon "CacolanterMounth"
+  Player.WeaponSlot 1, CacolanterMounth
+  BloodColor "blue" 
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  
+  States
+  {
+  Spawn:
+	HED2 A 5 
+    Loop
+  See:
+    HED2 A 0 
+    HED2 A 0 A_Jump (240,2)
+	HED2 A 0 A_PlaySoundEx ("caco/active","body")
+    HED2 A 15
+    Loop
+  Missile:
+    HED2 B 2 
+    HED2 C 6 BRIGHT
+    HED2 D 8 BRIGHT
+    HED2 C 6 BRIGHT
+    HED2 B 2
+    Goto See
+  Melee:
+    HED2 A 0
+    Goto Missile
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    HED2 L -1
+    stop
+  }
+}
+
+// Weapons etc
+
+ACTOR CacolanterMounth : Weapon
+{ 
+  OBITUARY "$OB_CACOLANTERN"
+  HITOBITUARY "$OB_CACOLANTERN_MELEE"
+  weapon.kickback 60
+  attacksound "caco/pain"
+  +WEAPON.NOALERT
+  +Ammo_Optional
+  +Alt_Ammo_Optional
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    CACL A 0 Thing_Remove (0)
+    Stop
+  Select:
+     CACL A 1 A_Raise
+     Goto Ready
+  Ready:
+     CACL A 5 A_WeaponReady
+     NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+     Loop
+	 NULL A 0 HealThing(1)
+	 goto ready 
+  DeSelect:
+     CACL A 1 A_Lower
+     Loop
+  Fire:
+     CACL A 0 A_JumpIfCloser (60,"Melee")
+	 CACL ABC 3
+	 CACL A 0 A_SetBlend ("BLUE",0.45,25)
+	 CACL A 0 A_FireCustomMissile ("PCacolanternBall",0,0,0,5)
+	 CACL C 6
+	 CACL CBA 3
+     Goto Ready 
+  Melee:
+    CACL A 4
+	CACL B 4 A_CustomPunch (6,0,1,"FBulletPuff",60)
+    CACL C 4
+	goto Ready	
+  Altfire:
+    CACL A 5 ACS_ExecuteAlways (991,0,3,0) 
+  	goto Ready	 
+  }
+}
+
+actor PCacolanternBall : MCacolanternBall
+
+{
+speed 22
+damage 6
+}
+
+// Abaddon
+
+ACTOR AbaddonClass : PlayerPawn
+{
+  
+  Health 1200
+  Speed 0.40
+  Radius 31
+  Height 56
+  Mass 400
+  PainChance 128
+  Player.DisplayName "Abaddon"
+  Player.MaxHealth 1200
+  Player.ViewHeight 40
+  Player.SoundClass Cacodemon
+  Player.JumpZ 0
+  Player.MorphWeapon "AbaddonMounth"
+  Player.WeaponSlot 1, AbaddonMounth
+  BloodColor "red" 
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  
+  States
+  {
+  Spawn:
+	HED3 A 5 
+    Loop
+  See:
+    HED3 A 0 
+    HED3 A 0 A_Jump (240,2)
+	HED3 A 0 A_PlaySoundEx ("caco/active","body")
+    HED3 A 15
+    Loop
+  Missile:
+    HED3 BC 5 
+    HED3 D 5 BRIGHT
+    HED3 BC 5 
+    HED3 D 5 BRIGHT
+	HED3 B 16
+    Goto See
+  Melee:
+    HED3 A 0
+    Goto Missile
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    HED3 L -1
+    stop
+  }
+}
+
+// Weapons etc
+
+ACTOR AbaddonMounth : Weapon
+{ 
+  OBITUARY "$OB_CACOLANTERN"
+  HITOBITUARY "$OB_CACOLANTERN_MELEE"
+  weapon.kickback 60
+  attacksound "caco/pain"
+  +WEAPON.NOALERT
+  +Ammo_Optional
+  +Alt_Ammo_Optional
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    CACA A 0 Thing_Remove (0)
+    Stop
+  Select:
+     CACA A 1 A_Raise
+     Goto Ready
+  Ready:
+     CACA A 5 A_WeaponReady
+     NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+     Loop
+	 NULL A 0 HealThing(1)
+	 goto ready 
+  DeSelect:
+     CACA A 1 A_Lower
+     Loop
+  Fire:
+     CACA A 0 A_JumpIfCloser (60,"Melee")
+	 CACA ABC 3
+	 CACA A 0 A_SetBlend ("red",0.45,10)
+	 CACA A 0 A_FireCustomMissile ("PAbaddonBall",0,0,0,5)
+	 CACA ABC 3
+	 CACA A 0 A_SetBlend ("red",0.45,10)
+	 CACA A 0 A_FireCustomMissile ("PAbaddonBall",0,0,0,5)
+	 CACA C 6
+	 CACA CBA 3
+     Goto Ready 
+  Melee:
+    CACA A 4
+	CACA B 4 A_CustomPunch (6,0,1,"FBulletPuff",60)
+    CACA C 4
+	goto Ready	
+  Altfire:
+    CACA A 5 ACS_ExecuteAlways (991,0,3,0) 
+  	goto Ready	 
+  }
+}
+
+actor PAbaddonBall : MAbaddonBall
+
+{
+Speed 22
+Damage 10
+}

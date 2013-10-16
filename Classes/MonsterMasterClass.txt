@@ -1,0 +1,117 @@
+actor MonsterMasterClass : PlayerPawn
+
+{
+  Speed 1
+  Health 1
+  Radius 16
+  Height 56
+  Mass 100
+  PainChance 0
+  Player.ViewHeight 25
+  Player.MaxHealth 1
+  Player.DisplayName "PuppetMaster"
+  Player.SoundClass "PuppetMaster"
+  Player.StartItem "mastergun"
+  Player.WeaponSlot 1, mastergun
+  FloatSpeed 0
+  
+  // immune to everything
+  DamageFactor "MarineDamage", 0
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "Cutter", 0
+  DamageFactor "MarineRLDamage", 0
+  DamageFactor "BFGSplash", 0
+  
+  RenderStyle None
+  +NOBLOODDECALS
+  +DONTSPLASH
+  +NOINTERACTION
+  -SHOOTABLE
+  -SOLID
+  -PICKUP
+  -TELESTOMP
+  +CANNOTPUSH
+  -FRIENDLY
+  +NOTARGET
+  -CANPUSHWALLS
+
+  limitedtoteam 1
+  
+  States
+  {
+  Spawn:
+ 	SPIR AB 1
+ 	loop
+  See:
+	SPIR AB 1 A_SpawnItemEx ("MGhost",-20,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    loop
+  Missile:
+	SPIR AB 1
+	goto spawn
+  Death:
+	TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+	TNT1 A 0 A_NoBlocking
+	SPIR EFGHI 3
+	SPIR J -1
+	stop
+  XDeath:
+	TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+	TNT1 A 0 A_NoBlocking
+	SPIR EFGHI 3
+	SPIR J -1
+	stop
+  }
+}
+
+actor MGhost
+{
+  +NOBLOCKMAP
+  +NOGRAVITY
+  +NOTELEPORT
+  RenderStyle add
+  Alpha 0.20
+  scale 0.7
+  +RANDOMIZE
+  States
+  {	
+  Spawn:
+    SPIR AB 3
+    stop
+  }
+}
+
+ACTOR MDeathGhost
+{
+  +NOBLOCKMAP
+  +NOGRAVITY
+  +NOTELEPORT
+  RenderStyle add
+  alpha 1
+  scale 0.8
+  States
+  {
+  Spawn:
+    SPIR EFGHIJ 3
+    stop
+  }
+}
+actor Mskull : Inventory
+{
+  inventory.amount 1
+  inventory.maxamount 20
+  states
+  {
+  Spawn:
+    TNT1 A -1
+    stop
+  }
+}

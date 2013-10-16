@@ -1,0 +1,110 @@
+// Created by Silva (com1337@gmail.com)
+// Edited by c4tnt (c4tnt@yandex.ru)
+
+#library "MMaster"
+#include "zcommon.acs"
+
+global int 1:marineplayers;
+global int 2:masterplayers;
+global int 3:monstersleft;
+global int 4:monsterstotal;
+global int 5:reinforcements;
+
+#libdefine MOPMAXCLIENTS		32
+
+#libdefine MOPMONSTERCOUNT	38
+#libdefine VERYVERYLONG		2147483647
+#libdefine PLAYERCOST		840
+#libdefine UNNORMAWARD		23520
+#libdefine mopBASEPLAYERTID	1000
+
+#libdefine mopX			-1
+#libdefine mopY			-2
+#libdefine mopZ			-3
+#libdefine mopPFLAGS		-4
+#libdefine mopPFRAME		-5
+
+// Delayed morph state here
+#libdefine mopDMSX		-6	
+#libdefine mopDMSY		-7
+#libdefine mopDMSZ		-8	
+#libdefine mopDMSH		-9	
+#libdefine mopDMST		-10
+
+#libdefine mopMCLASS		0
+#libdefine mopAMBSND		1
+#libdefine mopMONSTER		2
+#libdefine mopICON		3
+#libdefine mopNUMBEG		4
+#libdefine mopFLAGS		4
+#libdefine mopSCRIPT		5
+#libdefine mopCOST		6
+#libdefine mopBEACON		7
+
+#libdefine MOPSMAX		54
+#libdefine MOPCMAX		8
+#libdefine MOPSHID		0
+#libdefine MOPSHNAME		1
+#libdefine MOPSHTYPE		2
+#libdefine MOPSHA1		3
+#libdefine MOPSHA2		4
+#libdefine MOPDESC		5
+
+#libdefine SHOPCURSOR		"Mskull"
+
+#libdefine MOPANINVENTORY	0
+#libdefine MOPANSEQUENCE	1
+
+// MOP Functions
+
+function int FindFreeTID ( int start ) {;}
+function int MOPIsMorphed ( int playnum ) {;}
+function int MOPHaveDMS ( int playnum ) {;}
+function int MOPIsMaster ( int playnum ) {;}
+function int MOPIsMarine ( int playnum ) {;}
+
+// Master spawn core
+// type - morph index, when this < 1 script try to get typeinfo from the target actor
+// target - tid of the morph target, if it zero script will only change player, if target is negative, trying to use activator target
+// fl - flags:
+//	1 - no health transfer
+//	2 - unmorph to nothing ( not implemented yet )
+//	4 - die when unmorphing ( not implemented yet )
+//	8 - silent
+//	16 - no move
+//	32 - disable notarget, use it if you want to morph a marine
+//	64 - limit spawn cost, only used when type is not specified. Type will treated as maximum monster cost
+//	128 - test only, do not perform really morph or spawn
+//	256 - delayed morph. Call this with 128+256 to create a delayed morph state, then call this with 256 to execute a delayed morph state
+// returns:
+//	0 - failure
+//	-1 - monster too expensive ( for 64 flag only )
+//	1 - success
+//	2 - success, but monster in the wall. Old monster position is saved into mopX-mopZ player fields. Player morphed, but his position is left as is
+
+function int MOPMorph ( int type, int target, int fl ) {;}
+
+// Master unmorph 
+// fl - flags:
+//	1 - allow to lose monster
+//	2 - forced unmorph
+//	4 - actor lost, use saved data
+//	8 - force to lose monster
+//
+// return:
+//	positive value - spawned monster TID
+//	0 - unmorph was cancelled
+//	-1 - spawning failed, unmorph cancelled
+
+function int MOPUnmorph ( int fl ) {;}
+
+// Kills morphed monster and drops his corpse
+// fl - flags:
+//	1 - XDeath
+//
+// return:
+//	1 - monster removed, corpse wasn't spawned
+//	0 - all right
+//	-1 - activator is not a controlled monster
+
+function int MOPCorpse ( int fl ) {;}

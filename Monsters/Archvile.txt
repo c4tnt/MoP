@@ -1,0 +1,39 @@
+ACTOR MArchvile : Archvile replaces Archvile
+{
+  Health 700
+  Radius 20
+  Height 56
+  Mass 500
+  Speed 15
+  
+  PainChance "Control", 255
+  
+  // no immune for archvile
+  DamageFactor "Control", 1
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0
+  States
+  {
+  Spawn:
+    VILE A 10 A_Look 
+    VILE B 10 
+    loop
+  See:
+    VILE AABBCCDDEEFF 2 A_VileChase
+    loop	
+  Death:
+    VILE Q 7
+    VILE R 7 A_Scream
+    VILE S 7 A_NoBlocking
+    VILE TUVWXY 7
+    VILE Z -1
+    Stop	
+  }
+}

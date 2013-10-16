@@ -1,0 +1,24 @@
+
+ACTOR MonsterForceA : Inventory
+ {
+  Inventory.Amount 0
+  Inventory.MaxAmount 255
+  States
+   {
+    Spawn:
+    TNT1 A -1
+    Loop 
+   }
+ }
+
+ACTOR MonsterForceB : Inventory
+ {
+  Inventory.Amount 0
+  Inventory.MaxAmount 255
+  States
+   {
+    Spawn:
+    TNT1 A -1
+    Loop 
+   }
+ }

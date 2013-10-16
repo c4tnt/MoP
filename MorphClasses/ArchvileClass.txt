@@ -1,0 +1,194 @@
+actor ArchvileClass : PlayerPawn
+{
+  health 700
+  height 56
+  mass 500
+  Radius 20
+  Speed 0.80
+  PainChance 0
+  MaxStepHeight 36
+  Player.MorphWeapon "VileHands"
+  Player.WeaponSlot 1, VileHands
+  Player.DisplayName "Archvile"
+  Player.MaxHealth 700   
+  Player.ViewHeight 50
+  Player.SoundClass "Mvile"
+  Player.JumpZ 10
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP  
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+
+  states
+  {
+  Spawn:
+    VILE AB 10 
+    loop
+  See:
+    VILE A 0 A_Jump (240,2)
+	VILE A 0 A_PlaySoundEx ("vile/active","body")
+    VILE ABCDEF 4
+    Goto Spawn
+  Missile:
+    VILE G 0 A_JumpIf(pitch>=20 && pitch<60,"Heal")
+    VILE G 0 BRIGHT 
+    VILE G 10 BRIGHT 
+    VILE H 8 BRIGHT 
+    VILE IJKLMN 8 BRIGHT 
+    VILE O 8 BRIGHT
+    VILE P 21 BRIGHT
+    Goto Spawn
+  Missile2:
+    VILE G 0 BRIGHT 
+    VILE G 10 BRIGHT 
+    VILE H 8 BRIGHT 
+    VILE IJKLMN 8 BRIGHT 
+    VILE O 8 BRIGHT
+    VILE P 21 BRIGHT
+    Goto Spawn	
+  Heal:
+	VILE "[\]" 10
+	goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    VILE Z -1
+    stop
+  }
+}
+
+// weapon
+
+
+ACTOR VileHands : Weapon
+{
+  obituary "%o was incinerated by %k."
+  weapon.kickback 0
+  +WEAPON.NOALERT
+  +Ammo_Optional
+  +Alt_Ammo_Optional
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +WEAPON.NOAUTOFIRE
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    TNT1 A 1 A_Raise
+    Goto Ready
+  Ready:
+    TNT1 A 4 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(2)
+	goto ready 
+  DeSelect:
+    TNT1 A 1 A_Lower
+    Loop
+    Fire:
+    TNT1 A 0 A_JumpIf(pitch>=20 && pitch<60,"Heal")
+    TNT1 A 0 SetPlayerProperty (0, 1, 4)
+	TNT1 A 10
+	TNT1 A 0 A_ClearTarget
+	TNT1 A 0 A_Look
+	TNT1 A 0 A_VileStart
+	TNT1 A 0 A_SetBlend ("YELLOW",0.7,56)	
+    TNT1 A 0 A_FaceTarget
+	TNT1 A 0 A_FireCustomMissile ("MVileFireP",0,1,5,10)
+    ARCG IJKLMN 8 A_FaceTarget
+	TNT1 A 0 A_SetBlend ("YELLOW",1,20)
+    TNT1 A 8 A_VileAttack
+	TNT1 A 0 A_ClearTarget
+	TNT1 A 0 SetPlayerProperty (0, 0, 4)
+	goto ready
+   AltFire:
+    TNT1 A 0 A_ClearTarget
+    TNT1 A 5 ACS_ExecuteAlways (991,0,3,0)
+    goto ready
+  Heal:
+   TNT1 A 0 SetPlayerProperty (0, 1, 4)
+   TNT1 A 4 A_SetBlend ("RED",0.7,17)
+   TNT1 A 5 bright A_FireCustomMissile ("MVileRevive",0,0,0,0,0,0)
+   TNT1 AA 10
+   TNT1 A 1
+   TNT1 A 0 SetPlayerProperty (0, 0, 4)
+   goto Ready	
+  }
+}
+
+actor MVileFireP
+{
+  radius 4
+  height 1
+  speed 99
+  alpha 1
+  DamageType "viledamage"
+  renderstyle add
+  PROJECTILE
+  +NOBLOCKMAP
+  +NOGRAVITY
+  PROJECTILE
+  +SEEKERMISSILE
+  -BLOODLESSIMPACT
+  states
+  {
+  Spawn:
+    TNT1 A 1 A_Fire 
+	loop
+	death:
+    FIRE A 2 bright A_StartFire
+    FIRE BAB 2 bright A_Fire
+    FIRE C 2 bright A_FireCrackle
+    FIRE BCBCDCDCDEDED 2 bright A_Fire
+    FIRE E 2 bright A_FireCrackle
+    FIRE FEFEFGHGHGH 2 bright A_Fire
+    stop
+  }
+}
+
+ACTOR MVileRevive
+{
+   Radius 30
+   Height 1
+   Speed 5
+   PROJECTILE
+   +NOCLIP
+   +FLOORHUGGER
+   States
+   {
+   Spawn:
+	  TNT1 AAAA 4 A_VileChase  
+	  TNT1 A 0 
+      stop
+   See:	
+      TNT1 A 4 A_VileChase
+	  stop
+   Heal:
+      TNT1 A 1 
+      stop	  
+   }
+}
+

@@ -1,0 +1,128 @@
+actor MChaingunGuy : ChainGunGuy replaces ChainGunGuy
+{
+
+  health 70
+  radius 20
+  height 56
+  mass 100
+  speed 8
+  painchance 170
+  
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+  
+  // takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+
+  states
+  {
+  Spawn:
+    CPOS A 10 A_Look 
+    CPOS B 10
+    loop
+  See:
+    CPOS AABBCCDD 3 A_Chase
+    loop	
+  Missile:
+    CPOS E 10 A_FaceTarget
+    CPOS FE 4 bright A_CustomBulletAttack (22.5, 0, 1, 3, "FBulletPuff")
+    CPOS F 1 A_CPosRefire
+    goto Missile+1	
+  Death:
+    CPOS H 5
+    CPOS I 5 A_Scream
+    CPOS J 5 A_NoBlocking
+    CPOS KLM 5
+    CPOS N -1
+    stop
+  XDeath:
+    CPOS O 5
+    CPOS P 5 A_XScream
+    CPOS Q 5 A_NoBlocking
+    CPOS RS 5
+    CPOS T -1
+    stop	
+  }
+}
+
+actor MChaingunGuy2 20000
+{
+  obituary "%o was ripped to bloody ribbons by a double-chaingunner."
+  health 150
+  radius 20
+  height 56
+  mass 100
+  speed 8
+  painchance 150
+  seesound "chainguy/sight"
+  attacksound "chainguy/attack"
+  painsound "chainguy/pain"
+  deathsound "chainguy/death"
+  activesound "chainguy/active"
+  dropitem "Chaingun" 256
+  MONSTER
+  +FLOORCLIP
+  Decal Bulletchip
+
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+  
+  // takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  
+  states
+  {
+  Spawn:
+    DPOS A 10 A_Look
+    DPOS B 10
+    loop
+  See:
+    DPOS AABBCCDD 3 A_Chase
+    loop	
+  Missile:
+    DPOS E 10 A_FaceTarget
+    DPOS F 0 bright A_CustomBulletAttack (22.5, 0, 1, 4, "FBulletPuff")
+    DPOS F 4 bright A_CustomBulletAttack (22.5, 0, 1, 4, "FBulletPuff")
+    DPOS E 0 bright A_CustomBulletAttack (22.5, 0, 1, 4, "FBulletPuff")
+    DPOS E 4 bright A_CustomBulletAttack (22.5, 0, 1, 4, "FBulletPuff")
+    DPOS F 1 A_CPosRefire
+    goto Missile+1
+  Pain:
+    DPOS G 3
+    DPOS G 3 A_Pain
+    goto See
+  Death:
+    DPOS H 5
+    DPOS I 5 A_Scream
+    DPOS J 5 A_NoBlocking
+    DPOS KLM 5
+    DPOS N -1
+    stop
+  XDeath:
+    DPOS O 5
+    DPOS P 5 A_XScream
+    DPOS Q 5 A_NoBlocking
+    DPOS RS 5
+    DPOS T -1
+    stop
+  Raise:
+    DPOS NMLKJIH 5
+    goto See
+  }
+}

@@ -1,0 +1,357 @@
+
+actor ShotgunGuyClass : PlayerPawn
+
+{
+  Health 30
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 0.35
+  PainChance 127
+  Player.MaxHealth 30  
+  Player.ViewHeight 48
+  Player.JumpZ 5
+  
+  Player.MorphWeapon "ZombieShotGun"
+  Player.WeaponSlot 1, ZombieShotGun
+  Player.DisplayName "Sergeant"
+  Player.SoundClass "Brainless"
+  
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  +NOPAIN
+  +NOSKIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	SPOS AB 10 
+    loop
+  See:
+    SPOS A 0 A_Jump (240,2)
+  	SPOS A 0 A_PlaySoundEx ("shotguy/active","body")
+    SPOS ABCD 4 
+    Loop	
+  Missile:
+    SPOS E 1
+    SPOS F 10 bright
+    SPOS E 10
+    goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SPOS L -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    SPOS U -1
+    stop
+  }
+}
+
+
+
+actor ZombieShotGun : Weapon
+{
+  obituary "%o chewed on %k's boomstick."
+  attacksound "weapons/shotgf"
+  weapon.kickback 60
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Ready:
+    STG2 A 6 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  Deselect: 
+    STG2 A 1 A_Lower
+    loop
+  Select:
+	STG2 A 1 A_Raise
+    goto Ready
+  Fire:
+    STG2 A 1
+    STG2 A 0 A_FireBullets (4.5,0,6,5,"FBulletPuff")
+    STG2 A 4 A_GunFlash
+    STG2 BC 4
+    STG2 D 3
+    STG2 CB 4
+	STG2 A 3
+    STG2 A 4 A_ReFire
+    goto Ready
+	AltFire:
+    STG2 A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready
+  Flash:
+    SHTF A 3 bright A_Light1
+    SHTF B 3 bright A_Light2
+    SHTF B 0 bright A_Light0
+    stop
+  Spawn:
+    TNT1 A 1 Thing_Remove (0)
+    Stop
+  }
+}
+
+actor SSgZombieClass : PlayerPawn
+
+{
+  Health 100
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 0.35
+  Scale 0.8
+  PainChance 127
+  Player.MaxHealth 100  
+  Player.ViewHeight 48
+  Player.JumpZ 5
+  Translation "112:127=16:47"
+  
+  Player.MorphWeapon "ZombieSuperShotgun"
+  Player.WeaponSlot 1, ZombieSuperShotgun
+  Player.DisplayName "SSgZombie"
+  Player.SoundClass "SSSgZombie"
+  
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  +NOPAIN
+  +NOSKIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	GPOS AB 10 
+    loop
+  See:
+    GPOS A 0 A_Jump (240,2)
+  	GPOS A 0 A_PlaySoundEx ("SSGUNER/idle","body")
+    GPOS ABCD 4 
+    Loop	
+  Missile:
+    GPOS E 1
+    GPOS F 10 bright
+    GPOS E 10
+    goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    GPOS N -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    GPOS T -1
+    stop
+  }
+}
+
+actor ZombieSuperShotgun : SuperShotgun 
+{
+  obituary "%o was blown open by a %k'."
+  attacksound "SSGUNER/SSG"
+  weapon.kickback 60
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  States
+  {
+  Ready:
+    SHT2 A 1 A_WeaponReady
+	NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  Fire:
+    SHT2 A 3
+	SHT2 A 0 A_FireBullets (11.2, 7.1, 15, 5, "FBulletPuff")
+    SHT2 A 7 A_GunFlash
+    SHT2 B 0 A_CheckReload
+	SHT2 BCDEF 3
+    SHT2 F 0 A_OpenShotgun2
+    SHT2 HUVKL 3
+    SHT2 L 0 A_LoadShotgun2
+    SHT2 OPQR 3
+	SHT2 R 0 A_CloseShotgun2 
+    SHT2 RST 3 
+    SHT2 A 5 A_ReFire
+    Goto Ready
+  AltFire:
+    SHT2 A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready	
+  Spawn:
+    SGN2 A 1 Thing_Remove(0)
+    Stop
+  }
+}
+
+actor AShotgunGuyClass : PlayerPawn
+
+{
+  Health 70
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 0.35
+  PainChance 127
+  Player.MaxHealth 70  
+  Player.ViewHeight 41
+  Player.JumpZ 8
+  
+  Player.MorphWeapon "ZombieAShotGun"
+  Player.WeaponSlot 1, ZombieAShotGun
+  Player.DisplayName "Assault Shotgunner"
+  Player.SoundClass "Brainless"
+  
+  DamageFactor "MarineDamage", 0.8
+  DamageFactor "BFGSplash", 0.8
+  DamageFactor "MarineRLDamage", 0.8
+  DamageFactor "CybRLDamage", 0.25
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  
+  +NOPAIN
+  +NOSKIN
+  -PICKUP
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    ASGZ AB 10 
+    loop
+  See:
+    ASGZ A 0 A_Jump (240,2)
+    ASGZ A 0 A_PlaySoundEx ("shotguy/active","body")
+    ASGZ ABCD 4 
+    Loop	
+  Missile:
+    ASGZ E 3
+    ASGZ F 5 bright
+    ASGZ E 18
+    goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    ASGZ N -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    ASGN W -1
+    stop
+  }
+}
+
+actor ZombieAShotGun : Weapon
+{
+  obituary "%o was peppered y %k's jackhammer."
+  AttackSound "weapons/Ashotgun/fire"
+  weapon.kickback 60
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Ready:
+    D3SG A 6 A_WeaponReady
+    TNT1 A 0 A_JumpIfInventory ("Mskull",0,3)
+    D3SG A 6 A_WeaponReady
+    TNT1 A 0 A_JumpIfInventory ("Mskull",3,1)
+    Loop
+    TNT1 A 0 HealThing(1)
+    goto ready 
+  Deselect: 
+    D3SG A 1 A_Lower
+    loop
+  Select:
+    D3SG A 1 A_Raise
+    goto Ready
+  Fire:
+    D3SG A 3
+    D3SG A 0 A_FireBullets(4.6, 2.9, 7, 6, "FBulletPuff", 1)
+    D3SG A 9 A_GunFlash
+    D3SG B 4 A_PlaySound("weapons/Ashotgun/cock/back")
+    D3SG C 6
+    D3SG B 4 A_PlaySound("weapons/Ashotgun/cock/forward")
+    D3SG A 3
+    goto Ready
+  AltFire:
+    D3SG A 5 ACS_ExecuteAlways (991,0,3,0)
+    goto ready
+  Flash:
+    D3SF A 3 BRIGHT A_Light1
+    D3SF B 2 BRIGHT A_Light2
+    D3SF B 0 A_Light0
+    Stop
+  Spawn:
+    TNT1 A 1 Thing_Remove (0)
+    Stop
+  }
+}

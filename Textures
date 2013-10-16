@@ -1,0 +1,73 @@
+// made by silva (com1337@gmail.com)
+
+
+define MarinHB 82 22
+define MarinCC 82 22
+define MarinCD 82 22
+define MarinCE 82 22
+define MarinAB 66 17
+define MarinAA 66 17
+define ICONB 6 7
+define ICONR 16 6
+define ICONc 8 6
+define ICONN 16 6
+define ICOND 16 6
+
+define ICONBH 3 4
+define ICONRH 8 3
+define ICONcH 4 3
+define ICONNH 8 3
+define ICONDH 8 3
+define ICONSH 7 3
+
+define AICONR 8 4
+define AICONB 8 4
+define AICONG 8 4
+define MSKULL 15 15
+
+define PLAYH 9 12
+define MSTRH 9 12
+
+define mmbnum0 7 9
+define mmbnum1 7 9
+define mmbnum2 7 9
+define mmbnum3 7 9
+define mmbnum4 7 9
+define mmbnum5 7 9
+define mmbnum6 7 9
+define mmbnum7 7 9
+define mmbnum8 7 9
+define mmbnum9 7 9
+
+define mmcnum0 5 7
+define mmcnum1 5 7
+define mmcnum2 5 7
+define mmcnum3 5 7
+define mmcnum4 5 7
+define mmcnum5 5 7
+define mmcnum6 5 7
+define mmcnum7 5 7
+define mmcnum8 5 7
+define mmcnum9 5 7
+
+define mmdnum0 6 8
+define mmdnum1 6 8
+define mmdnum2 6 8
+define mmdnum3 6 8
+define mmdnum4 6 8
+define mmdnum5 6 8
+define mmdnum6 6 8
+define mmdnum7 6 8
+define mmdnum8 6 8
+define mmdnum9 6 8
+
+define mmsnum0 3 4
+define mmsnum1 3 4
+define mmsnum2 3 4
+define mmsnum3 3 4
+define mmsnum4 3 4
+define mmsnum5 3 4
+define mmsnum6 3 4
+define mmsnum7 3 4
+define mmsnum8 3 4
+define mmsnum9 3 4

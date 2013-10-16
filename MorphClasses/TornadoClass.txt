@@ -1,0 +1,162 @@
+actor TornadoDemonClass : PlayerPawn
+{
+  health 700
+  height 56
+  mass 500
+  Radius 20
+  Speed 1.0
+  PainChance 0
+  MaxStepHeight 36
+  Player.MorphWeapon "TornadoDemonHands"
+  Player.WeaponSlot 1, VileHands
+  Player.DisplayName "Tornado demon"
+  Player.MaxHealth 700   
+  Player.ViewHeight 50
+  Player.SoundClass "Mvile"
+  Player.JumpZ 10
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP  
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+
+  states
+  {
+  Spawn:
+    SILE AB 10 
+    loop
+  See:
+    SILE A 0 A_Jump (240,2)
+    SILE A 0 A_PlaySoundEx ("vile/active","body")
+    SILE AABBCCDDEEFF 2
+    Goto Spawn
+  Missile:
+    SILE G 0 BRIGHT 
+    SILE G 10 BRIGHT 
+    SILE H 8 BRIGHT 
+    SILE IJKLMN 8 BRIGHT 
+    SILE O 8 BRIGHT
+    SILE P 21 BRIGHT
+    Goto Spawn
+  Missile2:
+    SILE G 0 BRIGHT 
+    SILE G 10 BRIGHT 
+    SILE H 8 BRIGHT 
+    SILE IJKLMN 8 BRIGHT 
+    SILE O 8 BRIGHT
+    SILE P 21 BRIGHT
+    Goto Spawn	
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SILE Z -1
+    stop
+  }
+}
+
+// weapon
+
+
+ACTOR TornadoDemonHands : Weapon
+{
+  obituary "%o was blown away by %k."
+  weapon.kickback 0
+  +WEAPON.NOALERT
+  +Ammo_Optional
+  +Alt_Ammo_Optional
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +WEAPON.NOAUTOFIRE
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    TNT1 A 1 A_Raise
+    Goto Ready
+  Ready:
+    TNT1 A 4 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(2)
+	goto ready 
+  DeSelect:
+    TNT1 A 1 A_Lower
+    Loop
+    Fire:
+    TNT1 A 0 A_PlaySound("wind/away")
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 1, 2)
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 25, 2)
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 81, 2)	//SHIFT Boundary
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 121, 2)
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 169, 2)
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 225, 2)
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) < 324, 2)
+    TNT1 A 0 A_FireCustomMissile("PLeaves1", Random(-(momx*momx+momy*momy),(momx*momx+momy*momy)), 0, 0, 8, 0, Random(-5,5))
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) > 81, 2)
+    ARCG I 2
+    ARCG I 2
+    TNT1 A 0 A_JumpIf( (momx*momx+momy*momy) > 81, 2)
+    ARCG J 2
+    ARCG J 2
+    ARCG K 2 A_refire
+    ARCG LM 2
+    TNT1 A 8 BRIGHT A_FireCustomMissile("WindyDisaster",0,0)
+    goto ready
+   AltFire:
+    TNT1 A 0 A_ClearTarget
+    TNT1 A 5 ACS_ExecuteAlways (991,0,3,0)
+    goto ready
+  }
+}
+
+ACTOR PLeaves1
+{
+  Radius 8
+  Height 16
+  Speed 15 
+  Damage 4
+  PROJECTILE
+  +Randomize
+  states
+  {
+  Spawn:
+    LEF1 ABCDEFGHI 4 BRIGHT
+	LEF1 ABCDEFGHI 4 BRIGHT
+	LEF1 ABCDEFGHI 4 BRIGHT
+	LEF1 ABCDEFGHI 4 BRIGHT
+	LEF1 ABCDEFGHI 4 BRIGHT
+    Goto death
+  Death:
+    LEF1 A 1 BRIGHT
+    Stop
+  }
+}

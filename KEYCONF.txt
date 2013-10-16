@@ -1,0 +1,5 @@
+// made by silva (com1337@gmail.com)
+clearplayerclasses
+
+addplayerclass MarineClass
+addplayerclass MonsterMasterClass

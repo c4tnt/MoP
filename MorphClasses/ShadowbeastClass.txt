@@ -1,0 +1,131 @@
+actor ShadowBeastClass : Playerpawn
+{
+  health 500
+  radius 40
+  height 80
+  mass 500
+  speed 0.40
+  painchance 144
+  Player.DisplayName "Shadow Beast"
+  Player.MaxHealth 500
+  Player.ViewHeight 54
+  Player.SoundClass Shdbeast 
+  Player.JumpZ 5
+  Player.MorphWeapon "BeastHand"
+  Player.WeaponSlot 1, BeastHand
+  
+  BloodColor "70 AC 00"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    BDEM AB 10 
+    loop
+  See:
+    BDEM A 0 A_Jump (240,2)
+    BDEM A 0 A_PlaySoundEx ("shadowbeast/active","body")
+    BDEM ABCDEF 6
+    loop
+  Missile:
+    BDEM HI 6 
+    goto See   
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    BDEM Z -1
+    stop
+  }
+}
+
+// Weapon
+
+ACTOR BeastHand : Weapon
+{
+  obituary "%o was killed by %k."
+  hitobituary "%o was killed by %k."
+  weapon.kickback 80
+  weapon.ammouse 0
+  
+  +WEAPON.NOALERT
+  +ammo_optional
+  +Alt_Ammo_Optional
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    KHND A 1 A_Raise
+	goto ready
+  Ready:
+    KHND FAEA 3 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+    NULL A 0 HealThing(2)
+    goto ready 
+  DeSelect:
+    KHND A 1 A_Lower
+    Loop
+  Fire:
+    NULL A 0 SetPlayerProperty (0, 1, 0)
+    KHND A 0 A_JumpIfInventory ("MonsterForceA",4,"FireSplit")
+    KHND A 0 A_GiveInventory ("MonsterForceA", 1)
+    KHND A 5 
+    KHND A 0 A_ReFire 
+    KHND B 5 
+    KHND C 5 
+    KHND D 5 A_FireCustomMissile ("ShadowBeast_Ball1",0,0,0,15,0)
+    NULL A 0 SetPlayerProperty (0, 0, 0)
+    NULL A 0 A_TakeInventory("MonsterForceA", 255)
+    Goto Ready
+  FireSplit:
+    KHND A 0 A_JumpIfInventory ("MonsterForceA",8,"FireSpirit")
+    KHND A 0 A_GiveInventory ("MonsterForceA", 1)
+    KHND A 5 
+    KHND A 0 A_ReFire 
+    KHND B 5 
+    KHND C 5 
+    KHND D 5 A_FireCustomMissile ("ShadowBeast_Ball1",0,0,0,15,0)
+    KHND D 0 A_FireCustomMissile ("ShadowBeast_Ball1",-8,0,0,15,0)
+    KHND D 0 A_FireCustomMissile ("ShadowBeast_Ball1",8,0,0,15,0)
+    NULL A 0 SetPlayerProperty (0, 0, 0)
+    NULL A 0 A_TakeInventory("MonsterForceA", 255)
+    Goto Ready
+  FireSpirit:
+    KHND B 3 
+    KHND C 4 
+    KHND D 4 ACS_ExecuteAlways (990,0,48,47,1)
+    KHND C 4
+    NULL A 0 A_TakeInventory("MonsterForceA", 255)
+    NULL A 0 SetPlayerProperty (0, 0, 0)
+    Goto Ready
+  Altfire:
+    KHND A 5 ACS_ExecuteAlways (991,0,3,0)
+  	goto Ready
+  }
+}

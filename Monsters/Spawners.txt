@@ -1,0 +1,100 @@
+Actor ZombieManSpawner : RandomSpawner replaces Zombieman
+{
+	DropItem "MZombieMan" 255 3
+	DropItem "MChainsawZombie" 255 1  
+	DropItem "MPlasmaZombie" 255 1  
+	DropItem "MRocketZombie" 255 1  
+}
+
+Actor DoomImpSpawner : RandomSpawner replaces DoomImp
+{
+	DropItem "MDoomImp" 255 4
+	DropItem "MDarkImp" 255 2
+	DropItem "MSoulHarvester" 255 2
+	DropItem "MFlyingImp"  255 2
+	DropItem "MShadow"  255 1 
+	DropItem "MPyroImp"  255 1 
+	DropItem "MHellion"  255 1 
+}
+
+Actor ShotgunGuySpawner : RandomSpawner replaces ShotgunGuy
+{
+    DropItem "MShotgunGuy" 255 3
+    DropItem "MAShotgunGuy" 255 1 
+    DropItem "MSSGZombie" 255 1
+    DropItem "MZombieMarine" 255 1
+}
+
+Actor ChaingunGuySpawner : RandomSpawner replaces ChaingunGuy
+{
+    DropItem "MChaingunGuy" 255 3
+	DropItem "MChaingunGuy2" 255 2
+}
+
+Actor ArachnotronSpawner : RandomSpawner replaces Arachnotron
+{
+    DropItem "MArachnotron" 255 3
+    DropItem "MArachGunner" 255 1
+}
+
+Actor DemonSpawner : RandomSpawner replaces Demon
+{
+    DropItem "MDemon" 255 3
+	DropItem "MBloodDemon" 255 2
+}
+
+Actor CacoDemonSpawner : RandomSpawner replaces Cacodemon
+{
+    DropItem "MCacodemon" 255 4
+	DropItem "MCacolantern" 255 2
+	DropItem "MAbaddon" 255 1
+	DropItem "MFallen" 255 1
+}
+
+Actor HellKnightSpawner : RandomSpawner replaces HellKnight
+{
+    DropItem "MHellKnight" 255 5
+	DropItem "MBaronOfHell" 255 1
+}
+
+Actor BaronOfHellSpawner : RandomSpawner replaces BaronOfHell
+{
+    DropItem "MBaronOfHell" 255 3
+	DropItem "MBelphegor" 255 1
+	DropItem "MHellhound" 255 1
+}
+
+Actor FatsoSpawner : RandomSpawner replaces Fatso
+{
+    DropItem "MFatso" 255 3
+	DropItem "MHectebus" 255 1
+	DropItem "MShadowbeast" 255 1
+}
+
+//Actor ArchVileSpawner : RandomSpawner replaces ArchVile
+//{
+//    DropItem "MArchVile" 255 3
+//	DropItem "MTornadoDemon" 255 1
+//}
+
+Actor RevenantSpawner : RandomSpawner replaces Revenant
+{
+    DropItem "MRevenant" 255 3
+    DropItem "MRevenantor" 255 1
+}
+
+Actor CyberSpawner : RandomSpawner replaces CyberDemon
+{
+    DropItem "MCyberDemon" 255 3
+    DropItem "MAnnihilator" 255 1
+}
+
+Actor MExplosiveBarrel : ExplosiveBarrel
+{
+}
+
+Actor BarrelSpawner : RandomSpawner replaces ExplosiveBarrel
+{
+    DropItem "MExplosiveBarrel" 255 3
+    DropItem "OilDrum" 255 1
+}

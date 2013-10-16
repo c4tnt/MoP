@@ -1,0 +1,47 @@
+actor MHellKnight : HellKnight replaces HellKnight
+{
+  health 500
+  radius 24
+  height 64
+  mass 1000
+  speed 8
+  BloodColor "darkgreen"
+  
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+  
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  // immune to
+  DamageFactor "KnightDamage", 0
+  states
+  {
+  Spawn:
+    BOS2 A 10 A_Look 
+    BOS2 B 10 
+    loop
+  See:
+    BOS2 AABBCCDD 3 A_Chase
+    loop	
+  Death:
+    BOS2 I 8
+    BOS2 J 8 A_Scream
+    BOS2 K 8
+    BOS2 L 8 A_NoBlocking
+    BOS2 MN 8
+    BOS2 O -1 A_BossDeath
+    stop	
+  }
+}
+
+actor MBaronBall : BaronBall replaces BaronBall 
+{
+  DamageType "KnightDamage"
+}

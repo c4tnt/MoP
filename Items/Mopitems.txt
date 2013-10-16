@@ -1,0 +1,388 @@
+ACTOR HTarget : Inventory
+{
+  Inventory.MaxAmount 15
+}
+
+ACTOR RTarget : Inventory
+{}
+
+Actor ArmorSet : CustomInventory 11000
+{
+	//$Category MOP_MarineItems
+	+Inventory.AlwaysPickup
+	Inventory.Icon "APACA0"
+	Inventory.Pickupmessage "Picked up the armor pack."
+	Inventory.PickupSound "misc/i_pkup"
+	States
+	{
+	Spawn:
+		APAC A 5
+		APAC A 5 bright
+		loop
+	Pickup:
+		TNT1 A 0 A_GiveInventory ("MShell", 16)
+		TNT1 A 0 A_GiveInventory ("MClip", 40)
+		TNT1 A 0 A_GiveInventory ("MRocketAmmo", 8)
+		TNT1 A 0 A_GiveInventory ("MCell", 40)
+		TNT1 A 0 A_GiveInventory ("Medikit",2)
+		TNT1 A 0 A_GiveInventory ("MGreenArmor")
+		stop
+	}
+}
+
+Actor MMover : CustomInventory
+{
+	+INVENTORY.UNDROPPABLE
+	+Inventory.InvBar
+	+Inventory.PickupFlash
+	+FloatBob
+	Inventory.MaxAmount 20
+	Inventory.PickupMessage "Emerald Amulet"
+	Inventory.Icon "CHESA0"
+	States
+	{
+	Spawn:
+		CHES A -1 Bright
+		Stop
+	Use:
+		TNT1 A 0 A_JumpIfInventory("MMoverParts", 1, "Failed")
+		TNT1 A 0 A_GiveInventory("MMoverParts", 100)
+		TNT1 A 0 A_PlaySound("amulet/use")
+		Stop
+	Failed:
+		TNT1 A 0 A_GiveInventory("MMover", 1)
+		Stop
+	}
+}
+
+Actor MMoverParts : Inventory
+{
+	Inventory.MaxAmount 255
+}
+
+Actor MLight : PowerupGiver
+{
+	+INVENTORY.UNDROPPABLE
+	Inventory.MaxAmount 25
+	Inventory.PickupSound "misc/p_pkup"
+	Inventory.PickupMessage "Moonlight ring"
+	Powerup.Type Torch
+	Powerup.Duration -60
+	Inventory.Icon "ROWLI0"
+	+Inventory.PickupFlash
+	+Inventory.InvBar
+	+FloatBob
+	Scale 0.7
+	States
+	{
+	Spawn:
+		ROWL A 1 Bright
+		Loop
+	}
+}
+
+Actor MDupe : CustomInventory
+{
+	+INVENTORY.UNDROPPABLE
+	+Inventory.InvBar
+	+Inventory.PickupFlash
+	+FloatBob
+	Inventory.MaxAmount 25
+	Inventory.PickupMessage "Monster replicator"
+	Inventory.Icon "TOMEI0"
+	States
+	{
+	Spawn:
+		TOME A -1 Bright
+		Stop    
+	Use:
+		TNT1 A 0 A_JumpIf( 0 == (ACS_ExecuteWithResult(991, 7, 140, 0)),"Failed")
+		TNT1 A 0 A_PlaySound("amulet/use")
+		stop
+	Failed:
+		TNT1 A 1
+		fail
+	}
+}
+
+Actor MRegeneration : PowerupGiver
+{
+	+INVENTORY.UNDROPPABLE
+	Inventory.PickupMessage "Ring Of Regeneration"
+	Powerup.Color Red 0.1
+	Inventory.DefMaxAmount
+	Powerup.Type Regeneration
+	Powerup.Duration -60
+	Inventory.Icon "RRGNA0"
+	+Inventory.InvBar
+	+FloatBob
+	+CountItem
+	+Inventory.PickupFlash
+	Scale 0.75
+	States
+	{
+	Spawn:
+		RRGN BBBBCDDDDC 3 Bright
+		Loop
+	}
+}
+
+ACTOR NoFlash //replaces TeleportFog
+{
+	RenderStyle NONE
+	States
+	{
+	Spawn:
+		TNT1 A 1
+		Stop
+	}
+}
+
+//ACTOR MTypeDef : Inventory
+//{
+//  Inventory.MaxAmount 255
+//}
+
+ACTOR MSkullPoints : Inventory
+{
+	Inventory.MaxAmount 9200
+}
+
+ACTOR MJumpShoppie : Inventory
+{
+	Inventory.MaxAmount 1
+}
+
+Actor MEmerald : CustomInventory
+{
+	+Inventory.InvBar
+	+Inventory.PickupFlash
+	+FloatBob
+	+INVENTORY.UNDROPPABLE
+	Inventory.MaxAmount 20
+	Inventory.PickupMessage "Emerald Amulet"
+	Inventory.Icon "EMAMB0"
+	States
+	{
+	Spawn:
+		EMAM A -1 Bright
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("amulet/use")
+		TNT1 A 0 A_FireCustomMissile("EmeraldShot", 0, 0, 0, 0, 1)
+		stop
+	}
+}
+
+ACTOR EmeraldShot : FastProjectile
+{
+	Speed 184
+	Radius 1
+	Height 1
+	Damage 0
+	+RIPPER
+	+CANNOTPUSH
+	+NODAMAGETHRUST
+	States
+	{
+	Spawn:
+		NULL A 1
+		Loop
+	Death:
+		NULL A 1 A_SpawnItemEx ("PlaceableAlerter", 0, 0, 8, 0, 0, 0, 0, 1)
+		Stop
+	}
+}
+
+Actor PlaceableAlerter
+{
+	health 60
+	radius 1
+	height 1
+	mass 99999
+	speed 0
+	MaxTargetRange 8192
+
+	MONSTER
+	+FLOORCLIP
+	+FRIENDLY
+	+NOBLOOD
+	+NOGRAVITY
+	+LOOKALLAROUND
+	+NEVERRESPAWN
+	+STANDSTILL
+	+NORADIUSDMG
+	-SOLID
+	states
+	{
+	Spawn:
+		NULL A 4 NoiseAlert (0, 0)
+		NULL A 0 Thing_Damage (0, 1)
+		loop
+	Death:
+	XDeath:
+		NULL A -1
+		stop
+	}
+}
+
+Actor MControl : CustomInventory
+{
+	+Inventory.InvBar
+	+Inventory.PickupFlash
+	+FloatBob
+	+INVENTORY.UNDROPPABLE
+	Inventory.MaxAmount 20
+	Inventory.PickupMessage "Red Amulet"
+	Inventory.Icon "EMAMC0"
+	States
+	{
+	Spawn:
+		EMAM C -1 Bright
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("amulet/use")
+		TNT1 A 1 ACS_ExecuteAlways (991,0,8,0,0)
+		stop
+	}
+}
+
+actor SentryGun 12370
+{
+	//$Category MOP_MarineHelpers
+
+	obituary "%o was ventilated by an auto-sentry."
+	health 250
+	radius 20
+	height 56
+	mass 100000
+	speed 0
+	MaxTargetRange 2048
+	attacksound "sentry/attack"
+	MONSTER
+	+FLOORCLIP
+	+FRIENDLY
+	+NOBLOOD
+	+LOOKALLAROUND
+	+NEVERRESPAWN
+	+STANDSTILL
+	+USESPECIAL
+	states
+	{
+	Spawn:
+		SENT AAAAAAAAAAAAAAAA 4 A_Look
+		SENT A 0 A_PlaySound ("Sentry/Active")
+		loop
+	See:
+		SENT AAAAAAAAAAAAAAAA 4 A_Chase
+		SENT A 0 A_PlaySound ("Sentry/Active")
+		loop
+	Missile:
+		SENT A 16 A_FaceTarget
+		SENT B 2 bright A_CPosAttack
+		SENT A 2 A_CposRefire
+		goto Missile+1
+	Death:
+		SENT C 1 A_PlaySoundEx ("Sentry/Death", "SoundSlot5")
+		SENT C 0 A_PlaySoundEx ("weapons/rocklx", "SoundSlot6")
+		SENT C 0 A_SpawnItem ("SentryBoom", 0, 48)
+		SENT C 512
+	FadeOut:
+		SENT C 2 A_FadeOut (0.1)
+		loop
+	}
+}
+
+actor SentryBoom
+{
+	radius 2
+	height 2
+	renderstyle Add
+	+NOINTERACTION
+	+CLIENTSIDEONLY
+	states
+	{
+	Spawn:
+		XPL1 ABCDEF 3 bright
+		stop
+	}
+}
+
+ACTOR MBlot : CustomInventory
+{
+	+COUNTITEM
+	+INVENTORY.INVBAR
+	Inventory.MaxAmount 10
+	Inventory.Icon "MPHIA0"
+	Inventory.PickupMessage "You picked up a blot demon!"
+	States
+	{
+	Spawn:
+		MPHE ABC 4
+		Stop
+	Use:
+		TNT1 A 1 ACS_ExecuteAlways (990,0,48,0,0)
+		Stop
+	}
+}
+
+ACTOR SentryBox : CustomInventory 12369
+{
+	//$Category MOP_MarineItems
+	+COUNTITEM
+	+INVENTORY.INVBAR
+	Inventory.MaxAmount 3
+	Inventory.Icon "SENBB0"
+	Inventory.PickupMessage "You picked up a sentry gun!"
+	States
+	{
+	Spawn:
+		SENB A -1
+		Stop
+	Use:
+		TNT1 A 1 A_SpawnItemEx ("SentryGun", 56, 0, 8, 0, 0, 0, 0, 1)
+		Stop
+	}
+}
+
+Actor TechArmor : CustomInventory 12371
+{
+  //$Category MOP_MarineItems
+  Inventory.Amount 1
+  Inventory.PickupSound "misc/p_pkup"
+  Inventory.DefMaxAmount
+  Inventory.PickupMessage "Tech Armor"
+  Inventory.Icon ARM4B0
+  +Inventory.InvBar
+  +FloorClip
+  States
+  {
+  Spawn:
+    ARM4 A -1
+    Loop
+  Use:
+    TNT1 A 0 A_JumpIfInventory("Cell", 10, "Succeed")
+    TNT1 A 0 A_Print("Not enough energy cells")
+    TNT1 A 0 A_GiveInventory("TechArmor", 1)
+    Stop
+  Succeed:
+    TNT1 A 0 A_PlaySoundEx("Pickups/TechArmor", "SoundSlot7", 0)
+  Give:
+    TNT1 A 0 A_TakeInventory("Cell", 10)
+    TNT1 A 0 A_GiveInventory("TechArmorProtection", 1)
+    Stop
+  }
+}
+
+Actor TechArmorProtection : BasicArmorPickup
+{
+  Inventory.Icon "ARM4A0"
+  Armor.SavePercent 100
+  Armor.Saveamount 300
+  States
+  {
+  Spawn:
+    TNT1 A 1
+    Fail
+  }
+}

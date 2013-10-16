@@ -1,0 +1,155 @@
+actor MCyberdemon : Cyberdemon replaces Cyberdemon
+{
+  health 4000
+  radius 40
+  height 110
+  mass 1000
+  speed 16
+  
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+  
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 1
+  DamageFactor "ZombiesDamage", 1
+  DamageFactor "CacoDamage", 1
+  DamageFactor "SkelDamage", 1
+  DamageFactor "FatsoDamage", 1
+  DamageFactor "KnightDamage", 1
+  DamageFactor "ArachDamage", 1
+  DamageFactor "viledamage", 1
+  states
+  {
+  Spawn:
+    CYBR A 10 A_Look
+    CYBR B 10 
+    loop
+  See:
+    CYBR A 3 A_Hoof
+    CYBR ABBCC 3 A_Chase
+    CYBR D 3 A_Metal
+    CYBR D 3
+    loop	
+  Death:
+    CYBR H 10
+    CYBR I 10 A_Scream
+    CYBR JKL 10
+    CYBR M 10 A_NoBlocking
+    CYBR NO 10
+    CYBR P 30
+    CYBR P -1 A_BossDeath
+    stop
+  }
+}
+
+ACTOR MAnnihilator
+{
+  Obituary "%o was gibbed by a Cyber Annihilator."
+  Health 3250 
+  Radius 40 
+  Height 110 
+  Mass 1000 
+  Speed 12 
+  PainChance 30 
+  MONSTER
+  +BOSS
+  +FLOORCLIP
+  +NORADIUSDMG
+  +DONTMORPH
+  +MISSILEMORE
+  SeeSound "monster/annsit" 
+  PainSound "cyber/pain" 
+  DeathSound "monster/anndth" 
+  ActiveSound "cyber/active" 
+
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRail", 0.9
+  DamageFactor "CybRLDamage", 0
+  DamageFactor "ImpBallDamage", 1
+  DamageFactor "ZombiesDamage", 1
+  DamageFactor "CacoDamage", 1
+  DamageFactor "SkelDamage", 1
+  DamageFactor "FatsoDamage", 1
+  DamageFactor "KnightDamage", 1
+  DamageFactor "ArachDamage", 1
+  DamageFactor "viledamage", 1
+
+States 
+   {    
+   Spawn: 
+       ANNI AB 10 A_Look 
+       Loop 
+   See: 
+       ANNI A 2 A_Playsound ("monster/anhoof")
+       ANNI A 2 A_Chase
+       ANNI ABB 4 A_Chase 
+       ANNI C 2 A_Playsound ("monster/anhoof")
+       ANNI C 2 A_Chase
+       ANNI CDD 4 A_Chase
+       loop	
+   Missile:
+       ANNI E 0 A_Jump (160,7)
+       ANNI E 6 A_FaceTarget
+       ANNI F 0 Bright A_CustomMissile ("PCybRocket",40,22,3)
+       ANNI F 12 Bright A_CustomMissile ("PCybRocket",40,-22,-3)
+       ANNI E 12 A_FaceTarget 
+       ANNI F 0 Bright A_CustomMissile ("PCybRocket",40,22,-2)
+       ANNI F 12 Bright A_CustomMissile ("PCybRocket",40,-22,2)
+       ANNI E 6
+       Goto See
+       ANNI E 6 A_FaceTarget 
+       ANNI F 0 Bright A_CustomMissile ("PCybRocket2",40,22,1)
+       ANNI F 12 Bright A_CustomMissile ("PCybRocket2",40,-22,-1)
+       ANNI E 12 A_FaceTarget 
+       ANNI F 0 Bright A_CustomMissile ("PCybRocket2",40,22,0)
+       ANNI F 12 Bright A_CustomMissile ("PCybRocket2",40,-22,0)
+       ANNI E 6
+       Goto See
+   Pain: 
+       ANNI G 10 A_Pain 
+       Goto See 
+   Death: 
+       ANNI H 10 Bright
+       ANNI I 10 Bright A_Scream 
+       ANNI JKL 10 Bright
+       ANNI M 10 Bright A_NoBlocking 
+       ANNI NO 10 Bright
+       ANNI P 30 
+       ANNI P -1 A_BossDeath
+   } 
+}
+
+ACTOR PCybRocket2
+{
+   Radius 8
+   Height 11
+   Speed 18
+   Damage 15
+   PROJECTILE
+   DeathSound "weapons/hrlexp"
+   ExplosionDamage 96
+   ExplosionRadius 96
+   +SeekerMissile
+   +Rockettrail
+   +RANDOMIZE
+   +DEHEXPLOSION
+   Damagetype "CybRLDamage"
+   SeeSound "weapons/hrlfir"
+   Decal Scorch
+   States
+   {
+   Spawn:
+      HMIS A 4 Bright A_SeekerMissile (12,20)
+      HMIS A 4 Bright
+      HMIS A 2 Bright A_SeekerMissile (8,15)
+      HMIS A 2 Bright
+      goto Spawn+2
+   Death:
+      MISL B 8 bright A_Explode(96,96)
+      MISL C 6 bright
+      MISL D 4 bright
+      stop
+   }
+}

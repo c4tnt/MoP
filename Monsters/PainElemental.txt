@@ -1,0 +1,40 @@
+actor MPainElemental : PainElemental replaces PainElemental
+{
+  
+  health 400
+  radius 31
+  height 56
+  mass 400
+  speed 8
+
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "SkelDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  
+  states
+  {
+  Spawn:
+    PAIN A 5 A_Look 
+    PAIN A 5 
+    loop
+  See:
+    PAIN AABBCC 3 A_Chase
+    loop	
+  Death:
+    PAIN H 8 bright
+    PAIN I 8 bright A_Scream
+    PAIN JK 8 bright
+    PAIN L 8 bright A_PainDie       // See LostSoul
+    PAIN M 8 bright
+    stop	
+  }
+}

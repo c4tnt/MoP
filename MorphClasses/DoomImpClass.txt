@@ -1,0 +1,730 @@
+
+actor DooMImpClass : PlayerPawn
+{
+  health 60
+  radius 20
+  height 54
+  mass 80
+  speed 0.35
+  painchance 140
+  Player.MaxHealth 60
+  Player.ViewHeight 45
+  Player.JumpZ 5
+  Player.MorphWeapon "ImpBaller"
+  Player.WeaponSlot 1, ImpBaller
+  Player.DisplayName "DoomImp"
+  Player.SoundClass "MImpale"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -FRIENDLY
+  +NOTARGET
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  states
+  {
+  Spawn:
+      TROO A 10 
+	  TROO B 10 
+      loop
+  See:
+      TROO A 0
+      TROO A 0 A_Jump (240,2)
+	  TROO A 0 A_PlaySoundEx ("imp/active","body")
+      TROO ABCD 6 
+      Loop
+  Missile:
+      TROO EF 8
+	  TROO G 6
+	  goto Spawn
+  Melee:
+      TROO G 6
+      goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    TROO M -1
+    stop
+  XDeath:
+    TNT1 M 0 A_NoBlocking
+    TNT1 M 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 M 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    TROO U -1
+    stop
+  }
+}
+
+ACTOR ImpBaller : Weapon
+{
+  obituary "%o was burned by %k."
+  hitobituary "%o was slashed by %k."
+  weapon.kickback 60
+  attacksound "imp/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    CLAW A 1 A_Raise
+    Goto Ready
+  Ready:
+    CLAW A 6 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    CLAW A 1 A_Lower
+    Loop
+  Fire:
+    CLAW A 0 A_JumpIfCloser (60,"Melee")
+	CLAW B 5 bright
+    CLAW C 5 bright
+	CLAW D 5 bright A_FireCustomMissile ("PDoomImpBall",0,0,5,10)
+	CLAW E 3
+    Goto Ready
+  Melee:
+    CLAW A 5
+	CLAW B 6 A_CustomPunch (8,0,1,"FBulletPuff")
+    CLAW E 6
+	goto Ready	
+  AltFire:
+    CLAW A 5 ACS_ExecuteAlways (991,0,3,0)
+	Goto Ready
+  }
+}
+
+actor PDoomImpBall : DoomImpBall
+{
+damage 6
+speed 30
+DamageType "ImpBallDamage"
+}
+
+// DarkImp Class
+
+actor DarkImpClass : PlayerPawn
+{
+  health 120
+  radius 20
+  height 54
+  mass 80
+  speed 0.45
+  painchance 140
+  Player.MaxHealth 120
+  Player.ViewHeight 45
+  Player.JumpZ 5
+  Player.MorphWeapon "DarkImpHand"
+  Player.WeaponSlot 1, DarkImpHand
+  Player.DisplayName "DarkImp"
+  Player.SoundClass "MsDarkImp"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -FRIENDLY
+  +NOTARGET
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  states
+  {
+  Spawn:
+      DRKI AB 10 
+      loop
+  See:
+      DRKI A 0
+      DRKI A 0 A_Jump (240,2)
+	  DRKI A 0 A_PlaySoundEx ("darkimp/active","body")
+      DRKI ABCD 6 
+      Loop
+  Missile:
+	  DRKI EF 4
+	  DRKI G 5 bright
+	  goto Spawn
+  Melee:
+      DRKI G 6
+      goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    DRKI M -1
+    stop
+  XDeath:
+    TNT1 M 0 A_NoBlocking
+    TNT1 M 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 M 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    DRKI U -1
+    stop
+  }
+}
+
+ACTOR DarkImpHand : Weapon
+{
+  obituary "%o was burned by %k."
+  hitobituary "%o was slashed by %k."
+  weapon.kickback 60
+  attacksound "imp/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    DCLW A 1 A_Raise
+    Goto Ready
+  Ready:
+    DCLW A 6 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    DCLW A 1 A_Lower
+    Loop
+  Fire:
+    DCLW A 0 A_JumpIfCloser (60,"Melee")
+	DCLW B 4
+	DCLW C 4
+	DCLW D 4 bright A_FireCustomMissile ("MPDarkSeeker",0,0,5,10)
+    Goto Ready
+  Melee:
+    DCLW A 5
+	DCLW B 6 A_CustomPunch (8,0,1,"FBulletPuff")
+    DCLW E 6
+	goto Ready	
+  AltFire:
+    DCLW A 5 ACS_ExecuteAlways (991,0,3,0)
+	Goto Ready
+  }
+}
+
+actor MPDarkSeeker : MDarkSeeker
+{
+    Speed 16
+}
+
+// Shadow 
+
+actor ShadowClass : PlayerPawn
+{
+  health 160
+  radius 20
+  height 54
+  mass 100
+  speed 1.2
+  painchance 200
+  Player.MaxHealth 160
+  Player.ViewHeight 40
+  Player.JumpZ 10
+  Player.MorphWeapon "ShadowHand"
+  Player.WeaponSlot 1, ShadowHand
+  Player.DisplayName "Shadow"
+  Player.SoundClass "Sshadow"
+  RenderStyle "Translucent"
+  Alpha 0.7
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -FRIENDLY
+  +NOTARGET
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  states
+  {
+  Spawn:
+     SHDW E 5
+     loop
+  See:
+     SHDW A 0
+     SHDW A 0 A_Jump (240,2)
+     SHDW A 0 A_PlaySoundEx ("Shadow/active","body")
+     SHDW A 3 A_SpawnItemEx("ShadowGhostA",-20, 0, 0, 0, 0, 0, 0, 128)
+     SHDW B 3 A_SpawnItemEx("ShadowGhostB",-20, 0, 0, 0, 0, 0, 0, 128)
+     SHDW C 3 A_SpawnItemEx("ShadowGhostC",-20, 0, 0, 0, 0, 0, 0, 128)
+     SHDW D 3 A_SpawnItemEx("ShadowGhostD",-20, 0, 0, 0, 0, 0, 0, 128)
+     Loop
+  Missile:
+     SHDW EF 6
+     SHDW G 8
+     goto Spawn
+  Melee:
+     SHDW E 6
+     SHDW G 8
+     goto See
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SHDW P -1
+    stop
+  XDeath:
+    TNT1 M 0 A_NoBlocking
+    TNT1 M 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 M 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    SHDX G -1
+    stop
+  }
+}
+
+ACTOR ShadowHand : Weapon
+{
+  obituary "%o was assassinated by %k."
+  hitobituary "%o was assassinated by %k."
+  weapon.kickback 60
+  attacksound "imp/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    DCLW A 1 A_Raise
+    Goto Ready
+  Ready:
+    DCLW A 6 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    DCLW A 1 A_Lower
+    Loop
+  Fire:
+    DCLW A 0 A_JumpIfCloser (60,"Melee")
+	DCLW A 0 A_JumpIfInventory ("Mskull",0,"Fire2")
+	DCLW B 7 
+    SCLW C 6 A_FireCustomMissile ("PShadowBall",0,0,0,8)
+	SCLW D 6 A_FireCustomMissile ("PShadowBall",0,0,0,8)
+	DCLW E 8
+    Goto Ready
+  Fire2:
+	DCLW B 8
+    SCLW C 6 A_FireCustomMissile ("PShadowBall",0,0,0,8)
+	SCLW C 6 A_FireCustomMissile ("PShadowBall",0,0,0,8)
+	SCLW D 6 A_FireCustomMissile ("PShadowBall",0,0,0,8)
+	DCLW E 8
+    Goto Ready	
+  Melee:
+    DCLW A 3
+	DCLW B 3 A_CustomPunch (7,0,1,"FBulletPuff")
+    DCLW E 3
+	goto Ready	
+  AltFire:
+    DCLW A 5 ACS_ExecuteAlways (991,0,3,0)
+	Goto Ready
+  }
+}
+
+actor PShadowBall : ShadowBall
+{
+Speed 20
+Damage 6
+}
+
+actor SoulHarvesterclass : PlayerPawn
+{
+  health 100
+  radius 20
+  height 54
+  mass 80
+  speed 0.40
+  painchance 140
+  Player.MaxHealth 100
+  Player.ViewHeight 45
+  Player.JumpZ 5
+  Player.MorphWeapon "HarvesterHand"
+  Player.WeaponSlot 1, HarvesterHand
+  Player.DisplayName "SoulHarvester"
+  Player.SoundClass "SHplayer"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -FRIENDLY
+  +NOTARGET
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  states
+  {
+  Spawn:
+      SLHV A 10 
+	  SLHV B 10 
+      loop
+  See:
+      SLHV A 0
+      SLHV A 0 A_Jump (240,2)
+	  SLHV A 0 A_PlaySoundEx ("imp/active","body")
+      SLHV ABCD 6 
+      Loop
+  Missile:
+	  SLHV EFG 2 
+	  SLHV HIJK 3 Bright 
+	  SLHV L 3 Bright 
+	  SLHV M 4
+	  goto Spawn
+  Melee:
+      SLHV EF 3
+      goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SLHV W -1
+    stop
+  XDeath:
+    TNT1 M 0 A_NoBlocking
+    TNT1 M 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 M 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    SLHX A -1
+    stop
+  }
+}
+
+ACTOR HarvesterHand : Weapon
+{
+  obituary "%o couldn't evade %k attack."
+  hitobituary "%o couldn't evade %k attack."
+  weapon.kickback 60
+  attacksound "imp/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    DCLW A 1 A_Raise
+    Goto Ready
+  Ready:
+    DCLW A 6 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    DCLW A 1 A_Lower
+    Loop
+  Fire:
+	DCLW B 8 
+    DCLW C 8 A_FireCustomMissile ("PSoulHarvesterBall",0,0,0,8)
+	DCLW E 8
+    Goto Ready
+  AltFire:
+    DCLW A 5 ACS_ExecuteAlways (991,0,3,0)
+	Goto Ready
+  }
+}
+
+actor PSoulHarvesterBall : SoulHarvesterBall
+{
+speed 12
+}
+
+actor FlyingImpclass : PlayerPawn
+{
+  health 60
+  radius 20
+  height 56
+  mass 100
+  speed 0.40
+  painchance 140
+  Player.MaxHealth 60
+  Player.ViewHeight 45
+  Player.JumpZ 0
+//  Player.MorphWeapon "FlyingImpHand"
+//  Player.WeaponSlot 1, FlyingImpHand
+  Player.MorphWeapon "ImpBaller"
+  Player.WeaponSlot 1, ImpBaller
+  Player.DisplayName "FlyingImp"
+  Player.SoundClass "SHplayer"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+
+  states
+  {
+  Spawn:
+      AEIM ABCD 10 
+      loop
+  See:
+      AEIM A 0
+      AEIM A 0 A_Jump (240,2)
+	  AEIM A 0 A_PlaySoundEx ("imp/active","body")
+      AEIM ABCD 6 
+      Loop
+  Missile:
+	  AEIM E 4 
+	  AEIM F 6 Bright
+	  goto Spawn
+  Melee:
+      AEIM EF 3
+      goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    AEIM N -1
+    stop
+  }
+}
+
+ACTOR FlyingImpHand : Weapon
+{
+  obituary "%o couldn't evade %k attack."
+  hitobituary "%o couldn't evade %k attack."
+  weapon.kickback 60
+  attacksound "imp/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    CLAW A 1 A_Raise
+    Goto Ready
+  Ready:
+    CLAW A 6 A_WeaponReady
+    Loop
+  DeSelect:
+    CLAW A 1 A_Lower
+    Loop
+  Fire:
+    CLAW B 4 
+    CLAW C 6 A_FireCustomMissile ("PFlyingImpBall",0,0,0,8)
+    Goto Ready
+  AltFire:
+    CLAW A 5 ACS_ExecuteAlways (991,0,3,0)
+    Goto Ready
+  }
+}
+
+actor PFlyingImpBall : FlyingImpBall
+{
+speed 16
+}
+
+actor PyroImpClass : PlayerPawn
+{
+  health 150
+  radius 20
+  height 56
+  mass 1000
+  speed 0.45
+  painchance 200
+  Player.MaxHealth 150
+  Player.ViewHeight 45
+  Player.JumpZ 5
+  Player.MorphWeapon "PyroImpHand"
+  Player.WeaponSlot 1, PyroImpHand
+  Player.DisplayName "PyroImp"
+  Player.SoundClass "MImpale"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -FRIENDLY
+  +NOTARGET
+  +NOSKIN
+  +NOPAIN
+  -PICKUP
+  states
+  {
+  Spawn:
+      PRIM AB 10 
+      loop
+  See:
+      PRIM A 0
+      PRIM A 0 A_Jump (240,2)
+      PRIM A 0 A_PlaySoundEx ("imp/active","body")
+      PRIM ABCD 6 
+      Loop
+  Missile:
+      PRIM EF 8
+      PRIM G 6 bright
+      goto Spawn
+  Melee:
+      PRIM EF 8
+      PRIM G 6
+      goto See
+  Death:
+    TNT1 H 0 A_NoBlocking
+    TNT1 H 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 H 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A -1
+    stop
+  XDeath:
+    TNT1 M 0 A_NoBlocking
+    TNT1 M 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 M 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A -1
+    stop
+  }
+}
+
+ACTOR PyroImpHand : Weapon
+{
+  obituary "%o was burned by %k."
+  hitobituary "%o was slashed by %k."
+  weapon.kickback 60
+  attacksound "imp/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    PRCW A 1 A_Raise
+    Goto Ready
+  Ready:
+    PRCW A 6 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("MonsterForceA",3,2)
+    PRCW A 0 A_GiveInventory ("MonsterForceA",1)
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    PRCW A 1 A_Lower
+    Loop
+  Fire:
+    PRCW A 0 A_JumpIfCloser (60,"Melee")
+    PRCW B 1 A_JumpIfInventory ("MonsterForceA",1,1)
+    Goto Ready
+    PRCW B 3 A_TakeInventory ("MonsterForceA",1)
+    PRCW C 4
+    PRCW D 4 bright A_FireCustomMissile ("PyroImpBall",0,0,5,10)
+    Goto Ready
+  Melee:
+    PRCW A 5
+    PRCW B 6 A_CustomPunch (8,0,1,"FBulletPuff")
+    PRCW E 6
+	goto Ready	
+  AltFire:
+    PRCW A 5 ACS_ExecuteAlways (991,0,3,0)
+	Goto Ready
+  }
+}

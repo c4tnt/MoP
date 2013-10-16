@@ -1,0 +1,137 @@
+ACTOR MMegasphere : Megasphere replaces Megasphere
+{
+  Inventory.RespawnTics 4200
+  States
+  {
+  Spawn:
+    MEGA ABCD 6 BRIGHT
+    Loop
+  Pickup:
+    TNT1 A 0 A_GiveInventory("MBlueArmor", 1)
+    TNT1 A 0 A_GiveInventory("MegasphereHealth", 1)
+    Stop
+  }
+}
+
+ACTOR MSoulsphere : Soulsphere replaces Soulsphere
+{
+  Inventory.RespawnTics 3150
+}
+
+Actor MBlueArmor : BlueArmor replaces BlueArmor 
+{
+  Inventory.RespawnTics 2100
+  Inventory.Icon "AICONB"
+}
+
+Actor MGreenArmor : GreenArmor replaces GreenArmor
+{
+  Inventory.Icon "AICONG"
+}
+
+Actor MRedArmor : BasicArmorPickup 5040
+{
+	Game Doom
+	SpawnID 168
+	Radius 20
+	Height 16
+	Armor.Savepercent 66.66666
+	Armor.Saveamount 200
+	Inventory.Pickupmessage "$PICKUP_REDARMOR"
+	DamageFactor "Fire", 0.125
+	DamageFactor "Rocket", 0.125
+	DamageFactor "Grenade", 0.125
+	Inventory.Icon "AICONR"
+	States
+	{
+	Spawn:
+		ARM3 A 6
+		ARM3 B 6 bright
+		goto Spawn
+	}
+}
+
+// Start armor
+Actor StartArmor : MGreenArmor 
+{
+  Armor.Saveamount 50
+}
+
+Actor MArmorBonus : ArmorBonus replaces ArmorBonus
+{
+  Inventory.Icon "AICONG"
+}
+
+ACTOR MBerserk : Berserk replaces Berserk
+{
+  States
+  {
+  Spawn:
+    PSTR A -1
+    Stop
+  Pickup:
+    TNT1 A 0 A_GiveInventory("PowerStrength")
+    TNT1 A 0 A_GiveInventory("PowerSpeed")
+    TNT1 A 0 HealThing(100, 0)
+    Stop
+  }
+}
+
+// Starting Invulnerability
+
+ACTOR MSpawnProt : PowerupGiver
+{
+  
+  +INVENTORY.AUTOACTIVATE
+  +INVENTORY.ALWAYSPICKUP
+  Inventory.MaxAmount 0
+  Powerup.Type "Invulnerable"
+  Powerup.Duration 140
+  States
+  {
+  Spawn:
+    TNT1 A 1 
+    stop
+  }
+}
+
+// Actually from KDiZD
+
+ ACTOR RedCard : DoomKey 13
+{ 
+  spawnid 86
+  inventory.pickupmessage "$GOTREDCARD" // "Picked up a red keycard."
+  inventory.icon "STKEYS2"
+  States
+  {
+    Spawn:
+    RKEY ABCDEFGHIJKL 2 Bright
+    Loop
+  }
+}
+
+ACTOR BlueCard : DoomKey 5
+{ 
+  spawnid 85
+  inventory.pickupmessage "$GOTBLUECARD" // "Picked up a blue keycard."
+  inventory.icon "STKEYS0"
+  States
+  {
+    Spawn:
+    BKEY ABCDEFGHIJKL 2 Bright
+    Loop
+  }
+}
+
+ACTOR YellowCard : DoomKey 6
+{ 
+  spawnid 87
+  inventory.pickupmessage "$GOTYELWCARD" // "Picked up a yellow keycard."
+  inventory.icon "STKEYS1"
+  States
+  {
+    Spawn:
+    YKEY ABCDEFGHIJKL 2 Bright
+    Loop
+  }
+}

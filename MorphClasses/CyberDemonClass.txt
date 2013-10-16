@@ -1,0 +1,274 @@
+actor CyberdemonClass : PlayerPawn
+{
+  Speed 0.35
+  Health 4000
+  Radius 40
+  Height 110
+  Mass 1000
+  PainChance 0
+  MaxStepHeight 32
+  player.maxhealth 4000
+  player.soundclass "CyberDemonClass"
+  Player.DisplayName "CyberDemon"
+  Player.MorphWeapon "CyberDemonRL"
+  Player.WeaponSlot 1, CyberDemonRL
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "viledamage", 0
+
+  DamageFactor "Control", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  Player.JumpZ 0
+  Player.ViewHeight 90
+  -PICKUP
+  +NORADIUSDMG
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    CYBR AB 10
+    loop
+  See:
+    CYBR A 3 A_PlaySoundEx ("cyber/hoof","body") 
+    CYBR ABBCC 3 
+    CYBR D 3 A_PlaySoundEx ("spider/walk","body")
+    CYBR D 3
+    goto Spawn
+  Missile:
+    CYBR A 0 A_JumpIfInventory ("CybieHeat",3,"CantShot")
+    CYBR E 8 
+    CYBR F 10 bright
+    CYBR E 8 
+    CYBR F 10 bright
+    CYBR E 8 
+    CYBR F 12 bright
+	goto Spawn
+  CantShot:
+    CYBR E 15
+	goto spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    CYBR P -1
+    stop
+  }
+}
+
+// Weapon
+
+actor CyberDemonRL : DoomWeapon
+{
+  obituary "%o was splattered by a cyberdemon."
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +ammo_optional
+  +Alt_Ammo_Optional
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  States
+  {
+  Ready:
+    CYBW A 15 A_WeaponReady
+	CYBW A 0 A_TakeInventory ("CybieHeat",1)
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(3)
+	goto ready 
+  Deselect:
+    CYBW A 1 A_Lower
+    Loop
+  Select:
+    CYBW A 1 A_Raise
+    Loop
+  Fire:
+    CYBW A 0 A_JumpIfInventory ("CybieHeat",3,"Overheat")
+	CYBW A 0 SetPlayerProperty (0, 1, 0)
+	CYBW A 0 A_GiveInventory ("CybieHeat",1)
+    CYBW ABC 4 bright
+    CYBW D 6 bright A_FireCustomMissile ("PCybRocket",-1,0,-15,11,1,1)
+	CYBW ABC 4 bright
+    CYBW D 6 bright A_FireCustomMissile ("PCybRocket",-1,0,-15,11,1,1)
+	CYBW ABC 4 bright
+    CYBW D 6 bright A_FireCustomMissile ("PCybRocket",-1,0,-15,11,1,1)
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+    Goto Ready
+  Altfire:
+    CYBW A 5 ACS_ExecuteAlways (991,0,3,0)
+  	goto Ready
+  Overheat:
+    CYBW A 0 SetPlayerProperty (0, 1, 0)
+    CYBW A 7 A_PlaySoundEx ("cybie/overheat","body")
+    CYBW A 7 ACS_ExecuteAlways (991,0,5)
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+	goto ready
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  }
+}
+
+actor CybieHeat : Inventory
+{
+  inventory.amount 1
+  inventory.maxamount 15
+  states
+  {
+  Spawn:
+    TNT1 A -1
+    stop
+  }
+}
+
+actor PCybRocket : Rocket 
+{
+ DamageType "CybRLDamage"
+}
+
+actor CyberAnniClass : PlayerPawn
+{
+  Speed 0.2
+  Health 3250
+  Radius 40
+  Height 110
+  Mass 1000
+  PainChance 0
+  MaxStepHeight 32
+  player.maxhealth 3250
+  player.soundclass "CyberAnniClass"
+  Player.DisplayName "CyberAnnihilator"
+  Player.MorphWeapon "CyberAnniRL"
+  Player.WeaponSlot 1, CyberAnniRL
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  DamageFactor "MarineRail", 0.8
+  DamageFactor "CybRLDamage", 0
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "viledamage", 0
+
+  DamageFactor "Slime", 0
+  
+  Player.JumpZ 0
+  Player.ViewHeight 90
+  -PICKUP
+  +NORADIUSDMG
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    ANNI AB 10
+    loop
+  See:
+    ANNI A 4 A_PlaySoundEx ("monster/anhoof", "body")
+    ANNI ABB 4 
+    ANNI C 4 A_PlaySoundEx ("monster/anhoof", "body")
+    ANNI CDD 4 
+    goto Spawn
+  Missile:
+    ANNI A 0 A_JumpIfInventory ("CybieHeat",19,"CantShot")
+    ANNI E 9 
+    ANNI F 9 bright
+    ANNI E 9 
+    ANNI F 9 bright
+    ANNI E 9 
+    ANNI F 9 bright
+    ANNI E 23 
+    goto Spawn
+  CantShot:
+    //  ANNI E 14
+    goto spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    ANNI P -1
+    stop
+  }
+}
+
+// Weapon
+
+actor CyberAnniRL : DoomWeapon
+{
+  obituary "%o was gibbed by the Cyber Annihilator."
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +ammo_optional
+  +Alt_Ammo_Optional
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  States
+  {
+  Ready:
+    CYBD A 7 A_WeaponReady
+    CYBD A 0 A_TakeInventory ("CybieHeat",3)
+    CYBD A 0 A_JumpIfInventory ("Mskull",0,4)
+    CYBD A 7 A_WeaponReady
+    CYBD A 0 A_TakeInventory ("CybieHeat",3)
+    CYBD A 0 A_JumpIfInventory ("Mskull",3,1)
+    Loop
+    CYBD A 0 HealThing(2)
+    goto ready 
+  Deselect:
+    CYBD A 1 A_Lower
+    Loop
+  Select:
+    CYBD A 1 A_Raise
+    Loop
+  Fire:
+    CYBD A 0 A_JumpIfInventory ("CybieHeat",38,"Overheat")
+    CYBD A 0 SetPlayerProperty (0, 1, 0)
+    CYBD A 0 A_GiveInventory ("CybieHeat",14)
+    CYBD ABC 4 bright
+    CYBD D 0 bright A_FireCustomMissile ("PCybRocket",3,0,15,11,1,1)
+    CYBD D 6 bright A_FireCustomMissile ("PCybRocket",-3,0,-15,11,1,1)
+    CYBD ABC 4 bright
+    CYBD D 0 bright A_FireCustomMissile ("PCybRocket2",1,0,15,11,1,1)
+    CYBD D 6 bright A_FireCustomMissile ("PCybRocket2",-1,0,-15,11,1,1)
+    CYBD ABC 4 bright
+    CYBD D 0 bright A_FireCustomMissile ("PCybRocket",-2,0,15,11,1,1)
+    CYBD D 6 bright A_FireCustomMissile ("PCybRocket",2,0,-15,11,1,1)
+    CYBD A 22
+    CYBD A 0 SetPlayerProperty (0, 0, 0)
+    Goto Ready
+  Altfire:
+    CYBD A 5 ACS_ExecuteAlways (991,0,3,0)
+    goto Ready
+  Overheat:
+    CYBD A 0 A_PlaySoundEx ("cybie/overheat","body")
+    CYBD A 28 ACS_ExecuteAlways (991,0,5)
+    CYBD A 0 A_TakeInventory ("CybieHeat",10)
+    goto ready
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  }
+}

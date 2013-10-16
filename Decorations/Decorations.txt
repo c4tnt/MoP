@@ -1,0 +1,2058 @@
+ACTOR Tree1 6100
+{
+  //$Category MOP_Vegetation
+  Health 1000
+  Radius 15
+  Height 180
+  DeathHeight 24
+  Mass 0x7fffffff
+  DamageFactor "Cutting", 30.0
+  DeathSound "TreeBreak"
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TRDT A -1
+    Stop
+  Death:
+    TRDT B 5
+    TRDT C 5 A_Scream
+    TRDT DEF 5
+    TRDT G -1
+    Stop
+  } 
+}
+
+ACTOR Tree2 6101
+{
+  //$Category MOP_Vegetation
+  Health 1000
+  Radius 15
+  Height 180
+  DeathHeight 24
+  Mass 0x7fffffff
+  DamageFactor "Cutting", 30.0
+  DeathSound "TreeBreak"
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TRD1 A -1
+    Stop
+  Death:
+    TRDT B 5
+    TRDT C 5 A_Scream
+    TRDT DEF 5
+    TRDT G -1
+    Stop
+  } 
+}
+ACTOR Tree3 6102
+{
+  //$Category MOP_Vegetation
+  Health 1000
+  Radius 15
+  Height 180
+  DeathHeight 24
+  Mass 0x7fffffff
+  DamageFactor "Cutting", 30.0
+  DeathSound "TreeBreak"
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TRD2 A -1
+    Stop
+  Death:
+    TRDT B 5
+    TRDT C 5 A_Scream
+    TRDT DEF 5
+    TRDT G -1
+    Stop
+  } 
+}
+
+ACTOR SmallTree1 6103
+{
+  //$Category MOP_Vegetation
+  Radius 16
+  Height 96
+  +SOLID
+  States
+  {
+  Spawn:
+    TREN A -1
+    Stop
+  }
+}
+
+ACTOR SmallTree2 6104
+{
+  //$Category MOP_Vegetation
+  Radius 16
+  Height 64
+  +SOLID
+  States
+  {
+  Spawn:
+    TREN B -1
+    Stop
+  }
+}
+
+ACTOR SmallBush1 6105
+{
+  //$Category MOP_Vegetation
+  Radius 16
+  Height 24
+  +SOLID
+  States
+  {
+  Spawn:
+    BUSN A -1
+    Stop
+  }
+}
+
+ACTOR SmallBush2 6106
+{
+  //$Category MOP_Vegetation
+  Radius 16
+  Height 40
+  +SOLID
+  States
+  {
+  Spawn:
+    BUSN B -1
+    Stop
+  }
+}
+
+ACTOR SmallWinterTree1 6107
+{
+  //$Category MOP_Vegetation
+  Radius 16
+  Height 72
+  +SOLID
+  States
+  {
+  Spawn:
+    TRWN A -1
+    Stop
+  }
+}
+
+ACTOR SmallWinterTree2 6108
+{
+  //$Category MOP_Vegetation
+  Radius 16
+  Height 88
+  +SOLID
+  States
+  {
+  Spawn:
+    TRWN B -1
+    Stop
+  }
+}
+
+Actor DevilishBust 8001
+{
+	//$Category MOP_Decorative
+	+SOLID
+	Radius 8
+	Height 32
+
+	States
+	{
+	Spawn:
+		BUST A -1
+		Stop
+	}
+}
+
+Actor DevilishBustPillar : ZVasePillar 8002
+{
+	//$Category MOP_Decorative
+	Height 64
+
+	States
+	{
+	Spawn:
+		BUST B -1
+		Stop
+	}
+}
+
+ACTOR TLamp1 12850
+{
+	//$Category MOP_Decorative
+	Radius 16
+	Height 80
+	+SOLID
+	States
+	{
+	Spawn:
+		LAMT A -1 Bright
+		Stop
+	}
+}
+
+ACTOR TLamp2 12851
+{
+	//$Category MOP_Decorative
+	Radius 16
+	Height 60
+	+SOLID
+	States
+	{
+	Spawn:
+		LAMT B -1 Bright
+		Stop
+	}
+}
+
+ACTOR TLamp3 12852
+{
+	//$Category MOP_Decorative
+	Radius 16
+	Height 70
+	+SOLID
+	States
+	{
+	Spawn:
+		LAMT C -1 Bright
+		Stop
+	}
+}
+
+ACTOR Root 13000
+{
+	//$Category MOP_Vegetation
+	Radius 16
+	Height 84
+	-SOLID
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		ROOT A -1
+		Stop
+	}
+}
+ACTOR RootBlocking : Root 13001 { 
+	//$Category MOP_Vegetation
+	+SOLID 
+}
+
+ACTOR RootSmooth 13002
+{
+	//$Category MOP_Vegetation
+	Radius 16
+	Height 84
+	-SOLID
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		ROOT B -1
+		Stop
+	}
+}
+ACTOR RootSmoothBlocking : RootSmooth 13003 {
+	//$Category MOP_Vegetation
+	+SOLID 
+}
+
+ACTOR RootSmall 13004
+{
+	//$Category MOP_Vegetation
+	Radius 16
+	Height 48
+	-SOLID
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		ROOT C -1
+		Stop
+	}
+}
+ACTOR RootSmallBlocking : RootSmall 13005 { 
+	//$Category MOP_Vegetation
+	+SOLID 
+}
+
+ACTOR RootTiny 13006
+{
+	//$Category MOP_Vegetation
+	Radius 16
+	Height 24
+	-SOLID
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		ROOT D -1
+		Stop
+	}
+}
+ACTOR RootTinyBlocking : RootTiny 13007 {
+	//$Category MOP_Vegetation
+	+SOLID 
+}
+
+ACTOR RootDouble 13008
+{
+	//$Category MOP_Vegetation
+	Radius 16
+	Height 48
+	-SOLID
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		ROOT E -1
+		Stop
+	}
+}
+ACTOR RootDoubleBlocking : RootDouble 13009 {
+	//$Category MOP_Vegetation
+	+SOLID 
+}
+
+ACTOR RootFloor 13010
+{
+	//$Category MOP_Vegetation
+	Radius 16
+	Height 48
+	-SOLID
+	States
+	{
+	Spawn:
+		ROOT F -1
+		Stop
+	}
+}
+ACTOR RootFloorBlocking : RootFloor 13011 {
+	//$Category MOP_Vegetation
+	+SOLID 
+}
+
+actor CaveStalagmiteFloor 9357
+{
+	//$Category MOP_Decorative
+	Radius 24
+	Height 52
+	+SOLID
+	States
+	{
+	Spawn:
+		CAV3 A -1
+		Stop
+	}
+}
+
+actor CaveStalagmiteCeiling1 9358
+{
+	//$Category MOP_Decorative
+	Radius 24
+	Height 42
+	+SOLID
+	+NOGRAVITY
+	+SPAWNCEILING 
+	States
+	{
+	Spawn:
+		CAV1 A -1
+		Stop
+	}
+}
+
+actor CaveStalagmiteCeiling2 9359
+{
+	//$Category MOP_Decorative
+	Radius 24
+	Height 42
+	+SOLID
+	+NOGRAVITY
+	+SPAWNCEILING 
+	States
+	{
+	Spawn:
+		CAV2 A -1
+		Stop
+	}
+}
+
+ACTOR TechLanternBig 500
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 80
+	+SPAWNCEILING
+	+NOGRAVITY
+	+SOLID
+	States
+	{
+	Spawn:
+		HLMP ABCD 6 bright
+		Loop
+	}
+}
+
+ACTOR TechLanternSmall 501
+{
+	//$Category MOP_Decorative
+	Radius 6
+	Height 45
+	+SPAWNCEILING
+	+NOGRAVITY
+	+SOLID
+	States
+	{
+	Spawn:
+		HLMP EFGH 6 bright
+		Loop
+	}
+}
+
+ACTOR BlackCandleChandelier 502
+{
+	//$Category MOP_Decorative
+	Radius 20
+	Height 55
+	+SPAWNCEILING
+	+NOGRAVITY
+	+SOLID
+	States
+	{
+	Spawn:
+		HLMP I -1 bright
+		Stop
+	}
+}
+
+Actor Chandelier1Off 14068
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND D 1
+		Loop
+	}
+}
+
+Actor Chandelier1On 14069
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND ABC 2 A_PlaySound("DSCHAFIR")
+		Loop
+	}
+}
+
+Actor Chandelier2Off 14071
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND H 1 
+		Loop
+	}
+}
+
+Actor Chandelier2On 14072
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND EFG 2 A_PlaySound("DSCHAFIR")
+		Loop
+	}
+}
+
+Actor Chandelier3Off 14074
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND M 1
+		Loop
+	}
+}
+
+Actor Chandelier3On 14075
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND IJL 2 A_PlaySound("DSCHAFIR")
+		Loop
+	}
+}
+
+Actor Chandelier4Off 14077
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND Q 1
+		Loop
+	}
+}
+
+Actor Chandelier4On 14078
+{
+	//$Category MOP_Decorative
+	Radius 10
+	Height 21
+	+NOGRAVITY
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		CHND NOP 1 A_PlaySound("DSCHAFIR")
+		Loop
+	}
+}
+
+actor HangedBloodySkeleton 14079
+{
+	//$Category MOP_Decorative
+	Radius 20
+	Height 88
+	+SPAWNCEILING
+	+NOGRAVITY
+	+SOLID
+	States
+	{
+	Spawn:
+		HSKL A 0 A_Jump(60,"DropBlood")
+		HSKL A 50
+		Loop
+	DropBlood:
+		HSKL A 1 A_SpawnItem("SkeletonBloodDrip")
+		Goto Spawn
+	}
+}
+
+actor SkeletonBloodDrip
+{
+	Radius 1
+	Height 1
+	Scale 0.75
+	-NOGRAVITY
+	States
+	{
+	Spawn:
+		BDRP A 1 A_CheckFloor("Disappear")
+		Loop
+	Disappear:
+		TNT1 A 1
+		Stop
+	}
+}
+
+ACTOR HelmA 14080
+{
+  //$Category MOP_Decorative
+  Radius 8
+  Height 10
+  +SOLID
+  States
+  {
+  Spawn:
+    AHLM A -1
+    Stop
+  }
+}
+
+ACTOR HelmB 14081
+{
+  //$Category MOP_Decorative
+  Radius 8
+  Height 10
+  +SOLID
+  States
+  {
+  Spawn:
+    BHLM A -1
+    Stop
+  }
+}
+
+ACTOR HelmC 14082
+{
+  //$Category MOP_Decorative
+  Radius 8
+  Height 10
+  +SOLID
+  States
+  {
+  Spawn:
+    CHLM A -1
+    Stop
+  }
+}
+
+ACTOR HelmD 14083
+{
+  //$Category MOP_Decorative
+  Radius 6
+  Height 10
+  +SOLID
+  States
+  {
+  Spawn:
+    dHLM A -1
+    Stop
+  }
+}
+
+ACTOR Boots 14084
+{
+  //$Category MOP_Decorative
+  Radius 8
+  Height 11
+  +SOLID
+  States
+  {
+  Spawn:
+    BOOT A -1
+    Stop
+  }
+}
+
+ACTOR UniformA 14085
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 11
+  +SOLID
+  States
+  {
+  Spawn:
+    UNIF A -1
+    Stop
+  }
+}
+
+ACTOR UniformB 14086
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 11
+  +SOLID
+  States
+  {
+  Spawn:
+    UNIF B -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorBig1 14087
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    LIMF A -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorBig2 14088
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    LIMF B -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorBig3 14089
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    LIMF C -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorSmallLong 14090
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    LIMF D -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorSmall1 14091
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 16
+  States
+  {
+  Spawn:
+    LIMF E -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorSmall2 14092
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 16
+  States
+  {
+  Spawn:
+    LIMF F -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorSmall3 14093
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 16
+  States
+  {
+  Spawn:
+    LIMF G -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorKnobblyBig 14094
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 48
+  +SOLID
+  States
+  {
+  Spawn:
+    LIMK A -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorKnobblyMedium 14095
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    LIMK B -1
+    Stop
+  }
+}
+
+ACTOR LimestoneFloorKnobblySmall 14096
+{
+  //$Category MOP_Decorative
+  Radius 8
+  Height 16
+  States
+  {
+  Spawn:
+    LIMK C -1
+    Stop
+  }
+}
+
+ACTOR LimestoneCeilingBig1 14097
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 32
+  +SOLID
+  +SPAWNCEILING
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    LIMC A -1
+    Stop
+  }
+}
+
+ACTOR LimestoneCeilingBig2 14098
+{
+  //$Category MOP_Decorative
+  Radius 12
+  Height 32
+  +SOLID
+  +SPAWNCEILING
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    LIMC B -1
+    Stop
+  }
+}
+
+ACTOR LimestoneCeilingSmallLong 14099
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 32
+  +SOLID
+  +SPAWNCEILING
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    LIMC C -1
+    Stop
+  }
+}
+
+ACTOR LimestoneCeilingSmall1 14100
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 16
+  +SPAWNCEILING
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    LIMC D -1
+    Stop
+  }
+}
+
+ACTOR LimestoneCeilingSmall2 14101
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 16
+  +SPAWNCEILING
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    LIMC E -1
+    Stop
+  }
+}
+
+ACTOR LimestoneCeilingSmall3 14102
+{
+  //$Category MOP_Decorative
+  Radius 4
+  Height 16
+  +SPAWNCEILING
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    LIMC F -1
+    Stop
+  }
+}
+
+ACTOR IceStalagmiteLarge 14103
+{
+  //$Category MOP_Decorative
+  Radius 24
+  Height 128
+  +SOLID
+  States
+  {
+  Spawn:
+    ICES A -1
+    Stop
+  }
+}
+
+ACTOR IceStalagmiteSmall1 14104
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    ICES B -1
+    Stop
+  }
+}
+
+ACTOR IceStalagmiteSmall2 14105
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 32
+  +SOLID
+  States
+  {
+  Spawn:
+    ICES C -1
+    Stop
+  }
+}
+
+Actor ZCorpseImpaled1 14106
+{
+	//$Category MOP_Decorative
+	+SOLID
+	Radius 8
+	Height 100
+
+	States
+	{
+	Spawn:
+		CPSI A -1
+		Stop
+	}
+}
+
+Actor ZCorpseImpaled2 14107
+{
+	//$Category MOP_Decorative
+	+SOLID
+	Radius 8
+	Height 100
+
+	States
+	{
+	Spawn:
+		CPSI B -1
+		Stop
+	}
+}
+
+Actor ZCorpseImpaled3 14108
+{
+	//$Category MOP_Decorative
+	+SOLID
+	Radius 8
+	Height 100
+
+	States
+	{
+	Spawn:
+		CPSI C -1
+		Stop
+	}
+}
+
+Actor ZCorpseImpaled4 14109
+{
+	//$Category MOP_Decorative
+	+SOLID
+	Radius 8
+	Height 100
+
+	States
+	{
+	Spawn:
+		CPSI D -1
+		Stop
+	}
+}
+
+Actor ZCorpseImpaled5 14110
+{
+	//$Category MOP_Decorative
+	+SOLID
+	Radius 8
+	Height 100
+
+	States
+	{
+	Spawn:
+		CPSI E -1
+		Stop
+	}
+}
+
+ACTOR flaskblueA 14111
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 7
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS A -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskblueB 14112
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 6
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS G -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskpurpleA 14113
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 7
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS B -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskpurpleB 14114
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 6
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS H -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskredA 14115
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 7
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS C -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskredB 14116
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 6
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS I -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskgreenA 14117
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 7
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS D -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskgreenB 14117
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 6
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS J -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskyellowA 14118
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 7
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS E -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskyellowB 14119
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 6
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS K -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskgreyA 14120
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 7
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS F -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskgreyB 14121
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 6
+  Height 17
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    FLKS L -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR glassblue 14122
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 3
+  Height 8
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    BEAK A -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+    Stop
+  }
+}
+
+ACTOR glasspurple 14123
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 3
+  Height 8
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    BEAK B -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR glassred 14124
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 3
+  Height 8
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    BEAK C -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR glassgreen 14125
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 3
+  Height 8
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    BEAK D -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR glassyellow 14126
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 3
+  Height 8
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    BEAK E -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR glassgrey 14127
+{
+  //$Category MOP_Decorative
+  mass 1500
+  Health 1
+  Radius 3
+  Height 8
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  RenderStyle Translucent
+  DeathSound "tubes/break"
+  States
+  {
+   Spawn:
+    BEAK F -1
+    loop
+   Death:
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard1", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_SpawnItemEx ("Flaskshard2", 0, 0, random (3, 5), random (-5, 5), random (-5, 5), random (1, 2), 0, 0, 30)
+    NULL A 0 A_Scream
+    Stop
+  }
+}
+
+ACTOR flaskshard1
+{
+  Radius 2
+  Height 4
+  speed 2
+  mass 1
+  RenderStyle Translucent
+  Alpha 0.6
+  +NOBLOCKMAP
+  +MISSILE
+  +NOTELEPORT
+  +DONTSPLASH
+  +NOICEDEATH
+  States
+  {
+  Spawn:
+    TSR1 ABC 4
+    TSR1 D 4
+    TSR1 ABC 4
+    TSR1 D 4 A_Jump (24, "DeathA")
+    TSR1 ABC 4
+    TSR1 D 4
+    TSR1 ABC 4
+    TSR1 D 4 A_Jump (24, "DeatB")
+    Loop
+  DeathA:
+    TSR1 C 5 A_Jump (80, "DeathA2")
+    NULL A 1
+    Stop
+  DeathB:
+    TSR1 D 5 A_Jump (80, "DeathB2")
+    NULL A 1
+    Stop
+  DeathA2:
+    TSR1 C 3 A_Jump (24, "DeathA2")
+    NULL A 1
+    Stop
+  DeathB2:
+    TSR1 D 5 A_Jump (24, "DeathB2")
+    NULL A 1
+    Stop
+  }
+}
+
+ACTOR flaskshard2
+{
+  Radius 2
+  Height 4
+  speed 2
+  mass 1
+  RenderStyle Translucent
+  Alpha 0.6
+  +NOBLOCKMAP
+  +MISSILE
+  +NOTELEPORT
+  +DONTSPLASH
+  +NOICEDEATH
+  States
+  {
+  Spawn:
+    TSR2 ADB 4
+    TSR2 C 4
+    TSR2 ADB 4
+    TSR2 C 4 A_Jump (24, "DeathA")
+    TSR2 ADB 4
+    TSR2 C 4
+    TSR2 ADB 4
+    TSR2 C 4 A_Jump (24, "DeathB")
+    Loop
+  DeathA:
+    TSR2 C 5 A_Jump (80, "DeathA2")
+    NULL A 1
+    Stop
+  DeathB:
+    TSR2 D 5 A_Jump (80, "DeathB2")
+    NULL A 1
+    Stop
+  DeathA2:
+    TSR2 C 3 A_Jump (24, "DeathA2")
+    NULL A 1
+    Stop
+  DeathB2:
+    TSR2 D 5 A_Jump (24, "DeathB2")
+    NULL A 1
+    Stop
+  }
+}
+
+ACTOR FountainWater 14128
+{
+  //$Category MOP_Sfx
+  Radius 2
+  Height 2
+  Scale 0.75
+  RenderStyle Translucent
+  Alpha 0.75
+  +NOBLOCKMAP
+  +MOVEWITHSECTOR
+  States
+  {
+  Spawn:
+    WFOU ABCD 3
+    Loop
+  }
+}
+
+ACTOR FountainNukage 14129
+{
+  //$Category MOP_Sfx
+  Radius 2
+  Height 2
+  Scale 0.75
+  RenderStyle Translucent
+  Alpha 0.75
+  +NOBLOCKMAP
+  +MOVEWITHSECTOR
+  States
+  {
+  Spawn:
+    NFOU ABCD 3
+    Loop
+  }
+}
+
+ACTOR FountainBlood 14130
+{
+  //$Category MOP_Sfx
+  Radius 2
+  Height 2
+  Scale 0.75
+  RenderStyle Translucent
+  Alpha 0.75
+  +NOBLOCKMAP
+  +MOVEWITHSECTOR
+  States
+  {
+  Spawn:
+    BFOU ABCD 3
+    Loop
+  }
+}
+
+ACTOR FountainWaterNoisy 14131
+{
+  //$Category MOP_Sfx
+  Radius 2
+  Height 2
+  Scale 0.75
+  RenderStyle Translucent
+  Alpha 0.75
+  +NOBLOCKMAP
+  +MOVEWITHSECTOR
+  States
+  {
+  Spawn:
+    WFOU ABCD 3 A_PlaySound ("Fountain/Loop", CHAN_AUTO, 1.0, 1, 2)
+    Loop
+  }
+}
+
+ACTOR FountainNukageNoisy 14132
+{
+  //$Category MOP_Sfx
+  Radius 2
+  Height 2
+  Scale 0.75
+  RenderStyle Translucent
+  Alpha 0.75
+  +NOBLOCKMAP
+  +MOVEWITHSECTOR
+  States
+  {
+  Spawn:
+    NFOU ABCD 3 A_PlaySound ("Fountain/Loop", CHAN_AUTO, 1.0, 1, 2)
+    Loop
+  }
+}
+
+ACTOR FountainBloodNoisy 14133
+{
+  //$Category MOP_Sfx
+  Radius 2
+  Height 2
+  Scale 0.75
+  RenderStyle Translucent
+  Alpha 0.75
+  +NOBLOCKMAP
+  +MOVEWITHSECTOR
+  States
+  {
+  Spawn:
+    BFOU ABCD 3 A_PlaySound ("Fountain/Loop", CHAN_AUTO, 1.0, 1, 2)
+    Loop
+  }
+}
+
+ACTOR HPipe1 14134
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 128
+  Tag "Pipe 1"
+  +SOLID
+  States
+  {
+  Spawn:
+    PIP1 A -1
+    Stop
+  }
+}
+
+ACTOR HPipe2 14135
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 128
+  Tag "Pipe 2"
+  +SOLID
+  States
+  {
+  Spawn:
+    PIP2 A -1
+    Stop
+  }
+}
+
+ACTOR HPipe3 14136
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 128
+  Tag "Pipe 3"
+  +SOLID
+  States
+  {
+  Spawn:
+    PIP3 A -1
+    Stop
+  }
+}
+
+ACTOR HPipe4 14137
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 128
+  Tag "Pipe 4"
+  +SOLID
+  States
+  {
+  Spawn:
+    PIP4 A -1
+    Stop
+  }
+}
+
+ACTOR HPipe5 14138
+{
+  //$Category MOP_Decorative
+  Radius 16
+  Height 128
+  Tag "Pipe 5"
+  +SOLID
+  States
+  {
+  Spawn:
+    PIP5 A -1
+    Stop
+  }
+}
+
+ACTOR CarcassSittingMarine 14139
+{
+  //$Category MOP_Decorative
+Height 32
+Radius 20
++SOLID
+
+  States
+  {
+  Spawn:
+    SIT1 A -1
+    Stop
+  }
+}
+
+ACTOR CarcassSittingMaintenance 14140
+{
+  //$Category MOP_Decorative
+Height 32
+Radius 20
++SOLID
+
+  States
+  {
+  Spawn:
+    SIT2 A -1
+    Stop
+  }
+}
+
+ACTOR OilDrum 14141
+{
+  //$Category MOP_Decorative
+  Health 20
+  Radius 10
+  Height 34
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  +OLDRADIUSDMG
+  DeathSound "world/barrelx"
+  Obituary "$OB_BARREL"
+  States
+  {
+  Spawn:
+    OILD A 6
+    Loop
+  Death:
+    OILD A 5 BRIGHT
+    OILD A 5 BRIGHT A_Scream
+    OILD B 5 BRIGHT
+    OILD C 5 BRIGHT A_Explode
+    OILC CCCCC 0 BRIGHT A_SpawnItemEx ("BarrelFlames", random (0, 40), random (0, 40), 0, 0, 0, 0, random (0, 360)) 
+    OILD D 10 BRIGHT
+    OILD D 1050 BRIGHT A_BarrelDestroy
+    OILD D 5 A_Respawn
+    Wait
+  }
+}
+
+ACTOR BarrelFlames
+{
+  Radius 16
+  Height 24
+  ReactionTime 75
+  damagetype "fire"
+  renderstyle Add
+  Projectile
+  +NODAMAGETHRUST
+  +BLOODLESSIMPACT
+  -NOGRAVITY
+  -DROPOFF
+  -MISSILE
+  -ACTIVATEIMPACT
+  -ACTIVATEPCROSS
+  
+  States
+  {
+  Spawn:
+    OILS A 0 bright
+    OILS A 4 bright A_PlaySoundEx ("BarrelFire/Loop", "SoundSlot5", 1)
+    OILS A 0 bright A_PlaySoundEx ("BarrelFire/Start", "SoundSlot6")
+    OILS BC 4 bright
+  FireLoop:
+    OILF AB 4 bright
+    OILF C 4 bright A_Explode (5, 40)
+    OILF C 0 bright A_CountDown
+    Loop
+  Death:
+    OILS CB 4 bright
+    OILS A 4 bright A_StopSoundEx ("SoundSlot5")
+    Stop
+  }
+}

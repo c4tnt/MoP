@@ -1,0 +1,2005 @@
+// Created by Silva (com1337@gmail.com)
+// Edited by c4tnt (c4tnt@yandex.ru)
+
+#library "ZMMaster"
+#include "zcommon.acs"
+
+global int 1: marineplayers;
+global int 2: masterplayers;
+global int 3: monstersleft;
+global int 4: monsterstotal;
+global int 5: reinforcements;
+global int 6: playermoney[];
+
+int server = 0;
+
+int monsterforces = 0;
+int timetoexit;
+int cancount;
+
+#define MOPMAXCLIENTS       32
+#define MOPMARINESIDE       0
+#define MOPMASTERSIDE       1
+
+// [ Client locals ]
+int playerstid[MOPMAXCLIENTS];
+int dmontype[MOPMAXCLIENTS][14];
+// [ End client locals ]
+
+#define VERYVERYLONG        2147483647
+#define UNNORMAWARD     23520
+#define     mopBASETARGETTID    1000
+
+#define mopX            -1
+#define mopY            -2
+#define mopZ            -3
+#define mopA            -4
+#define mopH            -5
+#define mopPFLAGS       -6
+#define mopHUD1         -7
+
+// Delayed morph state here
+#define mopDMSX         -8
+#define mopDMSY         -9
+#define mopDMSZ         -10
+#define mopDMSA         -11
+#define mopDMSH         -12
+#define mopDMST         -13
+
+// Monster properties
+#define mopMCLASS       0
+#define mopAMBSND       1
+#define mopMONSTER      2
+#define mopICON         3
+#define mopNUMBEG       4
+#define mopICONOFST     4
+#define mopFLAGS        5
+#define mopSCRIPT       6
+#define mopCOST         7
+
+#define MOPSHNAME       1
+#define MOPSHTYPE       2
+#define MOPSHA1         3
+#define MOPSHA2         4
+#define MOPSHA3         5
+#define MOPDESC         6
+
+#define MOPSCLIMIT      0
+#define MOPSCNAME       1
+#define MOPSCACTION     2
+#define MOPSCARG        3
+
+#define mopPFSHOP       1
+#define mopPFCNTR       2
+
+#define SHOPCURSOR      "Mskull"
+
+#define mopNOTAFFECTACTORS  (ACTOR_WORLD|ACTOR_PLAYER|ACTOR_BOT|ACTOR_VOODOODOLL|ACTOR_MISSILE)
+//#define mopMORPHFLAGS (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_LOSEACTUALWEAPON|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
+#define mopMORPHFLAGS       (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
+
+#define MOP_INIT_USERMAP        0
+#define MOP_INIT_MAP            999
+#define MOP_INIT_PLAYER         998
+#define MOP_PLAYER_DEATH        997
+#define MOP_PLAYER_RESPAWN      996
+#define MOP_PLAYER_LEFT         995
+#define MOP_SEND_SYNC           994
+#define MOP_SHOP_CALLBACK       993 // ! Used in the shop routine
+#define MOP_SHOP_INITIATE       992
+#define MOP_WEAPON_EVENT        991 // ! Used in the decorate
+#define MOP_SPAWN_SPECIAL       990 // ! Used in the decorate
+#define MOP_CHECK_PERSISTANT    989 // ! Used in the decorate
+#define MOP_SHOP_RENDER         988
+#define MOP_DO_MASTER_WIN       987
+#define MOP_DO_MARINE_WIN       986
+#define MOP_PLAYER_TRACKER      985
+#define MOP_PLAYER_PREDICTION   984
+#define MOP_PLAYER_RERUN        983 // ! Used in the clientic script
+#define MOP_WORLD_TRACKER       982
+#define MOP_WORLD_EXIT          981
+
+#define MOP_NETSYNC_MARINEPLAYERS       0
+#define MOP_NETSYNC_MASTERPLAYERS       1
+#define MOP_NETSYNC_MONSTERSLEFT        2
+#define MOP_NETSYNC_MONSTERSTOTAL       3
+#define MOP_NETSYNC_REINFORCEMENTS      4
+#define MOP_NETSYNC_TID                 5
+#define MOP_NETSYNC_MONEY               6
+#define MOP_NETSYNC_DMONTYPE            7
+#define MOP_NETSYNC_PLRFLAGS            8
+#define MOP_NETSYNC_HARG1               9
+
+#define MOP_NETSYNCFL_AUTO              0
+#define MOP_NETSYNCFL_BYTE              256
+#define MOP_NETSYNCFL_WORD              512
+#define MOP_NETSYNCFL_DWORD             768
+
+#define MOP_NETSYNCFL_VAR               1
+#define MOP_NETSYNCFL_EACHPLAYER        1024
+#define MOP_NETSYNCFL_SIGNED            2048
+
+#define MOP_NETSYNCFL_COUNTMASK         255
+#define MOP_NETSYNCFL_TYPEMASK          768
+
+int MOP_NETSYNC_VARS[13]  = {
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_BYTE,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_BYTE,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_BYTE | MOP_NETSYNCFL_SIGNED,
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD
+};
+
+#define MOP_NETSYNC_UPDATEMAP           255
+
+int updatemap[MOP_NETSYNC_UPDATEMAP];
+int net_challenge = 0;
+
+int PlayerCost[5] = { 336, 336, 588, 840, 840 };
+
+// Update this after the changing following array
+#define MOPMONSTERCOUNT 44
+
+// Monster flags:
+// 1 - Flying
+// 2 - Could not unmorph
+// Iconoffset is:
+// 8 bits - horizontal offset ( -127 to 128 )
+// 8 bits - vertical offset ( -127 to 128 )
+// 4 bits - scale ( -8 to 7 )
+
+int Monsterdata[MOPMONSTERCOUNT][8] = {
+
+//  (Morphed player class)  (morph sound)   (monster class)     (icon)      (iconoffs)  (flags) (script)    (monster cost)
+
+    {"DoomImpClass",        "",             "MDoomImp",         "TROOA1",       0,          0,      0,          70},
+    {"ZombieManClass",      "",             "MZombieMan",       "POSSA1",       0,          0,      0,          56},
+    {"ShotGunGuyClass",     "",             "MShotGunGuy",      "SPOSA1",       0,          0,      0,          84},
+    {"ChainGunGuyClass",    "",             "MChainGunGuy",     "CPOSA1",       0,          0,      0,          105},
+    {"DemonClass",          "",             "MDemon",           "SARGA1",       0,          0,      0,          84},
+    {"SpectreClass",        "",             "MSpectre",         "SARGA1",       0,          0,      0,          105},
+    {"CacoDemonClass",      "",             "MCacoDemon",       "HEADA1",       0,          1,      0,          120},
+    {"RevenantClass",       "",             "MRevenant",        "SKELA1D1",     2.0,        0,      0,          210},
+    {"FatsoClass",          "",             "MFatso",           "FATTA1",       1.0,        0,      0,          168},
+    {"HellKnightClass",     "",             "MHellKnight",      "BOS2A1C1",     1.0,        0,      0,          140},
+    {"BaronOfHellClass",    "",             "MBaronOfHell",     "BOSSA1",       1.0,        0,      0,          168},
+    {"ArachnotronClass",    "",             "MArachnoTron",     "BSPIA1D1", 2.0 + 6,        0,      0,          168},
+    {"CyberDemonClass",     "cyber/sight",  "MCyberDemon",      "CYBRC1",       3.0,        0,      0,          4200},
+    {"MasterMindClass",     "spider/sight", "MSpiderMasterMind","SPIDA1D1", 5.0 + 12,       0,      0,          1680},
+    {"ArchVileClass",       "",             "MArchVile",        "VILEB1E1",     2.0,        0,      0,          210},
+    {"WolfensteinSSClass",  "",             "MWolfensteinSS",   "NAZIC1",       0,          0,      0,          84},
+    {"PainElementalClass",  "",             "MPainElemental",   "PAINA1",       1.0,        1,      0,          140},
+    {"LostSoulClass",       "",             "MLostSoul",        "SKULB1",       0,          1,      0,          70},
+    {"ChainsawZombieClass", "",             "MChainsawZombie",  "CHANA1",       0,          0,      0,          70},
+    {"DarkImpClass",        "",             "MDarkimp",         "DRKIA1",       0,          0,      0,          105},
+    {"SSgZombieClass",      "",             "MSSgZombie",       "GPOSB1",       0,          0,      0,          140},
+    {"ChainGunGuy2Class",   "",             "MChainGunGuy2",    "DPOSB1D1",     0,          0,      0,          168},
+    {"BloodDemonClass",     "",             "MBloodDemon",      "SRG2A1C1",     0,          0,      0,          140},
+    {"ShadowClass",         "",             "MShadow",          "SHDWE1",       0,          0,      0,          168},
+    {"CacoLanternClass",    "",             "MCacolantern",     "HED2A1",       0,          1,      0,          168},
+    {"AbaddonClass",        "",             "MAbaddon",         "HED3A1",       0,          1,      0,          210},
+    {"BelphegorClass",      "",             "MBelphegor",       "BOS3A1",       0,          0,      0,          280},
+    {"HectebusClass",       "",             "MHectebus",        "HECTA1",       1.0,        0,      0,          420},
+    {"SoulHarvesterClass",  "",             "MSoulHarvester",   "SLHVA1",       0,          0,      0,          140},
+    {"FlyingImpClass",      "",             "MFlyingImp",       "AEIMD1",       1.0,        1,      0,          84},
+    {"TornadoDemonClass",   "",             "MTornadoDemon",    "SILEB1E1",     2.0,        0,      0,          420},
+    {"FallenClass",         "",             "MFallen",          "FALNA2A8", 3.0 + 248,      1,      0,          280},
+    {"RevenantorClass",     "",             "MRevenantor",      "SKELA1D1",     2.0,        0,      0,          840},
+    {"HellionClass",        "",             "MHellion",         "HELNC1F1",     0,          0,      0,          120},
+    {"HellhoundClass",      "",             "MHellhound",       "HDOGH1",       2.0,        0,      0,          210},
+    {"ShadowBeastClass",    "",             "MShadowbeast",     "BDEMF1",       3.0,        0,      0,          280},
+    {"ZombieMarineClass",   "",             "MZombieMarine",    "UDM2A1",       0,          0,      0,          156},
+    {"PyroImpClass",        "",             "MPyroImp",         "PRIMA1C1",     0,          0,      0,          140},
+    {"PlasmaZombieClass",   "",             "MPlasmaZombie",    "ZMAYA1",       0,          0,      0,          112},
+    {"RocketZombieClass",   "",             "MRocketZombie",    "MPOSA1",       0,          0,      0,          140},
+    {"AShotgunGuyClass",    "",             "MAShotgunGuy",     "ASGZA1",       0,          0,      0,          112},
+    {"ArachGunnerClass",    "",             "MArachGunner",     "CSPIA1D1",     2.0 + 6,    0,      0,          190},
+    {"CyberAnniClass",      "",             "MAnnihilator",     "ANNIC1",       3.0,        0,      0,          8400},
+    {"BarrelClass",         "",             "MExplosiveBarrel", "BEXPA0",       0,          0,      0,          0}
+};
+
+#libdefine MOPSMAX      59  // Shop records total count
+#libdefine MOPCMAX      8   // Shop categories count
+#libdefine MOPSHID      0
+
+str SHOPCAT[MOPCMAX][4] = {
+    // ( PLAYER CLASS ) ( CATEGORY NAME )   ( ACTION )  (ARG)
+
+    { 0,            "Inventory",                1,      7 },
+    { 0,            "Ammo",                     1,      8 },
+    { 1,            "Zombies",                  1,      1 },
+    { 1,            "Demons",                   1,      2 },
+    { 1,            "Elite demons",             1,      3 },
+    { 1,            "Cyber-implanted",          1,      4 },
+    { 1,            "Flying demons",            1,      5 },
+    { 1,            "Enhancements",             1,      6 }
+};
+
+str SHOP[MOPSMAX][7] = {
+    // LIST - id of the list filter, 0 - show always
+    // NAME - item name, shown in the buy list
+    // TYPE:
+    //  Specifies an action
+    //  0 - Do nothing ( for exit only )
+    //  1 - spawn a monster ( and exit from shop ).
+    //      ARG1 is monster id from the morph table
+    //      ARG2 is strength group ( used with on-map spawners )
+    //  2 - give an item.
+    //      ARG1 is item inventory name
+    //      ARG2 is item cost
+
+    // ( LIST )     ( NAME )          ( TYPE )( ARG1 )( ARG2 )( ARG3 )( DESCRIPTION )
+
+    // Zombie fork:
+    { 1,        "Former Human",             1,  1,      0,  0,  "Weak zombie with a pistol."  },
+    { 1,        "Former Human Sergeant",    1,  2,      0,  0,  "Sergeant zombie with \na shotgun."  },
+    { 1,        "Former Commando",          1,  3,      0,  0,  "Zombie with a chaingun."  },
+    { 1,        "Chainsaw Zombie",          1,  18,     0,  0,  "Fast zombie with chainsaw."  },
+    { 1,        "Former Human SSG",         1,  20,     0,  0,  "Zombie with a double-barreled \nshotgun."  },
+    { 1,        "Double chaingun zombie",   1,  21,     0,  0,  "Zombie with two chainguns."  },
+    { 1,        "Marine zombie",            1,  36,     0,  0,  "Fast and strong zombie with a pistol."  },
+
+    // Weak demons fork:
+    { 2,        "Imp",                      1,  0,      0,  0,  "Standart imp. Nothing special."  },
+    { 2,        "Dark Imp",                 1,  19,     0,  0,  "Well-fried imp."  },
+    { 2,        "Pyro Imp",                 1,  37,     0,  0,  "Explosive flame imp."  },
+    { 2,        "Soul Harvester",           1,  28,     0,  0,  "Soul harvester."  },
+    { 2,        "Shadow",                   1,  23,     0,  0,  "Fast and invisible monster."  },
+    { 2,        "Demon",                    1,  4,      0,  0,  "Pinky demon."  },
+    { 2,        "Spectre",                  1,  5,      0,  0,  "Invisible pinky demon."  },
+
+    // Strong demons fork:
+    { 3,        "Hellion",                  1,  33,     0,  0,  "Imp-like hellish creature."  },
+    { 3,        "Hell knight",              1,  9,      0,  0,  "Goat-footed beast with a power \nwhich is inaccessible to human"  },
+    { 3,        "Baron of Hell",            1,  10,     0,  0,  "True overlords of hell"  },
+    { 3,        "Hellhound",                1,  34,     0,  0,  "Doggie from hell, made of fire and flesh"  },
+    { 3,        "Belphegor",                1,  26,     0,  0,  "Imagine that Baron of hell meets \nmegasphere, this is the result"  },
+    { 3,        "Arch-vile",                1,  14,     0,  0,  "This beast will make your ass burn!"  },
+    { 3,        "Tornado",                  1,  30,     0,  0,  "Feel the wind from hell with this one"  },
+    { 3,        "Shadow beast",             1,  35,     0,  0,  "Half-spirit demon with his own\narmy of ghosts"  },
+
+    // Cyber-implanted fork:
+    { 4,        "Blood Demon",              1,  22,     0,  0,  "The pinky demon with mechanical legs"  },
+    { 4,        "Revenant",                 1,  7,      0,  0,  "It looks weak, but deadly in action"  },
+    { 4,        "Mancubus",                 1,  8,      0,  0,  "Fat-ass demon with flamethrower"  },
+    { 4,        "Hectebus",                 1,  27,     0,  0,  "The dark version of a mancubus"  },
+    { 4,        "Arachnotron",              1,  11,     0,  0,  "It's a small brain on the spider-like \nmechanical legs"  },
+    { 4,        "Mastermind",               1,  13,     0,  0,  "Badass version of arachnotron"  },
+    { 4,        "Rocket revenant",          1,  32,     0,  0,  "The latest revision of a revenant with \nrocket launcher"  },
+    { 4,        "Cyberdemon",               1,  12,     0,  0,  "The biggest goat. Nuff said"  },
+
+    // Flying fork:
+    { 5,        "Lost soul",                1,  17,     0,  0,  "Just forgotten soul"  },
+    { 5,        "Cacodemon",                1,  6,      0,  0,  "Weak flying monster"  },
+    { 5,        "Pain Elemental",           1,  16,     0,  0,  "dispenser from hell"  },
+    { 5,        "Caco Lantern",             1,  24,     0,  0,  "It is like Cacodemons, but stronger"  },
+    { 5,        "Abaddon",                  1,  25,     0,  0,  "It is like two cacos in one!"  },
+    { 5,        "Flying Imp",               1,  29,     0,  0,  "Do imps dream of flying sheep?"  },
+    { 5,        "Fallen",                   1,  31,     0,  0,  "Guardian of hell's sky"  },
+
+
+    // Items fork (masters):
+    { 6,        "Amulet of anger",      2,  "MEmerald",     84, "EMAMB0" , "Wakes up all monsters around\nyou and makes they angry." },
+    { 6,        "Amulet of control",    2,  "MControl",     84, "EMAMC0" , "Monsters will follow you\nwhen this amulet is active." },
+    { 6,        "Regeneration ring",    2,  "MRegeneration",168,"RRGNA0" , "With this ring you can\nheal monsters." },
+    { 6,        "Glowing ring",         2,  "MLight",       168,"ROWLI0" , "With this ring you can\nsee in the dark." },
+    { 6,        "Monster mover",        2,  "MMover",       120,"CHESA0" , "This item allows you to\ndrag any monster through map." },
+    { 6,        "Replication tome",     2,  "MDupe",        140,"TOMEI0" , "With this you can clone\nsome monsters." },
+    { 6,        "Instant heal",         2,  "MHeal",        120,"MLBLA0" , "Restores some health\nwhen used." },
+    { 6,        "Blot",                 2,  "MBlot",        105,"MPHIA0" , "Free this demon and he\nwill chase you enemies." },
+    { 6,        "Instant imp",          2,  "MImp",         105,"IMPEI0" , "With this item you can\nbecome Imp everywhere." },
+    { 6,        "Your best nightmare",  2,  "MNightmare",   105,"NIMEI0" , "After using that you will\nbe turned into a nightmare." },
+
+    // Item fork (marines):
+    { 7,        "Medipack",             2,  "MMedkit",      120,    0,  "Holdable medkit." },
+    { 7,        "Sentry gun",           2,  "MSentry",      168,    0,  "Placeable sentry gun." },
+    { 7,        "Protection feets",     2,  "MHIronFeet",   120,    0,  "Holdable protection suit." },
+    { 7,        "Protection field",     2,  "MTechArmor",   168,    0,  "Field that protects you while you\nhave any cells for it." },
+
+    // Ammunition fork (marines):
+    { 8,        "Nuke",                 3,  "MNuke",        100,    0,  "A nuke for a nuke launcher." },
+    { 8,        "Bullets",              3,  "MClip",        100,    0,  "Ammo box for a chaingun and a pistol." },
+    { 8,        "Shells",               3,  "MShell",       100,    0,  "Ammo box for a shotgun and a supershotgun." },
+    { 8,        "Rockets",              3,  "MRocketAmmo",  100,    0,  "Ammo box for a rocketlauncher." },
+    { 8,        "Cells",                3,  "MCell",        100,    0,  "Ammo box for an energetical weapons." },
+    { 8,        "Armor repair",         3,  "MArmorShard",  100,    0,  "Restores current armor." },
+    { 8,        "Heal",                 3,  "Medikit",      100,    0,  "Restores 10% health." },
+
+    // Exit buttons
+    { 0,        "Exit",                 0,  0,              0,      0,  "" }
+};
+
+#libdefine MOPANINVENTORY   0
+#libdefine MOPANSEQUENCE    1
+
+// Keep this array square
+str MOPAnimated[6][10] = {
+    // (Inventory item)     ( SPRITE/DELAY chunks )
+    { "PowerRegeneration",  "ARGNB0", 12,    "ARGNC0", 1, "ARGND0", 12,    "ARGNC0", 1, "" },
+    { "PowerTorch",     "ROWIA0", 1, "ROWIB0", 1, "ROWIC0", 1, "ROWIB0", 1, "" },
+    { "PowerStrength",      "PSTRA0", 1, "", 0,       "", 0,       "", 0,       "" },
+    { "PowerInvulnerable",  "PINVA0", 4, "PINVB0", 4, "PINVC0", 4, "PINVD0", 4, "" },
+    { "PowerInvisibility",  "PINSA0", 4, "PINSB0", 4, "PINSC0", 4, "PINSD0", 4, "" },
+    { "",           "", 0,       "", 0,       "", 0,       "", 0,       "" }
+};
+
+str MOPPERSISTANTS[3][2] = {
+    { "HackDevice", "HackDeviceSpot" },
+    { "Cutter", "CutterSpot" },
+    { "NukeLauncher", "NukeLauncherSpot" }
+};
+
+// --------------------------------------------------------- MOP Unnumbered scripts ---------------------------------------------------------------------------------------------
+
+#define TEMP_TID_START  256
+#define TEMP_TID_END    65536
+
+#define     UINT_MAX        0xFFFFFFFF
+#define     UINT_BITS       32
+#define     A_TID_ARRAY_SIZE    (TEMP_TID_END-TEMP_TID_START+1)/UINT_BITS+1 // +1 at end in case of (likely) rounding error
+int     AcquiredTids[A_TID_ARRAY_SIZE];
+
+// Find first free TID, greater the start TID
+function int FindFreeTID( void )
+{
+    int i = 1;
+    while( ThingCount( T_NONE, i ) || CheckTID( i ) ) i++;
+    return i;
+}
+
+// Check TID for a blocking
+function int CheckTID( int TID )
+{
+    int tidx = TID - TEMP_TID_START;
+    int idx;
+    int msk;
+
+    if(( TID > TEMP_TID_END ) || ( TID < TEMP_TID_START ) ) return 0;
+
+    idx = tidx >> 5;
+    msk = 1 << ( tidx & 31 );
+
+    if( AcquiredTids[idx] & msk ) {
+        return 1;
+    }
+    return 0;
+}
+
+// Acquire any free TID and lock it
+function int AcquireTID( void )
+{
+    int idx;
+    int bitmask;
+    int bit;
+    int atid;
+
+    for( idx = 0; idx < A_TID_ARRAY_SIZE; idx++ ) {
+        if( AcquiredTids[idx] != UINT_MAX ) {
+            bitmask = 1;
+            for( bit = 0; bit < UINT_BITS; bit++ ) {
+                if(( AcquiredTids[idx] & bitmask ) == 0 ) {
+                    atid = idx * UINT_BITS + bit + TEMP_TID_START;
+                    if( ThingCount( T_NONE, atid ) == 0 ) {
+                        // Lock TID and exit
+                        AcquiredTids[idx] |= bitmask;
+                        return atid;
+                    }
+                }
+                bitmask = bitmask << 1;
+            }
+        }
+    }
+    return 0;
+}
+
+// Release TID
+function int ReleaseTID( int TID )
+{
+    int tidx = TID - TEMP_TID_START;
+    int idx;
+    int msk;
+
+    if(( TID > TEMP_TID_END ) || ( TID < TEMP_TID_START ) ) return 0;
+
+    idx = tidx >> 5;
+    msk = 1 << ( tidx & 31 );
+
+    if( AcquiredTids[idx] & msk ) {
+        AcquiredTids[idx] &=  ~msk;
+        Thing_changeTid( TID, 0 );
+        return 1;
+    }
+    return 0;
+}
+
+// Array string to numeric converter.
+int TextBase[2] = { "", 0 };
+
+function int _arraynumeric( int in )
+{
+    return in - TextBase[1];
+}
+
+// Gets cost of all monsters in the sector. When sector tag is negative it counts cost of all monsters in the map
+function int GetTotalMonsterCost( int SectorTAG )
+{
+    int count = 0;
+    int i;
+    if( SectorTag > 0 ) {
+        for( i = 0; i < MOPMONSTERCOUNT; i++ ) {
+            count  += ThingCountName( MCODE( i, MOPMONSTER ), 0 ) * MCODE( i, MOPCOST );
+        }
+    } else {
+        for( i = 0; i < MOPMONSTERCOUNT; i++ ) {
+            count  += ThingCountNameSector( MCODE( i, MOPMONSTER ), 0, SectorTag ) * MCODE( i, MOPCOST );
+        }
+    }
+    return count;
+}
+
+// Retrieves properties for some monster id. Look 'Monster properties' constants for details.
+function int MCODE( int mID, int PARM )
+{
+    if( mID < 0 || mID >= MOPMONSTERCOUNT ) {
+        Log( s: "Ambiguous call of MCODE: mID is out of range, mID = ", i: mID );
+        return 0;
+    }
+
+    if( PARM >= mopNUMBEG ) {
+        return _arraynumeric( Monsterdata[mID][PARM ] );
+    } else if( PARM >= 0 ) {
+        return Monsterdata[mID][PARM ];
+    }
+    return 0;
+}
+
+// Retrieves properties for a specified player. Look 'Player properties' constants for details.
+// Negative params are dynamics.
+function int PCODE( int playnum, int PARM )
+{
+    if( PARM >= 0 ) {
+        int mid = dmontype[ playnum ][0];
+        if( mid < 0 || mid >= MOPMONSTERCOUNT ) {
+            Log( s: "PCODE error: mID is out of range, mID = ", i: mid );
+            return 0;
+        }
+        return MCODE( mid, PARM );
+    }
+    return dmontype[ playnum ][ -PARM ];
+}
+
+// Set player's dynamics.
+function int SETPCODE( int playnum, int PARM, int VAR )
+{
+    if( PARM >= 0 ) {
+        return 0;
+    }
+    dmontype[ playnum ][ -PARM ] = VAR;
+    return 1;
+}
+
+// Uniform bit operation with player's dynamics. ARG = ( ARG & pNAND ) | pOR
+// NAND will be inverted before this operation
+function int ANDPCODE( int playnum, int PARM, int pNAND, int pXOR )
+{
+    if( PARM >= 0 ) {
+        return 0;
+    }
+    dmontype[ playnum ][ -PARM ] = ( dmontype[ playnum ][ -PARM ] & ( ~pNAND ) ) ^ pXOR;
+    return 1;
+}
+
+function int MOPIsMorphed( int playnum )
+{
+    if( playnum >= 0 ) {
+        return ( dmontype[ playnum ][0] >= 0 );
+    }
+
+    if( PlayerNumber() == -1 ) return 0;
+
+    return ( dmontype[ PlayerNumber()][0] >= 0 );
+}
+
+function int MOPHaveDMS( int playnum )
+{
+    if( playnum >= 0 ) {
+        return ( dmontype[ playnum ][-mopDMST] > 0 );
+    }
+
+    if( PlayerNumber() == -1 ) return 0;
+
+    return ( dmontype[ PlayerNumber()][-mopDMST] > 0 );
+}
+
+function int MOPIsMaster( int playnum )
+{
+    if( PlayerNumber() == -1 ) return 0;
+
+    if( PlayerClass( PlayerNumber() ) == MOPMASTERSIDE ) {
+        return 1;
+    }
+    return 0;
+}
+
+function int MOPIsMarine( int playnum )
+{
+    if( PlayerNumber() == -1 ) return 0;
+
+    if( PlayerClass( PlayerNumber() ) == MOPMARINESIDE ) {
+        return 1;
+    }
+    return 0;
+}
+
+function int PMONSTER( int tid )
+{
+    int i;
+    int class_index = -1;
+    int refertid;
+    int TIDsafety;
+
+    if( tid == 0 ) {
+        TIDSafety = ActivatorTID();
+        refertid = FindFreeTID();
+        Thing_changeTid( 0, refertid ); //Save activator
+    } else {
+        refertid = tid;
+    }
+
+    for( i = 0; i < MOPMONSTERCOUNT; i++ ) {
+        if( ThingCountName( Monsterdata[i][mopMONSTER], refertid ) ) {
+//      if (CheckActorClass(refertid, Monsterdata[i][mopMONSTER])) {    // It's a better way to do this, but it isn't working :'(
+            class_index = i;
+            break;
+        }
+    }
+
+    if( tid == 0 ) Thing_changeTid( refertid, TIDSafety );      // Turn old TID back
+    return class_index + 1;
+}
+
+function int MOPLookTarget( int lookingfor )
+{
+    int playnum = PlayerNumber();
+    int mtype;
+    int refertid;
+    int TIDsafety;
+    int h;
+
+    TIDSafety = ActivatorTID();
+    refertid = FindFreeTID();
+
+    Thing_changeTid( 0, refertid ); //Save activator
+
+    // We need to change the activator
+    if( !SetActivatorToTarget( refertid ) ) {
+        Thing_changeTid( refertid, TIDSafety );
+        return 0;   // No target avaliable
+    }
+
+    if( ClassifyActor( 0 ) & mopNOTAFFECTACTORS ) {
+        SetActivator( refertid );
+        Thing_changeTid( refertid, TIDSafety );
+        return 0;   // No target avaliable
+    }
+
+    mtype = PMONSTER( 0 );
+    if( !mtype ) {
+        SetActivator( refertid );
+        Thing_changeTid( refertid, TIDSafety );
+        return 0;
+    }
+
+    h = GetActorProperty( 0, APROP_Health ) * 100;
+    h /= GetActorProperty( 0, APROP_SpawnHealth );
+
+    SetActivator( refertid );
+    Thing_changeTid( refertid, TIDSafety );
+    return ( mtype & 65535 ) | ( h << 16 );
+}
+
+// Master spawn core
+// type - morph index, when this < 1 script try to get typeinfo from the target actor
+// target - tid of the morph target, if it zero script will only change player, if target is negative, trying to use activator target
+// fl - flags:
+//  1 - no health transfer
+//  2 - unmorph to nothing ( not implemented yet )
+//  4 - die when unmorphing ( not implemented yet )
+//  8 - silent
+//  16 - no move
+//  32 - disable notarget, use it if you want to morph a marine
+//  64 - limit spawn cost, only used when type is not specified. Type will treated as maximum monster cost
+//  128 - test only, do not perform really morph or spawn
+//  256 - delayed morph. Call this with 128+256 to create a delayed morph state, then call this with 256 to execute a delayed morph state
+// returns:
+//  0 - failure
+//  -1 - monster too expensive ( for 64 flag only )
+//  1 - success
+//  2 - success, but monster in the wall. Old monster position is saved into mopX-mopZ player fields. Player morphed, but his position is left as is
+
+function int MOPMorph( int type, int target, int fl )
+{
+    int playnum = PlayerNumber();
+    int mtype;
+    int spawnsuccess;
+    int angle;
+    int h;
+    int refertid;
+    int X;
+    int Y;
+    int Z;
+    int r;
+    int TIDsafety;
+    int scriptnum;
+    bool zerotype = ( type < 1 ) || ( fl & 64 );
+
+    if( playnum == -1 ) return 0;  // Failed ( The activator isn't a player )
+
+    TIDSafety = ActivatorTID();
+    refertid = FindFreeTID();
+
+    if(( fl & 256 ) && !( fl & 128 ) ) {
+        h = PCODE( playnum, mopDMSH );
+        X = PCODE( playnum, mopDMSX );
+        Y = PCODE( playnum, mopDMSY );
+        Z = PCODE( playnum, mopDMSZ );
+        mtype = PCODE( playnum, mopDMST );
+        if( mtype <= 0 ) return 0;  // No DMS saved
+    } else if( target < 0 ) {
+        Thing_changeTid( 0, refertid ); //Save activator
+        // We need to change the activator
+        if( !SetActivatorToTarget( refertid ) ) {
+            Thing_changeTid( refertid, TIDSafety );
+            return 0;   // No target avaliable
+        }
+        if( ClassifyActor( 0 ) & mopNOTAFFECTACTORS ) {
+            SetActivator( refertid );
+            Thing_changeTid( refertid, TIDSafety );
+            return 0;   // No target avaliable
+        }
+
+        if( zerotype ) {
+            mtype = PMONSTER( 0 );
+            if( !mtype ) {
+                SetActivator( refertid );
+                Thing_changeTid( refertid, TIDSafety );
+                return 0;
+            }
+            if(( fl & 64 ) && ( MCODE( mtype - 1, mopCOST ) > type ) ) {
+                SetActivator( refertid );
+                Thing_changeTid( refertid, TIDSafety );
+                return -1;
+            }
+        } else {
+            mtype = type;
+        }
+        h = GetActorProperty( 0, APROP_Health );
+        X = GetActorX( 0 );
+        Y = GetActorY( 0 );
+        Z = GetActorZ( 0 );
+        angle = GetActorAngle( 0 );
+        if( !( fl & 128 ) || ( fl & 256 ) ) thing_remove( 0 );
+        SetActivator( refertid );
+        Thing_changeTid( refertid, TIDSafety );
+    } else if( target > 0 ) {
+        if( ClassifyActor( target ) & mopNOTAFFECTACTORS ) {
+            return 0;   // No target avaliable
+        }
+        if( zerotype ) {
+            mtype = PMONSTER( target );
+            if( !mtype )
+                return 0;
+            if(( fl & 64 ) && ( MCODE( mtype - 1, mopCOST ) > type ) )
+                return -1;
+
+        } else {
+            mtype = type;
+        }
+        h = GetActorProperty( target, APROP_Health );
+        X = GetActorX( target );
+        Y = GetActorY( target );
+        Z = GetActorZ( target );
+        angle = GetActorAngle( target );
+        if( !( fl & 128 ) || ( fl & 256 ) ) thing_remove( target );
+    } else {
+        if( zerotype ) {
+            Thing_changeTid( 0, refertid ); //Save activator
+            if( !SetActivatorToTarget( refertid ) ) {
+                Thing_changeTid( refertid, TIDSafety );
+                return 0;   // No target avaliable
+            }
+            if( ClassifyActor( 0 ) & mopNOTAFFECTACTORS ) {
+                SetActivator( refertid );
+                Thing_changeTid( refertid, TIDSafety );
+                return 0;   // No target avaliable
+            }
+            mtype = PMONSTER( 0 );
+            if( !mtype ) {
+                SetActivator( refertid );
+                Thing_changeTid( refertid, TIDSafety );
+                return 0;
+            }
+            if(( fl & 64 ) && ( MCODE( mtype - 1, mopCOST ) > type ) ) {
+                SetActivator( refertid );
+                Thing_changeTid( refertid, TIDSafety );
+                return -1;
+            }
+
+            h = GetActorProperty( 0, APROP_Health );
+            angle = GetActorAngle( 0 );
+            SetActivator( refertid );
+            Thing_changeTid( refertid, TIDSafety );
+        } else {
+            mtype = type;
+            h = GetActorProperty( 0, APROP_Health );
+            angle = GetActorAngle( 0 );
+        }
+        X = GetActorX( 0 );
+        Y = GetActorY( 0 );
+        Z = GetActorZ( 0 );
+    }
+
+    if( mtype < 1 || mtype > MOPMONSTERCOUNT ) {
+        SetFont( "BIGFONT" );
+        HudMessage( s: "ERROR 2: Morph type = ", i: mtype, s: ". Please report about this bug";
+                    HUDMSG_TYPEON | HUDMSG_LOG, 0, CR_TAN, 1.5, 0.8, 5.0,
+                    0.05, 2.0 );
+        return 0;   // Execution failed
+    }
+
+    if( fl & 128 ) {
+        if( fl & 256 ) {
+            // Write DMS Here
+            SETPCODE( playnum, mopDMSX, X );
+            SETPCODE( playnum, mopDMSY, Y );
+            SETPCODE( playnum, mopDMSZ, Z );
+            SETPCODE( playnum, mopDMSH, h );
+            SETPCODE( playnum, mopDMST, mtype );
+        }
+        // For test-only flag
+        return 1;
+    }
+
+    if( dmontype[ playnum ][0] >= 0 ) {
+        UnMorphActor( 0, 1 );       // Unmorph player before morphing
+    }
+
+    dmontype[ playnum ][0] = mtype - 1;
+
+    SetupPlayer( 3 );           // Skulltag server bug resolver
+    r = MorphActor( 0, PCODE( playnum, mopMCLASS ), "", VERYVERYLONG, mopMORPHFLAGS, "NoFlash", "NoFlash" );
+
+    if( r == 0 ) {
+        // Morphing have been failed, immediately undo this action
+
+        if( !( fl & 128 ) || ( fl & 256 ) ) {
+            refertid = FindFreeTID();
+            r = Spawn( PCODE( playnum, mopMONSTER ) , X, Y, Z, refertid, angle );
+            if( r ) {
+                SetActorProperty( refertid, APROP_Health, h ); //Return Current Health to monster
+                SetActorState( refertid, "MOPFreed" );
+            }
+            dmontype[ playnum ][0] = -1;
+            Thing_changeTid( refertid, 0 );
+        }
+
+        return 0;
+    }
+
+    if( !( fl & 8 ) && ( strlen( PCODE( playnum, mopAMBSND ) ) > 0 ) ) {
+        AmbientSound( PCODE( playnum, mopAMBSND ), 127 ); // Sight sound that hears all players
+    }
+
+    if( !( fl & 16 ) ) { //Transfer position
+        //Move player to monster position ( and drag out the wall )
+        if( !SetActorPosition( 0, X, Y, Z, 0 ) ) {
+            SETPCODE( playnum, mopDMSX, X );
+            SETPCODE( playnum, mopDMSY, Y );
+            SETPCODE( playnum, mopDMSZ, Z );
+            SETPCODE( playnum, mopDMSA, angle );
+            r = 2;
+        } else {
+            SetActorAngle( 0, angle );
+        }
+    }
+
+    if( !( fl & 1 ) )   //Transfer health
+        SetActorProperty( 0, APROP_Health, h );
+
+    if( !( fl & 32 ) )  //Notarget
+        SetPlayerProperty( 0, 1, 1 ); // no target
+
+    if( PCODE( playnum, mopFLAGS ) & 1 ) {
+        SetPlayerProperty( 0, 1, 3 );
+    } else {
+        SetPlayerProperty( 0, 0, 3 );
+    }
+
+    // Some class related scripts
+    scriptnum = PCODE( playnum, mopSCRIPT );
+    if( scriptnum != 0 ) {
+        ACS_ExecuteAlways( scriptnum, 0 );
+    }
+
+    return r;   // Success!
+}
+
+// Master unmorph
+// fl - flags:
+//  1 - allow to lose monster
+//  2 - forced unmorph
+//  8 - force to lose monster
+//
+// return:
+//  positive value - spawned monster TID
+//  0 - unmorph was cancelled
+//  -1 - spawning failed, unmorph cancelled
+
+function int MOPUnmorph( int fl )
+{
+    int hlt = GetActorProperty( 0, APROP_Health );
+    int ang = GetActorAngle( 0 ) >> 8;
+    int s;
+    int X = GetActorX( 0 );
+    int Y = GetActorY( 0 );
+    int Z = GetActorZ( 0 );
+    int aTID;
+
+    if( !MOPIsMorphed( -1 ) ) return -1;  // Haven't morphed yet
+
+    if((( PCODE( PlayerNumber(), mopFLAGS ) & 2 ) == 0 ) || ( fl & 2 ) ) {
+
+        UnMorphActor( 0, 1 );
+        if( !( fl & 8 ) ) {
+            aTID = FindFreeTID();
+            s = Spawn( PCODE( PlayerNumber(), mopMONSTER ) , X, Y, Z, aTID, ang );
+            if( s || ( fl & 1 ) ) {
+                if( s ) {
+                    SetActorProperty( aTID, APROP_Health, hlt ); //Return Current Health to monster
+                }
+                dmontype[ PlayerNumber()][0] = -1;
+            } else {
+                // Bad spawn, morph back
+                MorphActor( 0, PCODE( PlayerNumber(), mopMCLASS ), "", VERYVERYLONG, mopMORPHFLAGS, "NoFlash", "NoFlash" );
+                SetActorProperty( 0, APROP_Health, hlt ); //Return Current Health
+                return -1;
+            }
+            SetActorState( aTID, "MOPFreed" );
+            return aTID;
+        }
+        return 0;
+    }
+    return -1;  // Not unmorphed
+}
+
+// There is only the 'forced' version of the unmorph
+
+function int MOPUnmorphStatic( int playernum )
+{
+
+    int s;
+    int aTID;
+
+    if( dmontype[ playernum ][0] < 0 )
+        return 0;   // Not morphed
+
+    if( PlayerInGame( playernum ) ) {
+        // If player presents in the game
+        return -1;
+
+    } else {
+        // Player have gone
+
+        aTID = FindFreeTID();
+        s = Spawn( PCODE( playernum, mopMONSTER ) , PCODE( playernum, mopX ), PCODE( playernum, mopY ), PCODE( playernum, mopZ ), aTID, PCODE( playernum, mopA ) >> 8 );
+        dmontype[ PlayerNumber()][0] = -1;
+        if( s ) {
+            SetActorProperty( aTID, APROP_Health, PCODE( playernum, mopH ) ); //Return Current Health to monster
+            SetActorState( aTID, "MOPFreed" );
+            return aTID;
+        } else {
+            return 0;
+        }
+    }
+    return 0;
+}
+
+function int PlayerTID( int plnum )
+{
+    return playerstid[plnum];
+}
+
+function int MOPCorpse( int fl )
+{
+    int ang = GetActorAngle( 0 ) >> 8;
+    int s;
+    int X = GetActorX( 0 );
+    int Y = GetActorY( 0 );
+    int Z = GetActorZ( 0 );
+    int aTID;
+
+    if( MOPIsMorphed( -1 ) ) {
+
+        if( ClassifyActor( 0 ) & ACTOR_ALIVE ) {
+            UnMorphActor( 0, 1 ); //Unmorph live players
+        }
+
+        aTID = FindFreeTID();
+        s = Spawn( PCODE( PlayerNumber(), mopMONSTER ) , X, Y, Z, aTID, ang );
+        dmontype[ PlayerNumber()][0] = -1;
+        if( s ) {
+            if( fl & 1 )
+                Thing_Destroy( aTID, 1 );
+            else
+                Thing_Destroy( aTID, 0 );
+
+            Thing_changeTid( aTID, 0 );
+            return 0;
+        }
+        return 1; // Corpse didn't spawn
+    }
+    return -1;  // Not unmorphed
+}
+
+function int UpdateAnims( int framenum, int baseX, int baseY, int dX, int dY, int baseID )
+{
+    int i;
+    int j;
+    int posx = 0;
+    int posy = 0;
+    int curframe;
+
+    i = 0;
+    while( 1 ) {
+        if( MOPAnimated[i][MOPANINVENTORY] == "" )
+            break;
+
+        if( CheckInventory( MOPAnimated[i][MOPANINVENTORY] ) ) {
+            // walk througth anim chunks
+            j = MOPANSEQUENCE;
+            curframe = 0;
+            while( 1 ) {
+                if( StrLen( MOPAnimated[i][j] ) == 0 )
+                    j = MOPANSEQUENCE;  //Cycle frames
+
+                if( _arraynumeric( MOPAnimated[i][j+1] ) == 0 )
+                    break;
+
+                if(( curframe + _arraynumeric( MOPAnimated[i][j+1] ) ) >= framenum ) {
+                    // Draw & break
+                    DrawScreenSprite( MOPAnimated[i][j], baseID + i, baseX, baseY, posx, posy, 1.0 );
+
+                    posx += dX;
+                    posy += dY;
+                    break;
+                } else {
+                    // Get next frame
+                    curframe += _arraynumeric( MOPAnimated[i][j+1] );
+                }
+                j += 2;
+            }
+        } else {
+            ClearSprite( baseID + i );
+        }
+        i++;
+    }
+    return framenum + 1;
+}
+
+function void CallServerScriptArg( int scriptnum, int arg )
+{
+    ConsoleCommand( strParam( s: "puke ", i: scriptnum, s: " ", i: arg ) );
+}
+
+function int FTOI( int fixed )
+{
+    return fixed >> 16;
+}
+
+function int FCLAMP( int fixed )
+{
+    return ( fixed >> 16 ) << 16;
+}
+
+function int IMULF( int integer, int fixed )
+{
+    return ( FixedMul( fixed, integer << 16 ) ) >> 16;
+}
+
+function void ClearSprite( int HUDNUM )
+{
+    hudmessage( s: ""; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, 0.1, 0.1, 0 );
+}
+
+function void DrawScreenSprite( str SPRITE, int HUDNUM, int X, int Y, int DX, int DY, int SpriteScale )
+{
+    int FSpriteDX;
+    int FSpriteDY;
+
+    int ScreenW;
+    int ScreenH;
+
+    ScreenW = FixedMul(( GetScreenWidth() << 16 ), SpriteScale );
+    ScreenH = FixedMul(( GetScreenHeight() << 16 ), SpriteScale );
+
+    FSpriteDX = FCLAMP( FixedMul( ScreenW, X ) + ( DX << 16 ) );
+    FSpriteDY = FCLAMP( FixedMul( ScreenH, Y ) + ( DY << 16 ) );
+
+    SetHUDSize( FTOI( ScreenW ), FTOI( ScreenH ), 0 );
+    SetFont( SPRITE );
+    hudmessage( s: "A"; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, FSpriteDX + 0.0, FSpriteDY + 0.0, 0 );
+}
+
+function void DrawSprite( str SPRITE, int HUDNUM, int X, int Y, int HUDW, int HUDH, int SPRITEOFFSET, int ExternalScale )
+{
+    int SpriteScale = ( SPRITEOFFSET >> 16 ) & 15;
+    int SpriteDX = SPRITEOFFSET & 255;
+    int SpriteDY = ( SPRITEOFFSET & 65280 ) >> 8;
+    int FSpriteDX;
+    int FSpriteDY;
+
+    if( SpriteDX > 128 ) SpriteDX -= 256;
+    if( SpriteDY > 128 ) SpriteDY -= 256;
+
+    switch( SpriteScale ) {
+    case 0:
+        SpriteScale = 1.0;
+        break;
+    case 1:
+        SpriteScale = 1.1;
+        break;
+    case 2:
+        SpriteScale = 1.25;
+        break;
+    case 3:
+        SpriteScale = 1.42;
+        break;
+    case 4:
+        SpriteScale = 2.0;
+        break;
+    case 5:
+        SpriteScale = 2.5;
+        break;
+    case 6:
+        SpriteScale = 3.3;
+        break;
+    case 7:
+        SpriteScale = 5.0;
+        break;
+    case 8:
+        SpriteScale = 0.9;
+        break;
+    case 9:
+        SpriteScale = 0.8;
+        break;
+    case 10:
+        SpriteScale = 0.7;
+        break;
+    case 11:
+        SpriteScale = 0.6;
+        break;
+    case 12:
+        SpriteScale = 0.5;
+        break;
+    case 13:
+        SpriteScale = 0.4;
+        break;
+    case 14:
+        SpriteScale = 0.3;
+        break;
+    case 15:
+        SpriteScale = 0.2;
+        break;
+    }
+
+    SpriteScale = FixedMul( ExternalScale, SpriteScale );
+
+    FSpriteDX = FCLAMP(( SpriteDX << 16 ) + FixedMul(( X << 16 ), SpriteScale ) );
+    FSpriteDY = FCLAMP(( SpriteDY << 16 ) + FixedMul(( Y << 16 ), SpriteScale ) );
+
+    SetHUDSize( IMULF( HUDW, SpriteScale ), IMULF( HUDH, SpriteScale ), 0 );
+    SetFont( SPRITE );
+    hudmessage( s: "A"; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, FSpriteDX + 0.1, FSpriteDY + 0.1, 0 );
+    SetHUDSize( HUDW, HUDH, 0 );
+}
+
+function void RenewCounters( void )
+{
+    int c;
+
+    marineplayers = ThingCountName( "MarineClass", 0 );
+    masterplayers = ThingCountName( "MonsterMasterClass", 0 );
+    monstersleft = GetLevelInfo( LEVELINFO_TOTAL_MONSTERS ) - GetLevelInfo( LEVELINFO_KILLED_MONSTERS );
+    // + masters in monsters
+    for( int i = 0; i < MOPMONSTERCOUNT; i++ ) {
+        c = ThingCountName( MCODE( i, mopMCLASS ), 0 );
+        monstersleft  += c;
+    }
+}
+
+function void MasterPhysics( int tics )
+{
+    int velx, vely, velz;
+    int kfr;
+
+    velx = GetActorVelX( 0 );
+    vely = GetActorVelY( 0 );
+    velz = GetActorVelZ( 0 );
+
+    SetActorPosition( 0, GetActorX( 0 ), GetActorY( 0 ), GetActorZ( 0 ), 0 );
+    if( GetActorCeilingZ( 0 ) > GetActorFloorZ( 0 ) ) {
+        kfr = 0.8 / tics;
+        velx = FixedMul( velx, kfr );
+        vely = FixedMul( vely, kfr );
+        velz = FixedMul( velz, kfr );
+        if( GetActorCeilingZ( 0 ) < GetActorZ( 0 ) ) {
+            velz = -5.0;
+        }
+        if( GetActorFloorZ( 0 ) > GetActorZ( 0 ) ) {
+            velz = 1.0;
+            SetActorPosition( 0, GetActorX( 0 ), GetActorY( 0 ), GetActorFloorZ( 0 ), 0 );
+        }
+    } else {
+        velz = 0.0;
+    }
+    SetActorVelocity( 0, velx, vely, velz, FALSE, FALSE );
+}
+
+function void DrawPlayerHUD( int type, int arg1 )
+{
+
+    int health;
+
+    switch( type ) {
+    case 0:
+        // No HUD
+        ClearSprite( 11 );
+        ClearSprite( 12 );
+        ClearSprite( 13 );
+        ClearSprite( 14 );
+        ClearSprite( 15 );
+        break;
+    case 1:
+        // Free master HUD
+        ClearSprite( 11 );
+
+        SetHUDSize( 400, 300, 0 );
+        setfont( "SMALLFONT" );
+        hudmessage( f: GetActorFloorZ( 0 ), s: "<", f: GetActorZ( 0 ), s: ">", f: GetActorCeilingZ( 0 ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, 0 );
+        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, 0 );
+        if( arg1 ) {
+            health = arg1 >> 16;
+            if( health > 65 ) {
+                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_GREEN, 215.1, 150.0, 0 );
+            } else if( health > 35 ) {
+                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_YELLOW, 215.1, 150.0, 0 );
+            } else if( health > 0 ) {
+                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_RED, 215.1, 150.0, 0 );
+            } else {
+                hudmessage( s: "---"; HUDMSG_PLAIN, 14, CR_GREY, 215.1, 150.0, 0 );
+            }
+            DrawScreenSprite( "MAHRB0", 13, 0.5, 0.5, 0, 0, 1.0 );
+        } else {
+            DrawScreenSprite( "MAHRA0", 13, 0.5, 0.5, 0, 0, 1.0 );
+            ClearSprite( 14 );
+        }
+        break;
+    case 2:
+        // Possessed monster HUD
+
+        ClearSprite( 13 );
+        ClearSprite( 14 );
+
+        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, 0 );
+        DrawSprite( MCODE( arg1, mopICON ), 11, 40, 180, 320, 200, MCODE( arg1, mopICONOFST ), 1.2 );
+        SetHUDSize( 400, 300, 0 );
+        setfont( "SMALLFONT" );
+        hudmessage( i: GetActorProperty( 0, APROP_Health ), s: "/", i: GetActorProperty( 0, APROP_SpawnHealth ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, 0 );
+        break;
+    case 3:
+        // Marine HUD
+        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, 0 );
+        ClearSprite( 11 );
+        ClearSprite( 12 );
+        ClearSprite( 13 );
+        ClearSprite( 14 );
+        break;
+    }
+}
+
+function int unpack( int byte1, int byte2, int byte3, int byte4 )
+{
+    return ( byte1 << 24 ) + ( byte2 << 16 ) + ( byte3 << 8 ) + byte4;
+}
+
+function int pack( int var, int byte )
+{
+    return ( var >> ( byte * 8 ) ) & 255;
+}
+
+
+function int NETSYNC_READ( int var, int idx )
+{
+    if( var == MOP_NETSYNC_MARINEPLAYERS ) return marineplayers;
+    if( var == MOP_NETSYNC_MASTERPLAYERS ) return masterplayers;
+    if( var == MOP_NETSYNC_MONSTERSLEFT ) return monstersleft;
+    if( var == MOP_NETSYNC_MONSTERSTOTAL ) return monsterstotal;
+    if( var == MOP_NETSYNC_REINFORCEMENTS ) return reinforcements;
+    if( var == MOP_NETSYNC_TID ) return playerstid[idx];
+    if( var == MOP_NETSYNC_MONEY ) return playermoney[idx];
+    if( var == MOP_NETSYNC_DMONTYPE ) return dmontype[idx][0];
+    if( var == MOP_NETSYNC_PLRFLAGS ) return dmontype[idx][-mopPFLAGS];
+    if( var == MOP_NETSYNC_HARG1 ) return dmontype[idx][-mopHUD1];
+    return 0;
+}
+
+function void NETSYNC_WRITE( int var, int idx, int val )
+{
+//  log(s:"NS_W: ",i:var,s:"[",i:idx,s:"] = ",i:val);
+    if( var == MOP_NETSYNC_MARINEPLAYERS ) {
+        marineplayers = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_MASTERPLAYERS ) {
+        masterplayers = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_MONSTERSLEFT ) {
+        monstersleft = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_MONSTERSTOTAL ) {
+        monsterstotal = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_REINFORCEMENTS ) {
+        reinforcements = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_TID ) {
+        playerstid[idx] = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_MONEY ) {
+        playermoney[idx] = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_DMONTYPE ) {
+        dmontype[idx][0] = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_PLRFLAGS ) {
+        dmontype[idx][-mopPFLAGS] = val;
+        return;
+    }
+    if( var == MOP_NETSYNC_HARG1 ) {
+        dmontype[idx][-mopHUD1] = val;
+        return;
+    }
+}
+
+function void GotNetworkSync( int challenge, int byte1, int byte2 )
+{
+
+    int idx = challenge & 63;
+    int decoded;
+    int i;
+    int count;
+    int loindex;
+    int r;
+
+    loindex = 0;
+    if( challenge == idx ) {
+        // Packet header, decrypt it
+
+        decoded = unpack( 0, 0, byte2, byte1 );
+        r = unpack( 5, 0, 0, 0 );
+        i = 0;
+        while( MOP_NETSYNC_VARS[i] ) {
+            if( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_EACHPLAYER ) {
+                if( decoded - loindex < MOPMAXCLIENTS ) {
+                    r = ( i << 8 ) + ( decoded - loindex ) + ((( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_TYPEMASK ) + 256 ) << 16 ) + (( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_SIGNED ) << 16 );
+                    break;
+                }
+                loindex += MOPMAXCLIENTS;
+            } else {
+                count = MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_COUNTMASK;
+                if( decoded - loindex < count ) {
+                    r = ( i << 8 ) + ( decoded - loindex ) + ((( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_TYPEMASK ) + 256 ) << 16 ) + (( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_SIGNED ) << 16 );
+                    break;
+                }
+                loindex += count;
+            }
+            i++;
+        }
+        count = i;
+        updatemap[challenge] = r;
+    } else {
+        // Packet body
+        updatemap[challenge] = unpack( 1, 0, byte2, byte1 );
+    }
+
+    if( pack( updatemap[idx], 3 ) != 0 ) {
+        // Header was readen, check the packet
+        i = 0;
+        switch((( pack( updatemap[idx], 3 ) - 1 ) << 8 ) & MOP_NETSYNCFL_TYPEMASK ) {
+        case MOP_NETSYNCFL_BYTE:
+            if( pack( updatemap[idx + 64], 3 ) ) {
+                r = updatemap[idx + 64] & 255;
+                if(( updatemap[idx] >> 16 ) & MOP_NETSYNCFL_SIGNED ) r = r - 128;
+                i = 1;
+            }
+            break;
+        case MOP_NETSYNCFL_WORD:
+            if( pack( updatemap[idx + 64], 3 ) ) {
+                r = updatemap[idx + 64] & 65535;
+                if(( updatemap[idx] >> 16 ) & MOP_NETSYNCFL_SIGNED ) r = r - 32768;
+                i = 1;
+            }
+            break;
+        case MOP_NETSYNCFL_DWORD:
+            if( pack( updatemap[idx + 64], 3 ) && pack( updatemap[idx + 128], 3 ) ) {
+                r = updatemap[idx + 64] & 65535 + (( updatemap[idx + 128] & 65535 ) << 16 );
+                i = 1;
+            }
+            break;
+        default:
+            // Reset packet
+            log( s: "NS_W: Bad challenge (HDR = ", i: updatemap[idx], s: ", IPS= ", i: count, s: ")" );
+            i = 2;
+        }
+
+        if( i == 1 ) {
+            //log( s: "NS_W: ", i: ( updatemap[idx] >> 8 ) & 65535, s: "[", i: updatemap[idx] & 255, s: "] = ", i: r, s: " (HDR = ", i: updatemap[idx], s: ", IPS= ", i: count, s: ")" );
+            NETSYNC_WRITE(( updatemap[idx] >> 8 ) & 65535, updatemap[idx] & 255, r );
+        }
+
+        if( i > 0 ) {
+            updatemap[idx] = 0;
+            updatemap[idx + 64] = 0;
+            updatemap[idx + 128] = 0;
+            updatemap[idx + 192] = 0;
+        }
+    }
+}
+
+function void SendNetworkSync( int force )
+{
+
+    int i = 0;
+    int loindex = 0;
+    int count;
+    int ioffset;
+    int tosend;
+    int type;
+    while( MOP_NETSYNC_VARS[i] ) {
+        if( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_EACHPLAYER ) {
+            count = PlayerCount();
+            ioffset = MOPMAXCLIENTS - count;
+        } else {
+            count = MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_COUNTMASK;
+        }
+        type = MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_TYPEMASK;
+        while( count > 0 ) {
+            count--;
+            tosend = NETSYNC_READ( i, count );
+            if(( updatemap[loindex] != tosend ) || force ) {
+                updatemap[loindex] = tosend;
+                // Encode var:
+                net_challenge = ( net_challenge + 1 ) & 63; // Generate netchallenge
+                ACS_ExecuteAlways( MOP_SEND_SYNC, 0, net_challenge, pack( loindex, 0 ), pack( loindex, 1 ) ); // Send netchallenge
+
+                switch( type ) {
+                case MOP_NETSYNCFL_BYTE:
+                    if( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_SIGNED ) {
+                        tosend += 128;
+                    }
+                    ACS_ExecuteAlways( MOP_SEND_SYNC, 0, net_challenge + 64, pack( tosend, 0 ) ); // an A packet
+                    break;
+                case MOP_NETSYNCFL_WORD:
+                    if( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_SIGNED ) {
+                        tosend += 32768;
+                    }
+                    ACS_ExecuteAlways( MOP_SEND_SYNC, 0, net_challenge + 64, pack( tosend, 0 ), pack( tosend, 1 ) ); // an A packet
+                    break;
+                case MOP_NETSYNCFL_DWORD:
+                    ACS_ExecuteAlways( MOP_SEND_SYNC, 0, net_challenge + 64, pack( tosend, 0 ), pack( tosend, 1 ) ); // an A packet
+                    ACS_ExecuteAlways( MOP_SEND_SYNC, 0, net_challenge + 128, pack( tosend, 2 ), pack( tosend, 3 ) ); // a B packet
+                    break;
+                }
+            }
+            loindex++;
+        }
+        loindex += ioffset;
+        i++;
+    }
+}
+
+// Reset player
+// 0 - initial setup
+// 1 - after respawn
+// 2 - unmorph reset
+// 3 - morph bug prevention
+function void SetupPlayer( int stage )
+{
+
+    int plnum = PlayerNumber();
+    int pclass = PlayerClass( plnum );
+
+    if( stage == 0 ) {
+// Not now!
+//        ClearInventory();
+        playermoney[plnum] = 8000;
+        SETPCODE( plnum, mopPFLAGS, 0 );    // Zero flags
+    }
+
+    if( stage == 3 ) {
+        SetActorVelocity( 0, 0, 0, 0, FALSE, FALSE );
+        SetActorState( 0, "Spawn" );
+        return;
+    }
+
+    if( stage < 2 ) {
+        MOPUnmorph( 8 );
+        dmontype[plnum][0] = -1;
+        TakeInventory( "MJumpShoppie", 1 );
+        ANDPCODE( plnum, mopPFLAGS, mopPFSHOP, 0 );
+
+        // Set player tid
+        ReleaseTID( PlayerTID( plnum ) );
+        playerstid[plnum] = AcquireTID();
+        Thing_changeTid( 0, PlayerTID( plnum ) );
+    }
+
+    switch( pclass ) {
+    case MOPMARINESIDE:
+        // Disable flight and freeze
+        SetPlayerProperty( 0, 0, 1 );
+        SetPlayerProperty( 0, 0, 3 );
+        SetPlayerProperty( 0, 0, 4 );
+        SetActorProperty( 0, APROP_Speed, 1.0 );
+        if( stage < 2 ) GiveInventory( "MSpawnProt", 1 ); // respawn protection
+        break;
+    case MOPMASTERSIDE:
+        if( stage == 1 ) SetActorPosition( 0, PCODE( plnum, mopX ), PCODE( plnum, mopY ), PCODE( plnum, mopZ ), 0 );
+        // Disable any freeze and enable flight
+        SetPlayerProperty( 0, 0, 4 );
+        SetPlayerProperty( 0, 1, 3 );
+        SetPlayerProperty( 0, 1, 1 );
+        SetActorProperty( 0, APROP_Speed, 1.0 );
+        break;
+    }
+    SendNetworkSync( 1 );
+}
+
+// Shop rendering helpers
+
+function void DrawItemInfo( int IID, int DESCHUD, int PICHUD )
+{
+    int idx;
+
+    SetHUDSize( 320, 200, 0 );
+    if( IID < 0 ) {
+        setfont( "SHOPB" );
+        hudmessage( s: "A"; HUDMSG_PLAIN, PICHUD, CR_RED, 0.1, 0.1, 0 );
+
+        SetFont( "SMALLFONT" );
+        hudmessage( s: ""; HUDMSG_PLAIN, DESCHUD, CR_WHITE, 99.1, 7.1, 0 );
+        return;
+    }
+    switch( _arraynumeric( SHOP[IID][MOPSHTYPE] ) & 15 ) {
+    case 0:
+        setfont( "SHOPB" );
+        hudmessage( s: "A"; HUDMSG_PLAIN, PICHUD, CR_RED, 0.1, 0.1, 0 );
+
+        SetFont( "SMALLFONT" );
+        hudmessage( s: "Leave this shop."; HUDMSG_PLAIN, DESCHUD, CR_GREEN, 99.1, 7.1, 0 );
+        break;
+    case 1:
+        idx = _arraynumeric( SHOP[IID][MOPSHA1] );
+
+        DrawSprite( MCODE( idx, mopICON ), PICHUD, 48, 84, 320, 200, MCODE( idx, mopICONOFST ), 1.0 );
+
+        SetFont( "SMALLFONT" );
+        hudmessage( s: SHOP[IID][MOPDESC]; HUDMSG_PLAIN, DESCHUD, CR_GREEN, 99.1, 7.1, 0 );
+        break;
+    case 2:
+        SetFont( SHOP[IID][MOPSHA3] );
+        hudmessage( s: "A"; HUDMSG_PLAIN, PICHUD, CR_UNTRANSLATED, 48.0,  48.0, 0 );
+
+        SetFont( "SMALLFONT" );
+        hudmessage( s: SHOP[IID][MOPDESC]; HUDMSG_PLAIN, DESCHUD, CR_GREEN, 99.1, 7.1, 0 );
+        break;
+    case 3:
+        setfont( "SHOPB" );
+        hudmessage( s: "A"; HUDMSG_PLAIN, PICHUD, CR_RED, 0.1, 0.1, 0 );
+
+        SetFont( "SMALLFONT" );
+        hudmessage( s: SHOP[IID][MOPDESC]; HUDMSG_PLAIN, DESCHUD, CR_GREEN, 99.1, 7.1, 0 );
+        break;
+    }
+}
+
+// --------------------------------------------------------- MOP Numbered scripts ---------------------------------------------------------------------------------------------
+
+script MOP_INIT_MAP open {
+    int t;
+    int i;
+    server = 1;
+
+    delay( 35 );
+
+    if( ThingCountName( "MBossBrain", 0 ) == 0 ) {
+        // now get if force
+        ConsoleCommand( "sv_noexit 1" );
+
+        // monsters
+        monsterforces = GetTotalMonsterCost( 0 );
+        monsterforces /= PlayerCost[GameSkill()];
+
+        // keys
+        monsterforces += ( ThingCountName( "BlueCard", 0 ) );
+        monsterforces += ( ThingCountName( "BlueSkull", 0 ) );
+        monsterforces += ( ThingCountName( "RedCard", 0 ) );
+        monsterforces += ( ThingCountName( "RedSkull", 0 ) );
+        monsterforces += ( ThingCountName( "YellowCard", 0 ) );
+        monsterforces += ( ThingCountName( "YellowSkull", 0 ) );
+
+        reinforcements = monsterforces;
+        if( reinforcements < 1 ) {
+            reinforcements = 1;
+        }
+        if( reinforcements > 999 ) {
+            reinforcements = 999;
+        }
+    } else {
+        ConsoleCommand( "sv_noexit 0" );
+        reinforcements = 15;
+        if( GameSkill() == 4 ) {
+            reinforcements += 20;
+        }
+    }
+
+    ACS_Execute( MOP_WORLD_TRACKER, 0 );
+
+    Delay( 35 * 8 );
+    cancount = 1;
+    SendNetworkSync( 1 );
+}
+
+script MOP_PLAYER_RESPAWN RESPAWN {
+    SetupPlayer( 1 );
+}
+
+script MOP_PLAYER_LEFT( int num ) DISCONNECT {
+    MOPUnmorphStatic( num );
+    // And share his money with other players...
+
+    // Release player's tid
+    ReleaseTID( PlayerTID( num ) );
+}
+
+script MOP_PLAYER_DEATH DEATH {
+    int plnum = PlayerNumber();
+    SETPCODE( plnum, mopX, GetActorX( 0 ) );
+    SETPCODE( plnum, mopY, GetActorY( 0 ) );
+    SETPCODE( plnum, mopZ, GetActorZ( 0 ) );
+    SETPCODE( plnum, mopA, GetActorAngle( 0 ) );
+    SETPCODE( plnum, mopH, 0 );
+
+    // Release player's tid
+    ReleaseTID( PlayerTID( plnum ) );
+    TakeInventory( "MJumpShoppie", 1 );
+    SendNetworkSync( 0 );
+}
+
+Script MOP_INIT_PLAYER enter {
+    SetHudSize( 600, 400, 0 );
+    SetFont( "SMALLFONT" );
+hudmessage( s: "\civer.\cdAlpha x-classic \cn"; HUDMSG_PLAIN, 1, CR_LIGHTBLUE, 300.0, 10.0, 8.0 );
+    SetupPlayer( 0 );
+    ACS_ExecuteAlways( MOP_PLAYER_TRACKER, 0 );
+}
+
+
+Script MOP_WORLD_TRACKER( void )
+{
+    RenewCounters();
+    delay( 4 );
+    SendNetworkSync( 0 );
+    restart;
+}
+
+script MOP_WORLD_EXIT UNLOADING {
+    SetResultValue( 0 );
+}
+
+script MOP_PLAYER_RERUN( int plnum ) net {  // Backmessage
+    ANDPCODE( plnum, mopPFLAGS, mopPFCNTR, 0 );
+    ACS_ExecuteAlways( MOP_PLAYER_PREDICTION, 0, plnum, PlayerTID( plnum ) );
+}
+
+script MOP_PLAYER_TRACKER( void ) // Masters Hud Loop
+{
+    int plnum = PlayerNumber();
+    int countdown = 0;
+
+    while( 1 ) {
+
+        SETPCODE( plnum, mopX, GetActorX( 0 ) );
+        SETPCODE( plnum, mopY, GetActorY( 0 ) );
+        SETPCODE( plnum, mopZ, GetActorZ( 0 ) );
+        SETPCODE( plnum, mopA, GetActorAngle( 0 ) );
+        SETPCODE( plnum, mopH, GetActorProperty( 0, APROP_Health ) );
+
+        if( ThingCountName( "PatrolPoint", mopBASETARGETTID + plnum ) > 0 ) {
+            SetActorPosition( mopBASETARGETTID + plnum, PCODE( plnum, mopX ), PCODE( plnum, mopY ), PCODE( plnum, mopZ ), 0 );
+        } else {
+            Spawn( "PatrolPoint" , PCODE( plnum, mopX ), PCODE( plnum, mopY ), PCODE( plnum, mopZ ), mopBASETARGETTID + plnum, 0 );
+            SetThingSpecial( mopBASETARGETTID + plnum, 0, mopBASETARGETTID + plnum, 0 );
+        }
+
+        if(( PCODE( plnum, mopPFLAGS ) & mopPFCNTR ) == 0 ) {
+            ACS_ExecuteAlways( MOP_PLAYER_PREDICTION, 0, plnum, PlayerTID( plnum ) );
+            ANDPCODE( plnum, mopPFLAGS, mopPFCNTR, mopPFCNTR );
+        }
+
+        if( MOPIsMaster( plnum ) ) {
+            int type = dmontype[plnum][0];
+            if( type == -1 ) {
+                if ( !CheckWeapon("mastergun") ) SetWeapon("mastergun");
+                MasterPhysics( 1 );
+                SETPCODE( plnum, mopHUD1, MOPLookTarget( 0 ) >> 16 );
+            } else {
+                SETPCODE( plnum, mopHUD1, 0 );
+            }
+        } else {
+            SETPCODE( plnum, mopHUD1, 0 );
+        }
+
+        delay( 1 );
+    }
+}
+
+script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
+    int plnum = PlayerNumber();
+    int frame = 0;
+    int tmp;
+
+    if( playnum != plnum )
+        terminate;
+
+    Thing_changeTid( playtid, 0 );  // Cleanup TID before using
+    Thing_changeTid( 0, playtid );
+
+    DrawPlayerHUD( 0, 0 );
+
+    while( PlayerInGame( plnum ) ) {
+
+        if( ActivatorTID() != PlayerTID( plnum ) ) {
+            CallServerScriptArg( MOP_PLAYER_RERUN, plnum );
+            terminate;
+        }
+
+        if( MOPIsMaster( plnum ) ) {
+            int type = dmontype[plnum][0];
+            if( type == -1 ) {
+                DrawPlayerHUD( 1, ( MOPLookTarget( 0 ) & 65535 ) | ( PCODE( plnum, mopHUD1 ) << 16 ) );
+                if( !server ) MasterPhysics( 1 );
+            } else {
+                DrawPlayerHUD( 2, type );
+            }
+        } else {
+            DrawPlayerHUD( 3, 0 );
+        }
+
+        //SetHUDSize(320,240,0);
+        frame = UpdateAnims( frame, 0.8, 0.05, -32, 0, 1000 );
+        delay( 1 );
+    }
+}
+
+script MOP_DO_MARINE_WIN( void ) // Marines victory song ))
+{
+    AmbientSound( "grunt/death1", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "grunt/death2", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "grunt/death3", 127 );
+    delay( 15 );
+    AmbientSound( "demon/death", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "caco/death", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "baron/death", 127 );
+    delay( 15 );
+    AmbientSound( "skeleton/death", 127 );
+    delay( 15 );
+    AmbientSound( "demon/death", 127 );
+    delay( 13 );
+    AmbientSound( "grunt/death1", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "grunt/death2", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "grunt/death3", 127 );
+    delay( 15 );
+    AmbientSound( "demon/death", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "caco/death", 127 );
+    delay( random( 10, 15 ) );
+    AmbientSound( "baron/death", 127 );
+    delay( 15 );
+    AmbientSound( "skeleton/death", 127 );
+    delay( 15 );
+    AmbientSound( "demon/death", 127 );
+}
+
+Script MOP_DO_MASTER_WIN( void )
+{
+    ConsoleCommand( "sv_noexit 0" );
+    delay( 15 );
+    SetHUDSize( 320, 240, 0 );
+    setfont( "BIGFONT" );
+    hudmessageBOLd( s: "\cgPuppet Masters Wins!"; HUDMSG_PLAIN, 7, -1, 160.0, 155.0, 0 );
+    AmbientSound( "baron/sight", 127 );
+    delay( 10 );
+    AmbientSound( "baron/sight", 127 );
+    delay( 10 );
+    AmbientSound( "baron/sight", 127 );
+    delay( 10 );
+    AmbientSound( "baron/sight", 127 );
+    delay( 35 * 4 );
+    Exit_normal( 0 );
+    delay( 1 );
+    terminate;
+}
+
+script MOP_SHOP_RENDER( void ) clientside {
+
+    int plnum = PlayerNumber();
+
+    int buttons;
+    int Ucursor;
+    int Vcursor;
+    int PMoney;
+    
+    // Is it a wrong client there?
+    if( CheckInventory( "MJumpShoppie" ) < 1 ) {
+        terminate;
+    }
+    
+    // Main action loop
+    while ( 1 ) {
+
+        PMoney = playermoney[plnum];
+        buttons = GetPlayerInput(plnum, INPUT_BUTTONS);
+
+        // Draw all shop-related things
+        // 1. Background:
+
+        SetHUDSize( 320, 200, 0 );
+        setfont( "SHOOP" );
+        hudmessage( s: "A"; HUDMSG_PLAIN, 9900, CR_RED, 0.1, 0.1, 0 );
+
+        // 2. Money which player has
+        SetFont( "SMALLFONT" );
+        hudmessage( i: PMoney; HUDMSG_PLAIN, 9899, CR_YELLOW, 255.1, 100.1, 0 );
+
+    }
+}
+
+script MOP_SHOP_CALLBACK( int giv ) net {
+    int plnum = PlayerNumber();
+    int mcost;
+    int pcost;
+    int item;
+    int count;
+    int dropshop = 0;
+
+    delay( 10 ); // Give some time to Skulltag for remove all client-side shop scripts
+
+    if( giv >= 0 && giv < MOPSMAX ) {
+        switch( _arraynumeric( SHOP[giv][MOPSHTYPE] ) ) {
+        case 0: // Let me out
+            dropshop = 1;
+            break;
+        case 1: // Monster
+            item = _arraynumeric( SHOP[giv][MOPSHA1] );
+
+            mcost = MCODE( item, mopCOST );
+            pcost = playermoney[plnum];
+
+            if( mcost <= pcost ) {
+                if( MOPMorph( item + 1, 0, 1 ) ) {
+                    playermoney[plnum] = pcost - mcost;
+                    dropshop = 1;
+                }
+            }
+            break;
+        case 2: // Item
+            item = SHOP[giv][MOPSHA1];
+            mcost = _arraynumeric( SHOP[giv][MOPSHA2] );
+            pcost = playermoney[plnum];
+
+            if( mcost <= pcost ) {
+                count = CheckInventory( item );
+                GiveInventory( item, 1 );
+                if( count < CheckInventory( item ) ) {
+                    playermoney[plnum] = pcost - mcost;
+                }
+            }
+            break;
+        }
+    }
+    if( dropshop ) {
+        SetPlayerProperty( 0, 0, 4 );
+        ANDPCODE( plnum, mopPFLAGS, mopPFSHOP, 0 );
+        TakeInventory( "MJumpShoppie", 1 );
+    }
+    SendNetworkSync( 0 );
+}
+
+// MOP weapon effects
+script MOP_WEAPON_EVENT( int event, int arg )
+{
+    int playnum = PlayerNumber();
+    int refertid;
+
+    if( playnum == -1 ) {
+        terminate;
+    }
+
+    switch( event ) {
+    case 1:     // Set player speed, arg = new speed / 128
+
+        SetActorProperty( 0, APROP_Speed, arg << 1 );
+        break;
+
+    case 2: // Morph to target, arg is morph flags
+
+        if( MOPIsMaster( playnum ) && (( PCODE( playnum, mopPFLAGS ) & mopPFSHOP ) == 0 ) ) {
+            MOPMorph( 0, -1, arg );
+        }
+        break;
+
+    case 3: // Soft unmorph, arg is unmorph flags
+
+        refertid = MOPUnmorph( arg );
+        if( refertid == -1 ) {
+            Delay( 20 );
+        } else {
+            if( refertid > 0 ) {
+                Thing_changeTid( refertid, 0 );
+            }
+            Delay( 1 );
+            SetupPlayer( 2 );
+        }
+        break;
+
+    case 4: // Archvile damage, arg is damage amount
+
+        if( SetActivatorToTarget( 0 ) ) {
+            ActivatorSound( "vile/stop", 127 );
+            ThrustThingZ( 0, 35 + random( 3, 10 ), 0, 1 );
+            if( MOPIsMarine( PlayerNumber() ) ) { // *damage marines only*
+                Thing_Damage2( 0, random( 3, 6 )*arg, "Fire" );
+            } else {
+                Thing_Damage2( 0, -random( 3, 6 )*arg, "Fire" );
+            }
+        }
+        break;
+
+    case 5: // Predefined messages, currently only 'OVERHEATED'
+
+        SetHUDSize( 320, 240, 0 );
+        setfont( "BIGFONT" );
+        hudmessage( s: "OVERHEATED!!!"; HUDMSG_PLAIN, 2, CR_RED, 160.0, 130.0, 0.5 );
+        break;
+
+    case 6: // Death of master. arg = 1 when it should be XDeath
+
+        if( MOPCorpse( arg ) >= 0 ) {
+            SetupPlayer( 2 );
+        }
+        break;
+
+    case 7: // Replicative morph ( with result )
+
+        if( MOPIsMorphed( -1 ) ) {
+            SetResultValue( 0 );
+        } else {
+            switch( MOPMorph( arg, 0, 448 ) ) {
+            case 1:
+                SetResultValue( 1 );
+                Spawn( "TeleportFog", GetActorX( 0 ), GetActorY( 0 ), GetActorZ( 0 ) );
+                delay( 10 );
+                MOPMorph( 0, 0, 256 );
+                break;
+            case 0:
+                SetResultValue( 0 );
+                break;
+            case -1:
+                SetFont( "BIGFONT" );
+                HudMessageBold( s: "This monster is too strong for replication";
+                                HUDMSG_TYPEON, 0, CR_TAN, 1.5, 0.8, 5.0,
+                                0.05, 2.0 );
+                SetResultValue( 0 );
+                break;
+            }
+        }
+        break;
+    case 8:
+        refertid = FindFreeTID();
+
+        if( !SetActivatorToTarget( 0 ) ) {
+            HudMessageBold( s: "No target";
+                            HUDMSG_TYPEON, 0, CR_TAN, 1.5, 0.8, 5.0,
+                            0.05, 2.0 );
+            terminate;
+        }
+        Thing_ChangeTid( 0, refertid );
+        Thing_SetGoal( refertid, mopBASETARGETTID + playnum, 0, 0 );
+        Thing_Activate( refertid );
+        Thing_ChangeTid( refertid, 0 );
+    }
+}
+
+script MOP_SHOP_INITIATE( void ) net {  // Monster shop
+    int plnum = PlayerNumber();
+    GiveInventory( "MJumpShoppie", 1 );
+    ANDPCODE( plnum, mopPFLAGS, mopPFSHOP, mopPFSHOP );
+    SetPlayerProperty( 0, 1, 4 );
+    ACS_ExecuteAlways( MOP_SHOP_RENDER, 0 );
+}
+
+script MOP_SPAWN_SPECIAL( int offset, int zoffset, int type )  // Helper spawner
+{
+    int angle = GetActorAngle( 0 );
+    int x = GetActorX( 0 ) + cos( angle ) * offset;
+    int y = GetActorY( 0 ) + sin( angle ) * offset;
+    int z = GetActorZ( 0 ) + zoffset;
+    int tid;
+
+    angle = angle >> 8;
+
+    switch( type ) {
+    case 0: // Make a new blot monster ( agressive to marines )
+        Spawn( "Blot", x, y, z, 0, angle );
+        break;
+    case 1: // Make a new green soul monster ( agressive to marines )
+        Spawn( "ShadowBeast_Creature", x, y, z, 0, angle );
+        break;
+    }
+}
+
+script MOP_CHECK_PERSISTANT( int pers ) //Persistant item counter (Hack device, Cutter and NukeLauncher)
+{
+    int count;
+    int i;
+    int tmptid;
+
+    count = ThingCountName( MOPPERSISTANTS[pers][0], 0 );
+    for( i = 0; i < PlayerCount(); i++ ) {
+        if( PlayerInGame( i ) ) {
+            count += CheckActorInventory( PlayerTID( i ), MOPPERSISTANTS[pers][0] );
+        }
+    }
+    if( count < 1 ) {
+        tmptid = FindFreeTID();
+        Spawn( MOPPERSISTANTS[pers][0], GetActorX( 0 ), GetActorY( 0 ), GetActorZ( 0 ), tmptid );
+        SetActorState( tmptid, "Stay" );
+        Thing_changeTid( tmptid, 0 );
+    }
+
+    SetResultValue( count );
+}
+
+script MOP_SEND_SYNC( int netch, int byte1, int byte2 ) clientside {
+    if( server ) terminate;
+    GotNetworkSync( netch, byte1, byte2 );
+}

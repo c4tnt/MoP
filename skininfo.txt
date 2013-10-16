@@ -1,0 +1,83 @@
+{
+name = "ChainSawMarine"
+sprite = PLA8
+crouchsprite = PLA1
+}
+
+{
+name = "FistMarine"
+sprite = PLA1
+crouchsprite = PLA1
+}
+
+{
+name = "PistolMarine"
+sprite = PLA2
+crouchsprite = PLA1
+}
+
+{
+name = "ShotGunMarine"
+sprite = PLA3
+crouchsprite = PLA1
+}
+
+{
+name = "SSGMarine"
+sprite = PLA5
+crouchsprite = PLA1
+}
+
+{
+name = "ChainGunMarine"
+sprite = PLA4
+crouchsprite = PLA1
+}
+
+{
+name = "MinigunMarine"
+sprite = PMIN
+crouchsprite = PLA1
+}
+
+{
+name = "RLMarine"
+sprite = PLAR
+crouchsprite = PLA1
+}
+
+{
+name = "PlsmMarine"
+sprite = PLA6
+crouchsprite = PLA1
+}
+
+{
+name = "BFGMarine"
+sprite = PLA7
+crouchsprite = PLA1
+}
+
+{
+name = "BFG10Marine"
+sprite = PB10
+crouchsprite = PLA1
+}
+
+{
+name = "RailMarine"
+sprite = PRAI
+crouchsprite = PLA1
+}
+
+{
+name = "GrenadeMarine"
+sprite = PGRN
+crouchsprite = PLA1
+}
+
+{
+name = "NukeMarine"
+sprite = PLAN
+crouchsprite = PLA1
+}

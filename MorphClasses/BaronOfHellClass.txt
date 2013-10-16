@@ -1,0 +1,285 @@
+actor BaronOfHellClass : Playerpawn
+{
+  health 1000
+  radius 24
+  height 64
+  mass 1000
+  speed 0.40
+  painchance 50
+  Player.DisplayName "BaronOfHell"
+  Player.MaxHealth 1000
+  Player.ViewHeight 54
+  Player.SoundClass BaronOfHellClass 
+  Player.JumpZ 5
+  Player.MorphWeapon "BaronHand"
+  Player.WeaponSlot 1, BaronHand
+  BloodColor "darkgreen"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	BOSS AB 10 
+    loop
+  See:
+    BOSS A 0 A_Jump (240,2)
+	BOSS A 0 A_PlaySoundEx ("baron/active","body")
+	BOSS AABBCCDD 3
+    loop
+  Missile:
+    BOSS E 8 
+	BOSS F 8 bright 
+    BOSS G 9 bright
+    goto See   
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    BOSS O -1
+    stop
+  }
+}
+
+// Weapon
+
+ACTOR BaronHand : Weapon
+{
+  obituary "%o was bruised by %k."
+  hitobituary "%o was ripped open by %k."
+  weapon.kickback 100
+  attacksound "baron/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +ammo_optional
+  +Alt_Ammo_Optional
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    BHND A 1 A_Raise
+	goto ready
+  Ready:
+    BHND FAEA 2 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(2)
+	goto ready 
+  DeSelect:
+    BHND A 1 A_Lower
+    Loop
+  Fire:
+    BHND A 0 A_JumpIfCloser (80,"Melee")
+    BHND A 6 
+	NULL A 0 SetPlayerProperty (0, 1, 0)
+	BHND B 6 
+	BHND C 7 
+	BHND D 7 A_FireCustomMissile ("KnightBallAd",0,0,0,15,0)
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+    Goto Ready
+  Melee:
+	BHND B 4 
+    BHND C 4 
+	BHND D 4 A_CustomPunch (16,0,0,"FBulletPuff",90)
+	BHND C 4
+    Goto Ready
+  Altfire:
+    BHND A 5 ACS_ExecuteAlways (991,0,3,0)
+  	goto Ready
+  }
+}
+
+
+actor KnightBallAd
+{
+  radius 6
+  height 16
+  renderstyle add
+  alpha 1
+  speed 20
+  damage 15
+  seesound "baron/attack"
+  deathsound "baron/shotx"
+  DamageType "KnightDamage"
+  PROJECTILE
+  +RANDOMIZE
+  states
+  {
+  Spawn:
+    BAL7 A 2 bright A_SpawnItem("BBallTrace",0)
+	BAL7 B 2 bright A_SpawnItem("BBallTrace",0)
+    loop
+  Death:
+    BAL7 C 5 A_Explode (8,64,0,0)
+    BAL7 DE 5 bright
+    stop
+  }
+}
+
+
+actor BBallTrace
+{
+  renderstyle Translucent
+  alpha 0.5
+  scale 0.7
+  +NOBLOCKMAP
+  +NOGRAVITY
+  states
+  {
+  Spawn:
+    BAL7 ABAB 3 A_FadeOut(0.0)
+    stop
+  }
+}  
+
+// Belphegor
+
+actor BelphegorClass : Playerpawn
+{
+  Health 1500
+  radius 24
+  height 64
+  mass 1000
+  speed 0.40
+  painchance 50
+  Player.DisplayName "Belphegor"
+  Player.MaxHealth 1500
+  Player.ViewHeight 54
+  Player.SoundClass BaronOfHellClass 
+  Player.JumpZ 5
+  Player.MorphWeapon "BelphegorHand"
+  Player.WeaponSlot 1, BelphegorHand
+  BloodColor "green"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+	BOS3 AB 10 
+    loop
+  See:
+    BOS3 A 0 A_Jump (240,2)
+	BOS3 A 0 A_PlaySoundEx ("baron/active","body")
+	BOS3 AABBCCDD 3
+    loop
+  Missile:
+    BOS3 EF 5 
+	BOS3 G 5 bright
+	BOS3 EF 5 
+	BOS3 G 5 bright
+	BOS3 EF 5 
+	BOS3 G 5 bright
+    goto See   
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    BOS3 O -1
+    stop
+  }
+}
+
+// Weapon
+
+ACTOR BelphegorHand : Weapon
+{
+  obituary "$OB_BELPHEGOR"
+  hitobituary "$OB_BELPHEGOR_MELEE"
+  weapon.kickback 100
+  attacksound "baron/melee"
+  weapon.ammouse 0
+  +WEAPON.NOALERT
+  +ammo_optional
+  +Alt_Ammo_Optional
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    BHND A 1 A_Raise
+	goto ready
+  Ready:
+    BHND FAEA 2 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(2)
+	goto ready 
+  DeSelect:
+    BHND A 1 A_Lower
+    Loop
+  Fire:
+    BHND A 0 A_JumpIfCloser (80,"Melee")
+    NULL A 0 SetPlayerProperty (0, 1, 0)
+	BHND ABC 3 
+	BHND D 5 A_FireCustomMissile ("PBelphegorBall",0,0,0,15,0)
+	BHND ABC 3 
+	BHND D 5 A_FireCustomMissile ("PBelphegorBall",0,0,0,15,0)
+	BHND ABC 3 
+	BHND D 5 A_FireCustomMissile ("PBelphegorBall",0,0,0,15,0)
+	NULL A 0 SetPlayerProperty (0, 0, 0)
+    Goto Ready
+  Melee:
+	BHND B 4 
+    BHND C 4 
+	BHND D 4 A_CustomPunch (16,0,0,"FBulletPuff",90)
+	BHND C 4
+    Goto Ready
+  Altfire:
+    BHND A 5 ACS_ExecuteAlways (991,0,3,0)
+  	goto Ready
+  }
+}
+
+actor PBelphegorBall : MBelphegorBall
+{
+Speed 23
+renderstyle Normal
+}

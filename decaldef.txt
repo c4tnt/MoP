@@ -1,0 +1,58 @@
+// made by silva (com1337@gmail.com)
+
+generator ZombieRifle			BulletChip
+generator ZombieShotGun			BulletChip
+generator ChainGuyGun			BulletChip
+generator MasterMindGun			BulletChip
+generator SSmp40			    	BulletChip
+
+generator MPistol				BulletChip
+generator ADMPistol			BulletChip
+generator MChainsaw			BulletChip
+generator MShotgun			BulletChip
+generator AssaultShotgun	    		BulletChip
+generator MSuperShotgun			BulletChip
+generator MChaingun			BulletChip
+generator AssaultRifle			BulletChip
+generator Vulcan				BulletChip
+//generator RailGun				RailScorch
+//generator BFG10K				BFGLightning
+
+generator MPlasmaBall			PlasmaScorch
+generator Rocket				Scorch
+generator MMarineRocket			Scorch
+generator MGrenade			Scorch
+generator MBFGBall			BFGLightning
+
+generator MarinePistol			BulletChip
+generator MarineShotgun			BulletChip
+generator MarineSSG			BulletChip
+generator MarineChaingun			BulletChip
+generator MarineRailgun			RailScorch
+
+generator MZombieMan			BulletChip
+generator MShotgunGuy			BulletChip
+generator MChaingunGuy			BulletChip
+generator MSSGZombie			BulletChip
+generator MWolfensteinSS			BulletChip
+generator MSpiderMastermind		BulletChip
+
+generator MArachnotronPlasma		ArachnotronScorch
+generator ArPlasm	            			ArachnotronScorch
+generator MBaronBall			BaronScorch
+generator MKnightBall			BaronScorch
+generator KnightBallAd			BaronScorch
+generator MBelphegorBall			BaronScorch
+generator MCacodemonBall			CacoScorch
+generator CacodemonBall2			CacoScorch
+generator MCacolanternBall			CacoScorch
+generator MDoomImpBall			DoomImpScorch
+generator PDoomImpBall			DoomImpScorch
+generator MDarkSeeker			DoomImpScorch
+generator MFatShot				Scorch
+generator FatShot2				Scorch
+generator MHectShot			Scorch
+generator MRevenantTracer			RevenantScorch
+generator HomingMissile		   	RevenantScorch
+
+

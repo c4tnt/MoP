@@ -1,0 +1,109 @@
+actor MRevenant : Revenant replaces Revenant
+{
+  health 300
+  radius 20
+  height 56
+  mass 500
+  speed 10
+  
+  PainChance "Control", 255
+  DamageFactor "Control", 1
+  
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 0.5
+  DamageFactor "ZombiesDamage", 0.5
+  DamageFactor "CacoDamage", 0.5
+  DamageFactor "FatsoDamage", 0.5
+  DamageFactor "KnightDamage", 0.5
+  DamageFactor "ArachDamage", 0.5
+  DamageFactor "viledamage", 0.5
+  // immune to
+  DamageFactor "SkelDamage", 0
+
+  states
+  {
+  Spawn:
+    SKEL A 10 A_Look 
+   loop
+  See:
+    SKEL AABBCCDDEEFF 2 A_Chase
+    loop	
+  Death:
+    SKEL A 0
+    SKEL LM 7
+    SKEL N 7 A_Scream
+    SKEL O 7 A_NoBlocking
+    SKEL P 7
+    SKEL Q -1
+    stop	
+  }
+}
+
+actor MRevenantTracer : RevenantTracer replaces RevenantTracer
+{
+  DamageType "SkelDamage"
+}
+
+ACTOR MRevenantor : MRevenant 30021
+{
+	Health 800
+	Mass 600
+	radius 24
+	height 72
+	PainChance 100
+	Scale 1.2
+	SeeSound "rvnntor/seesnd"
+	PainSound "rvnntor/pain"
+	DeathSound "rvnntor/death"
+	ActiveSound "rvnntor/active"
+	MeleeSound "skeleton/melee"
+	Translation "16:40=208:223", "41:47=232:235", "168:185=208:223", "186:191=232:235", "232:235=220:223", "4:4=128:128", "80:95=128:143", "209:210=129:129"
+	HitObituary "%o was punched by a revenant terminator."
+	Obituary "%o was terminated by a revenant terminator's rocket."
+  
+	PainChance "Control", 255
+	DamageFactor "Control", 1
+  
+	// Takes damage from 
+	DamageFactor "MarineDamage", 1
+	// immune to
+	DamageFactor "SkelDamage", 0
+	DamageFactor "ImpBallDamage", 0
+	DamageFactor "ZombiesDamage", 0
+	DamageFactor "CacoDamage", 0
+	DamageFactor "FatsoDamage", 0
+	DamageFactor "KnightDamage", 0
+	DamageFactor "ArachDamage", 0
+	DamageFactor "viledamage", 0
+
+	States
+	{
+	Spawn:
+		SKEL AB 10 A_Look
+		loop
+	See:
+		SKEL AABBCCDDEEFF 2 A_Chase
+		loop	
+	Melee:
+		SKEL G 1 A_FaceTarget
+		SKEL G 6 A_SkelWhoosh
+		SKEL H 6 A_FaceTarget
+		SKEL I 6 A_SkelFist
+		Goto See
+	Missile:
+		SKEL J 10 A_FaceTarget
+		NULL A 0 A_PlaySound ("rvnntor/launch")
+		SKEL K 10 A_CustomMissile ("Rocket", 64, 0, 0)
+		SKEL K 10 A_FaceTarget
+		Goto See
+	Death:
+		SKEL L 7
+		SKEL M 7
+		SKEL N 7 A_Scream
+		SKEL O 7 A_Fall
+		SKEL P 7
+		SKEL Q -1
+		Stop
+	}
+}

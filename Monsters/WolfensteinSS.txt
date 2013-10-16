@@ -1,0 +1,51 @@
+actor MWolfensteinSS : WolfensteinSS replaces WolfensteinSS
+{
+  speed 10
+  attacksound "weapon/mp40"
+  
+  // Takes damage from 
+  DamageFactor "MarineDamage", 1
+  DamageFactor "ImpBallDamage", 1
+  DamageFactor "Control", 1
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "CacoDamage", 1
+  DamageFactor "SkelDamage", 1
+  DamageFactor "FatsoDamage", 1
+  DamageFactor "KnightDamage", 1
+  DamageFactor "ArachDamage", 1
+  DamageFactor "viledamage", 1
+ 
+  MONSTER
+  +FLOORCLIP
+  states
+  {
+  Spawn:
+    NAZI AB 10 A_Look
+    loop
+  See:
+    NAZI AABBCC 3 A_Chase
+    loop	
+  Missile:
+    NAZI E 5 A_FaceTarget
+    NAZI FE 4 bright A_CustomBulletAttack (22.5, 0, 1, 3, "FBulletPuff")
+//    NAZI F 0 A_CustomMissile("Tracer",38, 0, random(-3, 3), 0)
+    NAZI F 1 A_CPosRefire
+    goto Missile+1	
+  Pain:
+    NAZI G 3 A_Pain
+    goto See
+  Death:
+    NAZI H 5 
+    NAZI I 5 A_Scream
+    NAZI J 5 A_NoBlocking
+    NAZI K 5
+    NAZI L -1
+    stop
+  Raise:
+    NAZI LKJIH 5
+    goto See
+  }
+}
+
+
+

@@ -1,0 +1,53 @@
+actor ScurryRat 12380
+{
+  //$Category MOP_Interactive
+  radius 8
+  height 8
+  mass 50
+  speed 16
+  scale 0.5
+  health 1
+  seesound 	"rat/squeek"
+  activesound	"rat/active"
+  deathsound	"rat/death"
+  +FLOORCLIP
+  +FRIGHTENED
+  +NEVERRESPAWN
+  +STANDSTILL
+  +LOOKALLAROUND
+  +SHOOTABLE
+  states
+  {
+  Spawn:
+    RATS A 1 A_LookEx(0, 0, 256, 1024, 0,"See")
+    loop
+  See:
+	RATS ABCD 2
+	RATS A 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS A 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS B 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS B 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS C 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS C 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS D 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	RATS D 2 A_Chase
+	RATS A 0 A_CheckSight ("Vanish")
+	loop
+  Vanish:
+	TNT1 A 1
+	stop
+  Death:
+	RATS I 3 A_ScreamAndUnblock
+	RATS J 3 A_AlertMonsters
+	RATS KL 3
+	RATS L -1
+	stop
+  }
+}

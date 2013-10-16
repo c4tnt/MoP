@@ -1,0 +1,578 @@
+// made by silva (com1337@gmail.com)                    
+// World sounds
+
+world/watersplash		    dssplash
+world/watersplashsmall		dssplsml
+world/sludgegloop		    dsploosh
+world/sludgegloopsmall		dsplosml
+world/lavasizzle		    dslvsiz
+world/lavasizzlesmall		dslavsml
+
+// game sounds 
+
+game/canexit                            Signal
+DBSPLASH                                DBSPLASH
+
+// other weapons
+
+weapons/dynamitethrow		dspipthr
+weapon/ADshotgun                        DSASHTGN
+weapon/ADshotgunre                      DSASTGNR
+weapon/mp40                             MP40
+weapon/claw                             CLAWW
+marine/fists                            dspunch
+marine/fistswall                        mfistw 
+weapons/adpistol                        adpistol
+cybie/overheat                          cybover
+weapons/mgrenbounce                     DSGRNHIT
+weapons/mgren                           DSGRNSHT
+weapon/VulcanCannonUp                   DSVCUP
+weapon/VulcanCannonLoop                 DSVCLOOP
+weapon/VulcanCannonDown                 DSVCDOWN
+weapon/msmgfire                         DSSMGSND
+
+weapons/Ashotgun/fire                    DSASHTGF
+weapons/Ashotgun/cock/back               DSASHTBK
+weapons/Ashotgun/cock/forward            DSASHTFD
+
+// Chat sounds
+
+$random misc/chat { misc/chats1 misc/chats2 misc/chats3 misc/chats4 misc/chats5 misc/chats6 }			
+$random misc/chat2 { misc/chats1 misc/chats2 misc/chats3 misc/chats4 misc/chats5 misc/chats6 }	
+
+misc/chats1     Mchat1
+misc/chats2     Mchat2  
+misc/chats3     Mchat3
+misc/chats4     Mchat4
+misc/chats5     Mchat5
+misc/chats6     Mchat6 
+
+// New Monsters
+
+//Hellion
+
+monster/hlnsit                  dshlnsit
+monster/hlnact                  dshlnact
+monster/hlnpai                  dshlnpai
+monster/hlndth                  dshlndth
+monster/hlnatk                  dshlnatk
+monster/hlnexp                  dshlnexp
+
+// DarkImp
+
+$RANDOM darkimp/see { darkImp/see1 darkImp/see2 }
+darkimp/see1 dsdvlsi1
+darkimp/see2 dsdvlsi2
+
+darkimp/pain dsdvlpai
+$RANDOM darkimp/death { darkImp/death1 darkImp/death2 }
+darkimp/death1 dsdvldt1
+darkimp/death2 dsdvldt2
+darkimp/active dsdvlact
+
+// SSg Zombie
+
+SSGUNER/sight	DSGPOSIT
+SSGUNER/SSG 	DSSGGATK
+SSGUNER/death	DSGPODTH
+SSGUNER/idle	DSGPOACT
+
+// Soul Harvester
+$random harvester/sight 	{ shsight1 shsight2 }
+shsight1 			shsight1
+shsight2 			shsight2
+$random harvester/death 	{ shdeath1 shdeath2 }
+shdeath1 				shdeath1
+shdeath2 				shdeath2
+harvester/scream 		shfbscrm
+harvester/ghost 		shghscrm
+		
+// BloodDemon
+
+blooddemon/sight DSBLDSIT
+blooddemon/pain DSBLDPAI
+blooddemon/death DSBLDDTH
+blooddemon/active DSBLDACT
+blooddemon/melee DSBLDATK
+blooddemon/walk DSBLDWAL
+
+// Shadow
+
+$random Shadow/active { Shadow/act1 Shadow/act2 }
+Shadow/act1			SHDACT1
+Shadow/act2			SHDACT2
+$random Shadow/pain { Shadow/pain1 Shadow/pain2 }
+Shadow/pain1			SHDPAIN1
+Shadow/pain2			SHDPAIN2
+Shadow/attack		    SHDATTAK
+Shadow/death		    SHDDEATH
+		
+// Darkness rift
+
+DarkRift/Active		DRFTACT
+DarkRift/Fire		DRFTFIRE
+DarkRift/Hit		DRFTHIT
+DarkRift/Loop		DRFTLOOP
+
+// Blot
+
+Blot/Sight		DSBLOTSE
+Blot/Death		DSBLOTDI
+
+// Tornado demon
+
+tornado/form		Q2WIND
+wind/away		HLWIND
+tornado/see		NA_TAUNT
+tornado/death		NA_DEATH
+tornado/pain		NA_PAIN_
+tornado/active		NA_IDLE_
+
+// Fallen
+
+monster/falsit dsfalsit
+monster/falpai dsfalpai
+monster/faldth dsfaldth
+monster/falact dsfalact
+monster/falwng dsfalwng
+weapons/firmfi dsfirmfi
+weapons/firex5 dsfirex5
+
+// Rocket revenant
+
+rvnntor/launch TERMROCK
+rvnntor/active TERMACTI
+rvnntor/pain   TERMPAIN
+rvnntor/death  TERMDETH
+rvnntor/seesnd TERMSEES
+
+// Sentry gun
+
+Sentry/Active	DSSENTID
+Sentry/Death	DSSENTDI
+Sentry/Attack	DSSENTFI
+$limit Sentry/Attack	0
+
+// Shadow beast
+
+shadowbeast/attack	BDMATK1
+shadowbeast/death	BDMDTH1
+shadowbeast/idle1	BDMIDL1
+shadowbeast/idle2	BDMIDL2
+$random shadowbeast/active { shadowbeast/idle2 shadowbeast/idle1 }
+shadowbeast/pain	BDMPAN1
+shadowbeast/sight	BDMSIT1
+shadowbeast/pr1death	BDPD1
+shadowbeast/pr1sight	BDPS1
+shadowbeast/pr2death	BDPD2
+shadowbeast/pr2sight	BDPS2
+shadowbeast/spread	BDPSPR
+shadowbeast/spiritsit	BDSPR2
+shadowbeast/spiritdth	BDSPR1
+
+// Hell dog
+
+monster/dogsit dsdogsit
+monster/dogatk dsdogatk
+monster/dogbit dsdogbit
+monster/dogpai dsdogpai
+$RANDOM monster/dogdth { monster/dogdt1 monster/dogdt2 }
+monster/dogdt1 dsdogdt1
+monster/dogdt2 dsdogdt2
+
+monster/dogact dsdogact
+weapons/bigbrn dsbigbrn
+monster/dogsht dsdogsht
+monster/doghit dsdoghit
+
+// Zombie Marine
+zombie/rifle dsrifle
+
+// Rats
+Rat/Squeek	DSRAT
+Rat/Active	DSRATIDL
+DSRATDI1	DSRATDI1
+DSRATDI2	DSRATDI2
+$random Rat/Death	{ DSRATDI1 DSRATDI2 }
+
+//Master
+
+$random pm_taunt { pmaster/taunt1 pmaster/taunt2 pmaster/taunt3 }
+
+pmaster/taunt1 Msnd1
+pmaster/taunt2 Msnd4
+pmaster/taunt3 Msnd5
+
+$playersound    PuppetMaster male *pain100 Msnd3  
+$playersounddup PuppetMaster male *pain75 *pain100
+$playersounddup PuppetMaster male *pain50 *pain100
+$playersounddup PuppetMaster male *pain25 *pain100
+$playersound    PuppetMaster male *death Msnd3
+$playersound    PuppetMaster male *xdeath Msnd3
+$playersound    PuppetMaster male *usefail Msnd2
+$playersounddup PuppetMaster male *grunt *pain100
+$playersounddup PuppetMaster male *land *pain100
+$playersound    PuppetMaster male *jump Msnd2
+$playeralias    PuppetMaster male *taunt pm_taunt  
+
+//Zombies
+
+$random bl_taunt { grunt/sight1 grunt/sight2 grunt/sight3 }
+
+$playersound    brainless male *pain100 dspopain
+$playersounddup brainless male *pain75 *pain100
+$playersounddup brainless male *pain50 *pain100
+$playersounddup brainless male *pain25 *pain100
+$playersound    brainless male *death bl_death
+$playersound    brainless male *xdeath DSSLOP
+$playersound    brainless male *usefail dsposact
+$playersounddup brainless male *grunt *pain100
+$playersounddup brainless male *land *pain100
+$playersound    brainless male *jump dspopain
+$playeralias    brainless male *taunt bl_taunt   
+
+// SSgZombie Player
+
+$playersound    SSSgZombie male *pain100 dspopain
+$playersounddup SSSgZombie male *pain75 *pain100
+$playersounddup SSSgZombie male *pain50 *pain100
+$playersounddup SSSgZombie male *pain25 *pain100
+$playersound    SSSgZombie male *death DSGPODTH
+$playersound    SSSgZombie male *usefail DSGPOACT
+$playersounddup SSSgZombie male *grunt *pain100
+$playersounddup SSSgZombie male *land *pain100
+$playersound    SSSgZombie male *jump DSGPOACT
+$playersound    SSSgZombie male *taunt DSGPOSIT
+
+//Imp Player
+
+$random imp_taunt	{ imp/sight1  imp/sight2 }
+
+$playersound    Mimpale male *pain100 dspopain
+$playersounddup Mimpale male *pain75 *pain100
+$playersounddup Mimpale male *pain50 *pain100
+$playersounddup Mimpale male *pain25 *pain100
+$playersound    Mimpale male *death DSNULL
+$playersound    Mimpale male *xdeath DSSLOP
+$playersound    Mimpale male *usefail dsbgact
+$playersounddup Mimpale male *grunt *pain100
+$playersounddup Mimpale male *land *pain100
+$playersound    Mimpale male *jump  dspopain
+$playeralias    Mimpale male *taunt imp_taunt   
+
+//Hellion Player
+
+$random heln_taunt  { dshlnsee  dshlnact }
+
+$playersound    Heln male *pain100 dshlnpai
+$playersounddup Heln male *pain75 *pain100
+$playersounddup Heln male *pain50 *pain100
+$playersounddup Heln male *pain25 *pain100
+$playersound    Heln male *death DSNULL
+$playersound    Heln male *xdeath dshlnexp
+$playersound    Heln male *usefail dshlnact
+$playersounddup Heln male *grunt *pain100
+$playersounddup Heln male *land *pain100
+$playersound    Heln male *jump  dshlnact
+$playeralias    Heln male *taunt heln_taunt
+
+//Dark Imp
+
+$random dimp_taunt	{ darkimp/see1  darkimp/see2 }
+
+$playersound    MsDarkimp male *pain100 dsdvlpai
+$playersounddup MsDarkimp male *pain75 *pain100
+$playersounddup MsDarkimp male *pain50 *pain100
+$playersounddup MsDarkimp male *pain25 *pain100
+$playersound    MsDarkimp male *death  DSNULL
+$playersound    MsDarkimp male *xdeath DSSLOP
+$playersound    MsDarkimp male *usefail dsdvlact
+$playersounddup MsDarkimp male *grunt *pain100
+$playersounddup MsDarkimp male *land *pain100
+$playersound    MsDarkimp male *jump  dsdvlpai
+$playeralias    MsDarkimp male *taunt dimp_taunt 
+
+//SShadow
+
+$random Shadow_taunt	{ imp/sight1  imp/sight2 }
+
+$playeralias    SShadow male *pain100 Shadow/pain
+$playersounddup SShadow male *pain75 *pain100
+$playersounddup SShadow male *pain50 *pain100
+$playersounddup SShadow male *pain25 *pain100
+$playersound    SShadow male *death  DSNULL
+$playersound    SShadow male *xdeath DSSLOP
+$playeralias    SShadow male *usefail Shadow/active
+$playersounddup SShadow male *grunt *pain100
+$playersounddup SShadow male *land *pain100
+$playersound    SShadow male *jump  SHDPAIN1
+$playeralias    SShadow male *taunt Shadow/active 
+
+// SoulHarvester
+
+
+$random SoulHar_taunt	{ shsight1  shsight2 }
+shsight1 			shsight1
+shsight2 			shsight2
+
+$random SoulHar_death 	{ shdeath1 shdeath2 }
+shdeath1 				shdeath1
+shdeath2 				shdeath2
+
+$playeralias    SHplayer male *pain100 dspopain
+$playersounddup SHplayer male *pain75 *pain100
+$playersounddup SHplayer male *pain50 *pain100
+$playersounddup SHplayer male *pain25 *pain100
+$playeralias    SHplayer male *death  SoulHar_death
+$playersound    SHplayer male *xdeath shfbscrm
+$playeralias    SHplayer male *usefail dsbgact
+$playersounddup SHplayer male *grunt *pain100
+$playersounddup SHplayer male *land *pain100
+$playersound    SHplayer male *jump  dspopain
+$playeralias    SHplayer male *taunt SoulHar_taunt 
+
+//SpigMarine
+
+$random mpig/active	{ mpig/active1  mpig/active2 }
+mpig/active1    DSPGACT1
+mpig/active2    DSPGACT2
+mpig/death      DSPIGDTH
+mpig/attack     DSPIGATC
+mpig/pain       DSPGPAIN
+
+$playersound    SpigMarine male *pain100 DSPGPAIN
+$playersounddup SpigMarine male *pain75  *pain100
+$playersounddup SpigMarine male *pain50  *pain100
+$playersounddup SpigMarine male *pain25  *pain100
+$playersound    SpigMarine male *death   DSPIGDTH
+$playersound    SpigMarine male *xdeath  DSSLOP
+$playeralias    SpigMarine male *usefail mpig/active
+$playersounddup SpigMarine male *grunt   *pain100
+$playersound    SpigMarine male *land    DSPIGATC
+$playersound    SpigMarine male *jump    DSPIGATC
+$playersound    SpigMarine male *taunt   DSPGACT2
+
+//Archvile
+
+$playersound    Mvile male *pain100 DSVIPAIN
+$playersounddup Mvile male *pain75 *pain100
+$playersounddup Mvile male *pain50 *pain100
+$playersounddup Mvile male *pain25 *pain100
+$playersound    Mvile male *death DSVILDTH
+$playersound    Mvile male *usefail DSVILACT
+$playersounddup Mvile male *grunt *pain100
+$playersounddup Mvile male *land *pain100
+$playersound    Mvile male *jump DSVILSIT
+$playersound    Mvile male *taunt dsvilsit
+
+//Demon
+
+$playersound    Mdemon male *pain100 DSDMPAIN
+$playersounddup Mdemon male *pain75 *pain100
+$playersounddup Mdemon male *pain50 *pain100
+$playersounddup Mdemon male *pain25 *pain100
+$playersound    Mdemon male *death DSSGTDTH
+$playersound    Mdemon male *usefail DSDMACT
+$playersounddup Mdemon male *grunt *pain100
+$playersounddup Mdemon male *land *pain100 
+$playersound    Mdemon male *taunt dssgtsit 
+
+//BDemon
+
+$playersound    BDemon male *pain100 DSBLDPAI
+$playersounddup BDemon male *pain75 *pain100
+$playersounddup BDemon male *pain50 *pain100
+$playersounddup BDemon male *pain25 *pain100
+$playersound    BDemon male *death DSBLDDTH
+$playersound    BDemon male *usefail DSBLDACT
+$playersounddup BDemon male *grunt *pain100
+$playersound    BDemon male *land  DSBLDACT 
+$playersound    BDemon male *taunt DSBLDSIT 
+
+//LostSoul
+
+$playersound    MLostSoul male *pain100 DSDMPAIN
+$playersounddup MLostSoul male *pain75 *pain100
+$playersounddup MLostSoul male *pain50 *pain100
+$playersounddup MLostSoul male *pain25 *pain100
+$playersound    MLostSoul male *death DSFIRXPL
+$playersounddup MLostSoul male *xdeath *death
+$playersound    MLostSoul male *usefail DSDMACT
+$playersounddup MLostSoul male *grunt *usefail
+$Playersounddup MLostSoul male *land *usefail
+$playersound    MLostSoul male *taunt dssklatk
+
+//Mancubus Player
+
+$playersound    Mancubus male *pain100 DSMNPAIN
+$playersounddup Mancubus male *pain75 *pain100
+$playersounddup Mancubus male *pain50 *pain100
+$playersounddup Mancubus male *pain25 *pain100
+$playersound    Mancubus male *death DSMANDTH
+$playersound    Mancubus male *usefail dsposact
+$playersounddup Mancubus male *grunt *pain100
+$playersounddup Mancubus male *land *pain100
+$playersound    Mancubus male *jump DSMANSIT
+$playersound    Mancubus male *taunt dsmansit
+
+//Revenant Player
+
+$playersound    Mskeleton male *pain100 DSPOPAIN
+$playersounddup Mskeleton male *pain75 *pain100
+$playersounddup Mskeleton male *pain50 *pain100
+$playersounddup Mskeleton male *pain25 *pain100
+$playersound    Mskeleton male *death DSSKEDTH
+$playersound    Mskeleton male *xdeath DSSKEDTH
+$playersound    Mskeleton male *usefail DSSKEACT
+$playersounddup Mskeleton male *grunt *pain100
+$playersounddup Mskeleton male *land *pain100
+$playersound    Mskeleton male *jump DSSKESIT
+$playersound    Mskeleton male *taunt dsskesit
+
+SKELLPUNCH DSSKESWG
+SKELLPCHHIT DSSKEPCH
+SKELLMISS DSSKEATK
+
+//Cacodemon Player
+
+$playersound    Cacodemon male *pain100 DSDMPAIN
+$playersounddup Cacodemon male *pain75 *pain100
+$playersounddup Cacodemon male *pain50 *pain100
+$playersounddup Cacodemon male *pain25 *pain100
+$playersound    Cacodemon male *death DSCACDTH
+$playersound    Cacodemon male *usefail DSDMACT
+$playersounddup Cacodemon male *grunt *pain100
+$playersounddup Cacodemon male *land *pain100
+$playersound    Cacodemon male *jump DSCACSIT
+$playersound    Cacodemon male *taunt dscacsit
+
+//Arachnotron Player
+
+$playersound    ArachnotronClass  male *pain100 dsdmpain
+$playersounddup ArachnotronClass  male *pain75 *pain100
+$playersounddup ArachnotronClass  male *pain50 *pain100
+$playersounddup ArachnotronClass  male *pain25 *pain100
+$playersound    ArachnotronClass  male *death dsbspdth
+$playersound    ArachnotronClass  male *usefail dsbspact
+$playersounddup ArachnotronClass  male *grunt *pain100
+$playersounddup ArachnotronClass  male *land *pain100
+$playersound    ArachnotronClass  male *jump dsbspact
+$playersound    ArachnotronClass  male *taunt dsbspsit
+
+//HellKnight Player
+
+$playersound    HellKnightClass  male *pain100 dsdmpain
+$playersounddup HellKnightClass  male *pain75 *pain100
+$playersounddup HellKnightClass  male *pain50 *pain100
+$playersounddup HellKnightClass  male *pain25 *pain100
+$playersound    HellKnightClass  male *death dsbrsdth
+$playersound    HellKnightClass  male *usefail dsdmact
+$playersounddup HellKnightClass  male *grunt *pain100
+$playersounddup HellKnightClass  male *land *pain100
+$playersound    HellKnightClass  male *jump dsdmact
+$playersound    HellKnightClass  male *taunt dskntsit
+
+//BaronOfHell Player
+
+$playersound    BaronOfHellClass  male *pain100 dsdmpain
+$playersounddup BaronOfHellClass  male *pain75 *pain100
+$playersounddup BaronOfHellClass  male *pain50 *pain100
+$playersounddup BaronOfHellClass  male *pain25 *pain100
+$playersound    BaronOfHellClass  male *death dsbrsdth
+$playersound    BaronOfHellClass  male *usefail dsdmact
+$playersounddup BaronOfHellClass  male *grunt *pain100
+$playersounddup BaronOfHellClass  male *land *pain100
+$playersound    BaronOfHellClass  male *jump dsdmact
+$playersound    BaronOfHellClass  male *taunt dsbrssit
+
+//Shadow Beast Player
+
+$playersound    Shdbeast  male *pain100 BDMPAN1
+$playersounddup Shdbeast  male *pain75 *pain100
+$playersounddup Shdbeast  male *pain50 *pain100
+$playersounddup Shdbeast  male *pain25 *pain100
+$playersound    Shdbeast  male *death BDMDTH1
+$playersound    Shdbeast  male *usefail BDMSIT1
+$playersounddup Shdbeast  male *grunt *pain100
+$playersounddup Shdbeast  male *land *pain100
+$playersound    Shdbeast  male *jump BDMSIT1
+$playersound    Shdbeast  male *taunt BDMIDL1
+
+//SSnazi Player
+
+$playersound    SSnazi  male *pain100 dspopain
+$playersounddup SSnazi  male *pain75 *pain100
+$playersounddup SSnazi  male *pain50 *pain100
+$playersounddup SSnazi  male *pain25 *pain100
+$playersound    SSnazi  male *death dsssdth
+$playersound    SSnazi  male *usefail dsposact
+$playersounddup SSnazi  male *grunt *pain100
+$playersounddup SSnazi  male *land *pain100
+$playersound    SSnazi  male *jump dsposact
+$playersound    SSnazi  male *taunt dssssit
+
+//Pain elemental
+
+$playersound	PainElementalClass	male	*death		dspedth
+$playersound	PainElementalClass	male	*xdeath		dspedth
+$playersound	PainElementalClass	male	*gibbed		dsslop
+$playersound	PainElementalClass	male	*pain100	dspepain
+$playersounddup	PainElementalClass	male	*pain75		*pain100
+$playersounddup	PainElementalClass	male	*pain50		*pain100
+$playersounddup	PainElementalClass	male	*pain25		*pain100
+$playersound	PainElementalClass	male	*grunt		dspepain
+$playersound	PainElementalClass	male	*land		dspepain
+$playersound	PainElementalClass	male	*jump		dsjump
+$playersound	PainElementalClass	male	*fist		dsfirsht
+$playersound	PainElementalClass	male	*usefail	dsdmact
+$playersound    PainElementalClass  male    *taunt      dspesit
+
+//Cyber Demon
+
+$playersound	CyberDemonClass	male	*death		dscybdth
+$playersound	CyberDemonClass	male	*xdeath		dscybdth
+$playersound	CyberDemonClass	male	*pain100	dsdmpain
+$playersounddup	CyberDemonClass	male	*pain75		*pain100
+$playersounddup	CyberDemonClass	male	*pain50		*pain100
+$playersounddup	CyberDemonClass	male	*pain25		*pain100
+$playersound	CyberDemonClass	male	*grunt		dsdmact
+$playersound	CyberDemonClass	male	*land		dsdmact
+$playersound	CyberDemonClass	male	*jump		dsdmact
+$playersound	CyberDemonClass	male	*fist		dsfirsht
+$playersound	CyberDemonClass	male	*usefail	dsdmact
+$playersound    CyberDemonClass male    *taunt      dscybsit
+
+//MasterMind
+
+$playersound	MasterMindClass	male    *death		dsspidth
+$playersound	MasterMindClass	male	*xdeath		dsspidth
+$playersound	MasterMindClass	male	*pain100	dsdmpain
+$playersounddup	MasterMindClass	male	*pain75		*pain100
+$playersounddup	MasterMindClass	male	*pain50		*pain100
+$playersounddup	MasterMindClass	male	*pain25		*pain100
+$playersound	MasterMindClass	male	*grunt		dsdmact
+$playersound	MasterMindClass	male	*land		dsdmact
+$playersound	MasterMindClass	male	*jump		dsdmact
+$playersound	MasterMindClass	male	*fist		dsfirsht
+$playersound	MasterMindClass	male	*usefail	dsdmact
+$playersound    MasterMindClass male    *taunt      dsspisit
+
+// Weapons & Items
+
+misc/barbrk dsmash1
+misc/hackng DSHACK
+misc/pong DSPONG
+
+weapons/nuclearmissileexplode	dsnukxpl
+weapons/nuclearmissileburn	dsnukbrn
+amulet/use			AMUUSE
+Pickups/TechArmor	TCHARMUS
+
+DSCHAFIR DSCHAFIR
+
+// Deco
+tubes/break TSTTB
+Fountain/Loop	DSWFOUNT
+BarrelFire/Start	DSFIRSTA
+BarrelFire/Loop		DSFIRLOP
+$limit BarrelFire/Loop	0

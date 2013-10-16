@@ -1,0 +1,231 @@
+ACTOR DemonClass : PlayerPawn
+{
+  health 150
+  painchance 180
+  speed 1
+  radius 30
+  height 56
+  mass 400
+  Player.DisplayName "Demon"
+  Player.MaxHealth 150
+  Player.SoundClass "Mdemon"
+  Player.JumpZ 10
+  Player.ViewHeight 30
+  Player.MorphWeapon "DemonMouth"
+  Player.WeaponSlot 2, DemonMouth
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+
+  -FRIENDLY
+  +NOTARGET
+  -PICKUP
+  +NOPAIN
+  +NOSKIN
+   states
+  {
+  Spawn:
+	SARG AB 10 
+    loop
+  See:
+    SARG A 0
+    SARG A 0 A_Jump (240,2)
+	SARG A 0 A_PlaySoundEx ("demon/active","body")
+    SARG ABCD 4
+    loop
+  Missile:
+    SARG EFG 8
+    goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SARG N -1
+    stop
+  XDeath:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 1, 0)
+    TNT1 A 40 A_HideThing
+    SARG V -1
+    stop
+  }
+}
+
+ACTOR DemonMouth : Weapon
+{
+  obituary "%o was bit by %k."
+  weapon.kickback 60
+  +ammo_optional
+  +WEAPON.NOALERT
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    DEMH A 1 A_Raise
+    Goto Ready
+  Ready:
+    DEMH A 2 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	DEMH A 0 HealThing(1)
+	DEMH A 0 A_SpawnItemEx ("MDemonTraceRun",-20,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	goto ready 
+  DeSelect:
+    DEMH A 1 A_Lower
+    Loop
+  Fire:
+    DEMH A 0 A_JumpIfInventory ("Mskull",0,"AdFire")
+    DEMH A 0 A_PlaySoundEx ("demon/melee","Weapon")
+	DEMH A 8 A_CustomPunch (5,0,0,"FBulletPuff",60)
+	DEMH A 7 A_CustomPunch (4,0,0,"FBulletPuff",60)
+    DEMH A 6 A_CustomPunch (3,0,0,"FBulletPuff",60)	
+    Goto Ready
+  AdFire:
+    DEMH A 0 A_PlaySoundEx ("demon/melee","Weapon")
+	DEMH A 7 A_CustomPunch (8,0,0,"FBulletPuff",60)
+	DEMH A 6 A_CustomPunch (7,0,0,"FBulletPuff",60)
+    DEMH A 5 A_CustomPunch (6,0,0,"FBulletPuff",60)	
+    Goto Ready
+  AltFire:
+    DEMH A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready	
+  }
+}
+
+actor MDemonTraceRun
+{
+  +NOBLOCKMAP
+  +NOGRAVITY
+  +NOTELEPORT
+  RenderStyle translucent
+  Alpha 0.20
+
+  States
+  {	
+  Spawn:
+    SARG ABCD 2
+    stop
+  }
+}
+
+ACTOR BloodDemonClass : PlayerPawn
+{
+  health 300
+  painchance 180
+  speed 1.2
+  radius 30
+  height 56
+  mass 400
+  Player.DisplayName "BloodDemon"
+  Player.MaxHealth 300
+  Player.SoundClass "Bdemon"
+  Player.JumpZ 10
+  Player.ViewHeight 30
+  Player.MorphWeapon "BloodDemonMouth"
+  Player.WeaponSlot 2, BloodDemonMouth
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  -FRIENDLY
+  +NOTARGET
+  -PICKUP
+  +NOPAIN
+  +NOSKIN
+   states
+  {
+  Spawn:
+	SRG2 AB 10 
+    loop
+  See:
+    SRG2 A 0
+    SRG2 A 0 A_Jump (240,2)
+	SRG2 A 0 A_PlaySoundEx ("blooddemon/active","body")
+    SRG2 A 0 A_PlaySound("blooddemon/walk")
+	SRG2 AB 4 
+	SRG2 C 0 A_PlaySound("blooddemon/walk")
+	SRG2 CD 4
+    loop
+  Missile:
+    SRG2 EFG 8
+    goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    SRG2 N -1
+    stop
+  }
+}
+
+ACTOR BloodDemonMouth : Weapon
+{
+  obituary "%o Was chewed up and spat out by %k."
+  weapon.kickback 60
+  +ammo_optional
+  +WEAPON.NOALERT
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    DEMH A 1 A_Raise
+    Goto Ready
+  Ready:
+    DEMH A 2 A_WeaponReady
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	DEMH A 0 HealThing(1)
+	goto ready 
+  DeSelect:
+    DEMH A 1 A_Lower
+    Loop
+  Fire:
+    DEMH A 0 A_PlaySoundEx ("blooddemon/melee","Weapon")
+	DEMH A 7 A_CustomPunch (7,0,0,"FBulletPuff",60)
+	DEMH A 6 A_CustomPunch (5,0,0,"FBulletPuff",60)
+    DEMH A 6 A_CustomPunch (4,0,0,"FBulletPuff",60)	
+    Goto Ready
+  AltFire:
+    DEMH A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready	
+  }
+}
+

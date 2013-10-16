@@ -1,0 +1,7 @@
+
+[enu default] 
+
+OB_FRIENDLY1 = "killed by %k."; 
+OB_FRIENDLY2 = "killed by %k."; 
+OB_FRIENDLY3 = "killed by %k."; 
+OB_FRIENDLY4 = "killed by %k.";

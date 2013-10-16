@@ -1,0 +1,103 @@
+ACTOR WolfensteinSSClass : PlayerPawn
+{
+  Health 50
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 0.35
+  PainChance 170
+  Player.MorphWeapon "SSmp40"
+  Player.WeaponSlot 1, SSmp40
+  Player.DisplayName "WolfensteinSS"
+  Player.MaxHealth 70   
+  Player.ViewHeight 47
+  Player.SoundClass SSnazi
+  Player.JumpZ 10
+  Translation "112:127=192:207"
+  
+  DamageFactor "MarineDamage", 1
+  DamageFactor "MarineRLDamage", 1
+  
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageFactor "InstantDeath", 0
+  
+  -PICKUP
+  +NOSKIN
+  +NOPAIN
+  -FRIENDLY
+  +NOTARGET
+  states
+  {
+  Spawn:
+    NAZI AB 10
+    loop
+  See:
+    NAZI AABBCC 3
+    Loop
+  Missile:
+    NAZI F 5  
+    NAZI G 6 bright 
+    Goto Spawn
+  Death:
+    TNT1 A 0 A_NoBlocking
+    TNT1 A 0 A_SpawnItemEx ("MDeathGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 A 0 ACS_ExecuteAlways (991, 0, 6, 0, 0)
+    TNT1 A 40 A_HideThing
+    NAZI L -1
+    stop
+  }
+}
+
+ACTOR SSmp40 : Weapon
+{
+  OBITUARY "%o met a Nazi %k."
+  ATTACKSOUND "wolfss/attack"
+  weapon.kickback 100
+  Weapon.AmmoUse 0
+  +WEAPON.NOALERT
+  +WEAPON.AMMO_OPTIONAL
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Ready:
+    MP40 A 6 A_WeaponReady	
+    NULL A 0 A_JumpIfInventory ("Mskull",0,1)
+    Loop
+	NULL A 0 HealThing(1)
+	goto ready 
+  DeSelect: 
+    MP40 A 1 A_Lower
+    Loop
+  Select:
+    MP40 A 1 A_Raise
+	goto ready
+  Fire:
+    MP40 C 4 A_FireBullets (2.7, 2.7, 1, 5, "FBulletPuff")
+    MP40 B 3 
+    MP40 C 4 A_FireBullets (2.7, 2.7, 1, 5, "FBulletPuff")
+	MP40 B 5 A_ReFire
+	MP40 C 3
+    goto Ready
+  AltFire:
+    MP40 A 5 ACS_ExecuteAlways (991,0,3,0)
+	goto ready
+  }
+}
+
+
+
+

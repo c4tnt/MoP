@@ -1,0 +1,98 @@
+ACTOR BarrelClass : PlayerPawn
+{
+  health 20
+  painchance 0
+  speed 0.2
+  radius 10
+  height 34
+  Player.DisplayName "Barrel"
+  Player.MaxHealth 20
+  Player.SoundClass "BarrelBob"
+  Player.JumpZ 8
+  Player.ViewHeight 29
+  Player.MorphWeapon "Barrelweapon"
+  Player.WeaponSlot 1, Barrelweapon
+  DeathSound "world/barrelx"
+
+  DamageFactor "MarineDamage", 0.7
+  DamageFactor "MarineRLDamage", 0.7
+  DamageFactor "CybRLDamage", 0.2
+  DamageFactor "ImpBallDamage", 0
+  DamageFactor "CacoDamage", 0
+  DamageFactor "SkelDamage", 0
+  DamageFactor "FatsoDamage", 0
+  DamageFactor "KnightDamage", 0
+  DamageFactor "ArachDamage", 0
+  DamageFactor "viledamage", 0
+  DamageFactor "Control", 0
+  DamageFactor "ZombiesDamage", 0
+  DamageFactor "Slime", 0
+  DamageType "CybRLDamage"
+
+  +NOBLOOD
+  +ACTIVATEMCROSS
+  +DONTGIB
+  +NOICEDEATH
+  +OLDRADIUSDMG
+  -FRIENDLY
+  +NOTARGET
+  -PICKUP
+  +NOPAIN
+  +NOSKIN
+   states
+  {
+  Spawn:
+    BAR1 AB 6
+    loop
+  See:
+    BAR1 AB 6
+    loop
+  Missile:
+    goto See
+  Death:
+    BEXP A 5 BRIGHT
+    BEXP B 5 BRIGHT A_Scream
+    BEXP C 5 BRIGHT
+    BEXP D 5 BRIGHT A_Explode
+    BEXP E 10 BRIGHT A_NoBlocking
+    TNT1 A 1 A_HideThing
+    BEXP E -1
+    stop	
+  }
+}
+
+ACTOR Barrelweapon : Weapon
+{
+  obituary "%o was blown up by %k."
+  weapon.kickback 0
+  +ammo_optional
+  +WEAPON.NOALERT
+  +WEAPON.DONTBOB
+  +WEAPON.CHEATNOTWEAPON
+  +INVENTORY.UNDROPPABLE
+
+  DamageType "CybRLDamage"
+  states
+  {
+  Spawn:
+    TNT1 A 0 Thing_Remove (0)
+    Stop
+  Select:
+    TNT1 A 1 A_Raise
+    Goto Ready
+  Ready:
+    TNT1 A 3 A_WeaponReady
+    Loop
+  DeSelect:
+    TNT1 A -1
+    Loop
+  Fire:
+    TNT1 A 0
+    TNT1 A 5 ACS_ExecuteAlways (991,0,6,0)
+    Goto Ready
+  AltFire:
+    TNT1 A 0
+    TNT1 A 5 ACS_ExecuteAlways (991,0,3,0)
+    Goto Ready
+  }
+}

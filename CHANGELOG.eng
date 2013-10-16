@@ -1,0 +1,44 @@
+// made by silva (com1337@gmail.com)
+
+					 .:: Master Of Puppets ::. 
+
+*-----------------------version beta 0.40--------------------------------------*
+
+Changes and bugfixes:
+
+many....
+
+*-----------------------version beta 0.39b--------------------------------------*
+English changelog started .silva 
+
+Changes and bugfixes:
+
+- *Fixed bug* Sometime masters after death or changemap has spawn with monster 
+   weapon. this fixed i hope. 
+- *Fixed bug* Remove raise state from ZombieManClass(it may cause client crash) .
+- *Fixed minor bug* Ñhaingun hud sprites restored to default .
+- *Fixed bug* Master(ghost) suicide can crash all clients on server.
+  (forced server command "sv_disallowsuicide = 1")
+- Baron of hell(master and monster) bloodcolor changed to darkgreen .
+- Puppetmaster hud changes:
+  changed position of monster picture and hp amount, now at bottom left corner of screen 
+  add Spidermastermind pic
+  size of Cyberdemon pic has lowered
+- When marines respawn they get:
+  startarmor(50% green armor) only if have no armor. 
+  ammo(48 bullets and 8 shells) only if out of starting amount.
+- master corpse dissapears, when no one look on it (A_CheckSight)
+- redrawn Demon and spectre Xdeath animation  
+- new AdvancedPistol(little bit faster and more damage) replaces regular pistol
+- Revenant(master) deal more damage in melee.
+- New reinforcements counting system.
+
+Known bugs(or todolist):
+
++ sometimes in multyplayer games all clients crashes, but not server . unknown reason 
++ sometimes monster disappears when master tries get in him. should be fixed soon
++ sometimes masters respawn at regular start position, not at death point. 
++ if monster in see state(or fighting state), and master get in him, master get monster spawn state hp, 
+  but not actual. So you when shoting cyberdemon and he have about half of hp if master 
+  get in this cybie master get full hp. this appear after 0.98b, unknown reason
+   

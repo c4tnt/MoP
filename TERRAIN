@@ -1,0 +1,147 @@
+// made by silva (com1337@gmail.com)
+
+splash Water
+{
+	smallclass		WaterSplash
+	smallclip		-7
+	smallsound		world/watersplashsmall
+
+	baseclass		WaterSplashBase
+	chunkclass		WaterSplash
+	chunkxvelshift	8
+	chunkyvelshift	8
+	chunkzvelshift	8
+	chunkbasezvel	2
+	sound			world/watersplash
+}
+
+splash Blood
+{
+	smallclass		BloodSplash
+	smallclip		-7
+	smallsound		world/sludgegloopsmall
+
+	baseclass		BloodSplashBase
+	chunkclass		BloodSplash
+	chunkxvelshift	8
+	chunkyvelshift	8
+	chunkzvelshift	8
+	chunkbasezvel	1
+	sound			world/sludgegloop
+}
+
+
+
+splash Lava
+{
+	smallclass		LavaSplash
+	smallclip		12
+	smallsound		world/lavasizzlesmall
+
+	baseclass		LavaSplash
+	chunkclass		LavaSmoke
+	chunkxvelshift	-1
+	chunkyvelshift	-1
+	chunkzvelshift	7
+	chunkbasezvel	1
+	sound			world/lavasizzle
+}
+
+
+splash Sludge
+{
+	smallclass		SludgeChunk
+	smallclip		-7
+	smallsound		world/sludgegloopsmall
+
+	baseclass		SludgeSplash
+	chunkclass		SludgeChunk
+	chunkxvelshift	8
+	chunkyvelshift	8
+	chunkzvelshift	8
+	chunkbasezvel	1
+	sound			world/sludgegloop
+}
+
+splash Slime
+{
+	smallclass		SlimeSplash
+	smallclip		-6
+	smallsound		world/sludgegloopsmall
+
+	baseclass		SlimeSplash
+	chunkclass		SlimeChunk
+	chunkxvelshift	8
+	chunkyvelshift	8
+	chunkzvelshift	8
+	chunkbasezvel	1
+	sound			world/sludgegloop
+}
+
+
+
+terrain Water
+{
+	splash			Water
+	footclip		5
+	liquid
+}
+
+terrain Blood
+{
+	splash			Blood
+	footclip		5
+	liquid
+}
+
+terrain Lava
+{
+	splash			Lava
+	footclip		8
+	liquid
+}
+
+
+terrain Slime
+{
+	splash			Slime
+	footclip		8
+	liquid
+}
+
+terrain Sludge
+{
+	splash			Sludge
+	footclip		5
+	liquid
+}
+
+ifdoom
+// blood
+floor BLOOD1 Blood
+floor BLOOD2 Blood
+floor BLOOD3 Blood
+// Water 
+floor FWATER1 Water
+floor FWATER2 Water
+floor FWATER3 Water
+floor FWATER4 Water
+// Sludge
+floor SLIME01 Sludge
+floor SLIME02 Sludge
+floor SLIME03 Sludge
+floor SLIME04 Sludge
+floor SLIME05 Sludge
+floor SLIME06 Sludge
+floor SLIME07 Sludge
+floor SLIME08 Sludge
+// lava
+floor LAVA1 Lava
+floor LAVA2 Lava
+floor LAVA3 Lava
+floor LAVA4 Lava
+// slime
+floor NUKAGE1 Slime
+floor NUKAGE2 Slime
+floor NUKAGE3 Slime
+endif

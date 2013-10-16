@@ -1,0 +1,116 @@
+// made by silva (com1337@gmail.com)
+
+height 0;
+
+
+statusbar fullscreen, forcescaled
+{
+	PlayerClass Marine
+	{
+//		drawimage "MarineH", 0, 0;
+		drawimage "MarinHB", 0, 180;
+		drawimage "MarinAB", 255, 183;
+
+		drawimage armoricon, 5, 190;
+		drawimage ammoicon1, 295, 189;
+	
+		drawnumber 3, MarineHpFont, green, health, 68, 187,1;
+		drawnumber 3, MarineArFont, green, armor, 30, 189,0;
+		drawnumber 3, MarineAmmoFont, green, ammo1, 283, 188,1;
+		
+		gamemode cooperative, singleplayer
+		{
+			drawswitchableimage BlueCard, "nullimage", "STKEYS0", 308, 2;
+			drawswitchableimage YellowCard, "nullimage", "STKEYS1", 308, 12;
+			drawswitchableimage RedCard, "nullimage", "STKEYS2", 308, 22;
+			drawswitchableimage BlueSkull, "nullimage", "STKEYS3", 298, 2;
+			drawswitchableimage YellowSkull, "nullimage", "STKEYS4", 298, 12;
+			drawswitchableimage RedSkull, "nullimage", "STKEYS5", 298, 22;
+		}
+	}
+
+	drawimage "MarinCD", 0, 0;
+	drawimage "PLAYH", 7, 5;
+	drawnumber 2, MarineAmmoFont, green, GlobalVar 1, fillzeros, 32, 8,1;
+	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 5, fillzeros, 34, 18,1;
+
+	drawimage "MarinCE", 238, 0;
+	drawimage "MSTRH", 304, 5;
+	drawnumber 2, MarineAmmoFont, green, GlobalVar 2, fillzeros, 300, 8,1;
+	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 3, fillzeros, 297, 18,1;
+
+	drawnumber 8, MarineAmmoFontSm, green, GlobalArray 6, 10, 110,1;
+	drawselectedinventory MarineAmmoFontSm, 280, 148;
+}
+
+statusbar Normal, forcescaled
+{
+	PlayerClass Marine
+	{
+//		drawimage "MarineH", 0, 0;
+		
+		drawimage "MarinHB", 0, 180;
+		drawimage "MarinAB", 255, 183;
+		drawimage armoricon, 5, 190;
+		drawimage ammoicon1, 295, 189;
+		
+		drawnumber 3, MarineHpFont, green, health, 68, 187,1;
+		drawnumber 3, MarineArFont, green, armor, 30, 189,0;
+		drawnumber 3, MarineAmmoFont, green, ammo1, 283, 188,1;
+
+		drawimage "ICONBH", 298, 151;
+		drawnumber 3, MarineAmmoFontSm, green, Ammo MClip, 293, 150,1;
+		drawimage "ICONSH", 298, 156;
+		drawnumber 3, MarineAmmoFontSm, green, Ammo MShell, 293, 155,1;
+		drawimage "ICONRH", 298, 161;
+		drawnumber 3, MarineAmmoFontSm, green, Ammo MRocketAmmo, 293, 160,1;
+		drawimage "ICONCH", 298, 166;
+		drawnumber 3, MarineAmmoFontSm, green, Ammo MCell, 293, 165,1;
+		drawimage "ICONNH", 298, 171;
+		drawnumber 3, MarineAmmoFontSm, green, Ammo MNuclearMissile, 293, 170,1;
+		drawimage "ICONDH", 298, 176;
+		drawnumber 3, MarineAmmoFontSm, green, Ammo MDynamite, 293, 175,1;
+
+		gamemode cooperative, singleplayer
+		{
+			drawswitchableimage BlueCard, "nullimage", "STKEYS0", 308, 2;
+			drawswitchableimage YellowCard, "nullimage", "STKEYS1", 308, 12;
+			drawswitchableimage RedCard, "nullimage", "STKEYS2", 308, 22;
+			drawswitchableimage BlueSkull, "nullimage", "STKEYS3", 298, 2;
+			drawswitchableimage YellowSkull, "nullimage", "STKEYS4", 298, 12;
+			drawswitchableimage RedSkull, "nullimage", "STKEYS5", 298, 22;
+		}
+	}
+	drawimage "MarinCD", 0, 0;
+	drawimage "PLAYH", 7, 5;
+	drawnumber 2, MarineAmmoFont, green, GlobalVar 1, fillzeros, 32, 8,1;
+	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 5, fillzeros, 34, 18,1;
+
+	drawimage "MarinCE", 238, 0;
+	drawimage "MSTRH", 304, 5;
+	drawnumber 2, MarineAmmoFont, green, GlobalVar 2, fillzeros, 300, 8,1;
+	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 3, fillzeros, 297, 18,1;
+
+	drawnumber 8, MarineAmmoFontSm, green, GlobalArray 6, 10, 110,1;
+	drawselectedinventory MarineAmmoFontSm, 280, 148;
+}
+
+statusbar Automap, forcescaled
+{
+	PlayerClass Marine
+	{
+		gamemode cooperative, singleplayer
+		{
+			drawswitchableimage BlueCard, "nullimage", "STKEYS0", 308, 2;
+			drawswitchableimage YellowCard, "nullimage", "STKEYS1", 308, 12;
+			drawswitchableimage RedCard, "nullimage", "STKEYS2", 308, 22;
+			drawswitchableimage BlueSkull, "nullimage", "STKEYS3", 298, 2;
+			drawswitchableimage YellowSkull, "nullimage", "STKEYS4", 298, 12;
+			drawswitchableimage RedSkull, "nullimage", "STKEYS5", 298, 22;
+		}
+	}
+
+	PlayerClass PuppetMaster
+	{
+	}
+}
