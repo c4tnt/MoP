@@ -73,6 +73,7 @@ int dmontype[MOPMAXCLIENTS][14];
 #define mopPFCNTR       2
 
 #define SHOPCURSOR      "Mskull"
+#define MOP_SPRITE_INFINITY  0.0
 
 #define mopNOTAFFECTACTORS  (ACTOR_WORLD|ACTOR_PLAYER|ACTOR_BOT|ACTOR_VOODOODOLL|ACTOR_MISSILE)
 //#define mopMORPHFLAGS (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_LOSEACTUALWEAPON|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
@@ -1032,7 +1033,7 @@ function void DrawScreenSprite( str SPRITE, int HUDNUM, int X, int Y, int DX, in
 
     SetHUDSize( FTOI( ScreenW ), FTOI( ScreenH ), 0 );
     SetFont( SPRITE );
-    hudmessage( s: "A"; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, FSpriteDX + 0.0, FSpriteDY + 0.0, 0 );
+    hudmessage( s: "A"; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, FSpriteDX + 0.0, FSpriteDY + 0.0, MOP_SPRITE_INFINITY );
 }
 
 function void DrawSprite( str SPRITE, int HUDNUM, int X, int Y, int HUDW, int HUDH, int SPRITEOFFSET, int ExternalScale )
@@ -1104,7 +1105,7 @@ function void DrawSprite( str SPRITE, int HUDNUM, int X, int Y, int HUDW, int HU
 
     SetHUDSize( IMULF( HUDW, SpriteScale ), IMULF( HUDH, SpriteScale ), 0 );
     SetFont( SPRITE );
-    hudmessage( s: "A"; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, FSpriteDX + 0.1, FSpriteDY + 0.1, 0 );
+    hudmessage( s: "A"; HUDMSG_PLAIN, HUDNUM, CR_UNTRANSLATED, FSpriteDX + 0.1, FSpriteDY + 0.1, MOP_SPRITE_INFINITY );
     SetHUDSize( HUDW, HUDH, 0 );
 }
 
@@ -1170,18 +1171,18 @@ function void DrawPlayerHUD( int type, int arg1 )
 
         SetHUDSize( 400, 300, 0 );
         setfont( "SMALLFONT" );
-        hudmessage( f: GetActorFloorZ( 0 ), s: "<", f: GetActorZ( 0 ), s: ">", f: GetActorCeilingZ( 0 ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, 0 );
-        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, 0 );
+        hudmessage( f: GetActorFloorZ( 0 ), s: "<", f: GetActorZ( 0 ), s: ">", f: GetActorCeilingZ( 0 ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, MOP_SPRITE_INFINITY );
+        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, MOP_SPRITE_INFINITY );
         if( arg1 ) {
             health = arg1 >> 16;
             if( health > 65 ) {
-                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_GREEN, 215.1, 150.0, 0 );
+                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_GREEN, 215.1, 150.0, MOP_SPRITE_INFINITY );
             } else if( health > 35 ) {
-                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_YELLOW, 215.1, 150.0, 0 );
+                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_YELLOW, 215.1, 150.0, MOP_SPRITE_INFINITY );
             } else if( health > 0 ) {
-                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_RED, 215.1, 150.0, 0 );
+                hudmessage( i: health, s: "%"; HUDMSG_PLAIN, 14, CR_RED, 215.1, 150.0, MOP_SPRITE_INFINITY );
             } else {
-                hudmessage( s: "---"; HUDMSG_PLAIN, 14, CR_GREY, 215.1, 150.0, 0 );
+                hudmessage( s: "---"; HUDMSG_PLAIN, 14, CR_GREY, 215.1, 150.0, MOP_SPRITE_INFINITY );
             }
             DrawScreenSprite( "MAHRB0", 13, 0.5, 0.5, 0, 0, 1.0 );
         } else {
@@ -1195,15 +1196,15 @@ function void DrawPlayerHUD( int type, int arg1 )
         ClearSprite( 13 );
         ClearSprite( 14 );
 
-        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, 0 );
+        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, MOP_SPRITE_INFINITY );
         DrawSprite( MCODE( arg1, mopICON ), 11, 40, 180, 320, 200, MCODE( arg1, mopICONOFST ), 1.2 );
         SetHUDSize( 400, 300, 0 );
         setfont( "SMALLFONT" );
-        hudmessage( i: GetActorProperty( 0, APROP_Health ), s: "/", i: GetActorProperty( 0, APROP_SpawnHealth ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, 0 );
+        hudmessage( i: GetActorProperty( 0, APROP_Health ), s: "/", i: GetActorProperty( 0, APROP_SpawnHealth ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, MOP_SPRITE_INFINITY );
         break;
     case 3:
         // Marine HUD
-        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, 0 );
+        hudmessage( s: "TID:", i: ActivatorTID(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, MOP_SPRITE_INFINITY );
         ClearSprite( 11 );
         ClearSprite( 12 );
         ClearSprite( 13 );
@@ -1592,18 +1593,21 @@ script MOP_PLAYER_DEATH DEATH {
     SETPCODE( plnum, mopA, GetActorAngle( 0 ) );
     SETPCODE( plnum, mopH, 0 );
 
-    // Release player's tid
-    ReleaseTID( PlayerTID( plnum ) );
+    DrawPlayerHUD( 0, 0 );	// Clear screen messages
+    ReleaseTID( PlayerTID( plnum ) );     // Release player's tid
     TakeInventory( "MJumpShoppie", 1 );
     SendNetworkSync( 0 );
 }
 
 Script MOP_INIT_PLAYER enter {
+    if (PlayerNumber() == -1) terminate;
     SetHudSize( 600, 400, 0 );
     SetFont( "SMALLFONT" );
-hudmessage( s: "\civer.\cdAlpha x-classic \cn"; HUDMSG_PLAIN, 1, CR_LIGHTBLUE, 300.0, 10.0, 8.0 );
-    SetupPlayer( 0 );
-    ACS_ExecuteAlways( MOP_PLAYER_TRACKER, 0 );
+    hudmessage( s: "\civer.\cdAlpha x-classic \cn"; HUDMSG_PLAIN, 1, CR_LIGHTBLUE, 300.0, 10.0, 8.0 );
+    if ( PlayerInGame(PlayerNumber()) ) {
+	SetupPlayer( 0 );
+	ACS_ExecuteAlways( MOP_PLAYER_TRACKER, 0 );
+	}
 }
 
 
@@ -1624,12 +1628,19 @@ script MOP_PLAYER_RERUN( int plnum ) net {  // Backmessage
     ACS_ExecuteAlways( MOP_PLAYER_PREDICTION, 0, plnum, PlayerTID( plnum ) );
 }
 
-script MOP_PLAYER_TRACKER( void ) // Masters Hud Loop
+script MOP_PLAYER_TRACKER( void )
 {
     int plnum = PlayerNumber();
     int countdown = 0;
 
-    while( 1 ) {
+    if (plnum == -1) {
+        log(s:"MOP_PLAYER_TRACKER terminated due to wrong player id (-1)");
+        terminate;
+    }
+
+    log(s:"Player ",i:plnum,s:" is being tracked");
+
+    while( PlayerInGame( plnum ) ) {
 
         SETPCODE( plnum, mopX, GetActorX( 0 ) );
         SETPCODE( plnum, mopY, GetActorY( 0 ) );
@@ -1671,8 +1682,10 @@ script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
     int frame = 0;
     int tmp;
 
-    if( playnum != plnum )
+    if( playnum != plnum || playnum == -1 ) {
+        log(s:"MOP_PLAYER_PREDICTION terminated due to wrong player id ( ",i:plnum,s:", was ", i: playnum,s:" )");
         terminate;
+    }
 
     Thing_changeTid( playtid, 0 );  // Cleanup TID before using
     Thing_changeTid( 0, playtid );
@@ -1681,8 +1694,9 @@ script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
 
     while( PlayerInGame( plnum ) ) {
 
-        if( ActivatorTID() != PlayerTID( plnum ) ) {
-            CallServerScriptArg( MOP_PLAYER_RERUN, plnum );
+	plnum = PlayerNumber();
+        if( ActivatorTID() != PlayerTID( plnum ) || plnum != playnum ) {
+            CallServerScriptArg( MOP_PLAYER_RERUN, playnum );
             terminate;
         }
 
@@ -1698,7 +1712,7 @@ script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
             DrawPlayerHUD( 3, 0 );
         }
 
-        //SetHUDSize(320,240,0);
+        delay( 1 );
         frame = UpdateAnims( frame, 0.8, 0.05, -32, 0, 1000 );
         delay( 1 );
     }
