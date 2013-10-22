@@ -10,12 +10,14 @@ global int 3: monstersleft;
 global int 4: monsterstotal;
 global int 5: reinforcements;
 global int 6: playermoney[];
+global int 7: monsterpercent;
 
 int server = 0;
 
 int monsterforces = 0;
+int monsterforcesclean = 0;
 int timetoexit;
-int cancount;
+int canexit = 0;
 
 #define MOPMAXCLIENTS       32
 #define MOPMARINESIDE       0
@@ -79,7 +81,7 @@ int dmontype[MOPMAXCLIENTS][14];
 //#define mopMORPHFLAGS (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_LOSEACTUALWEAPON|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
 #define mopMORPHFLAGS       (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
 
-#define MOP_INIT_USERMAP        0
+#define MOP_INIT_USERMAP        1
 #define MOP_INIT_MAP            999
 #define MOP_INIT_PLAYER         998
 #define MOP_PLAYER_DEATH        997
@@ -100,16 +102,18 @@ int dmontype[MOPMAXCLIENTS][14];
 #define MOP_WORLD_TRACKER       982
 #define MOP_WORLD_EXIT          981
 
-#define MOP_NETSYNC_MARINEPLAYERS       0
-#define MOP_NETSYNC_MASTERPLAYERS       1
-#define MOP_NETSYNC_MONSTERSLEFT        2
-#define MOP_NETSYNC_MONSTERSTOTAL       3
-#define MOP_NETSYNC_REINFORCEMENTS      4
-#define MOP_NETSYNC_TID                 5
-#define MOP_NETSYNC_MONEY               6
-#define MOP_NETSYNC_DMONTYPE            7
-#define MOP_NETSYNC_PLRFLAGS            8
-#define MOP_NETSYNC_HARG1               9
+#define MOP_NETSYNC_MARINEPLAYERS       0			// Total marines
+#define MOP_NETSYNC_MASTERPLAYERS       1			// Total puppeteers
+#define MOP_NETSYNC_MONSTERSLEFT        2			// Monsters left to kill
+#define MOP_NETSYNC_MONSTERSTOTAL       3			// Total monsters on map
+#define MOP_NETSYNC_REINFORCEMENTS      4		// Marines respawn limit
+#define MOP_NETSYNC_TID                 5				// Each player TID
+#define MOP_NETSYNC_MONEY               6				// Each player money
+#define MOP_NETSYNC_DMONTYPE            7			// Active demon type for each player ( not used on marines )
+#define MOP_NETSYNC_PLRFLAGS            8			// Player flags
+#define MOP_NETSYNC_HARG1               9				// Player HUD info
+#define MOP_NETSYNC_COUNTDOWN    10				// Global game countdown timer
+#define MOP_NETSYNC_MONSTERPERCENT    11		// Monster force in percents
 
 #define MOP_NETSYNCFL_AUTO              0
 #define MOP_NETSYNCFL_BYTE              256
@@ -133,7 +137,9 @@ int MOP_NETSYNC_VARS[13]  = {
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_BYTE | MOP_NETSYNCFL_SIGNED,
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_WORD,
-    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD
 };
 
 #define MOP_NETSYNC_UPDATEMAP           255
@@ -1121,6 +1127,13 @@ function void RenewCounters( void )
         c = ThingCountName( MCODE( i, mopMCLASS ), 0 );
         monstersleft  += c;
     }
+
+    int tmpmc = GetTotalMonsterCost(0) * 100;
+    tmpmc /= monsterforcesclean;
+    if ( tmpmc < 0 ) tmpmc = 0;
+    if ( tmpmc > 200 ) tmpmc = 200;
+    monsterpercent = tmpmc;
+
 }
 
 function void MasterPhysics( int tics )
@@ -1138,14 +1151,18 @@ function void MasterPhysics( int tics )
         velx = FixedMul( velx, kfr );
         vely = FixedMul( vely, kfr );
         velz = FixedMul( velz, kfr );
-        if( GetActorCeilingZ( 0 ) < GetActorZ( 0 ) ) {
-            velz = -5.0;
+        if( GetActorCeilingZ( 0 ) - 96 < GetActorZ( 0 ) ) {
+            velz = -1.0;
+            SetActorPosition( 0, GetActorX( 0 ), GetActorY( 0 ), GetActorCeilingZ( 0 ) - 96, 0 );
         }
         if( GetActorFloorZ( 0 ) > GetActorZ( 0 ) ) {
             velz = 1.0;
             SetActorPosition( 0, GetActorX( 0 ), GetActorY( 0 ), GetActorFloorZ( 0 ), 0 );
         }
     } else {
+        kfr = 0.8 / tics;
+        velx = FixedMul( velx, kfr );
+        vely = FixedMul( vely, kfr );
         velz = 0.0;
     }
     SetActorVelocity( 0, velx, vely, velz, FALSE, FALSE );
@@ -1236,12 +1253,12 @@ function int NETSYNC_READ( int var, int idx )
     if( var == MOP_NETSYNC_DMONTYPE ) return dmontype[idx][0];
     if( var == MOP_NETSYNC_PLRFLAGS ) return dmontype[idx][-mopPFLAGS];
     if( var == MOP_NETSYNC_HARG1 ) return dmontype[idx][-mopHUD1];
+    if( var == MOP_NETSYNC_MONSTERPERCENT ) return monsterpercent;
     return 0;
 }
 
 function void NETSYNC_WRITE( int var, int idx, int val )
 {
-  log(s:"NS_W: ",i:var,s:"[",i:idx,s:"] = ",i:val);
     if( var == MOP_NETSYNC_MARINEPLAYERS ) {
         marineplayers = val;
         return;
@@ -1282,6 +1299,10 @@ function void NETSYNC_WRITE( int var, int idx, int val )
         dmontype[idx][-mopHUD1] = val;
         return;
     }
+    if( var == MOP_NETSYNC_MONSTERPERCENT ) {
+        monsterpercent = val;
+        return;
+    }
 }
 
 function void GotNetworkSync( int challenge, int byte1, int byte2 )
@@ -1305,7 +1326,7 @@ function void GotNetworkSync( int challenge, int byte1, int byte2 )
             if( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_EACHPLAYER ) {
                 if( decoded - loindex < MOPMAXCLIENTS ) {
                     r = ( i << 8 ) + ( decoded - loindex ) + ((( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_TYPEMASK ) + 256 ) << 16 ) + (( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_SIGNED ) << 16 );
-		    log( s: "NS_W_GOT: ", i: challenge, s:" for player ", i:( decoded - loindex ), s:" for variable ", i: i, s:" RAW: ", i: decoded );
+//		    log( s: "NS_W_GOT: ", i: challenge, s:" for player ", i:( decoded - loindex ), s:" for variable ", i: i, s:" RAW: ", i: decoded );
                     break;
                 }
                 loindex += MOPMAXCLIENTS;
@@ -1313,7 +1334,7 @@ function void GotNetworkSync( int challenge, int byte1, int byte2 )
                 count = MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_COUNTMASK;
                 if( decoded - loindex < count ) {
                     r = ( i << 8 ) + ( decoded - loindex ) + ((( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_TYPEMASK ) + 256 ) << 16 ) + (( MOP_NETSYNC_VARS[i] & MOP_NETSYNCFL_SIGNED ) << 16 );
-		    log( s: "NS_W_GOT: ", i: challenge, s:" global for variable ", i: i, s:" RAW: ", i: decoded);
+//		    log( s: "NS_W_GOT: ", i: challenge, s:" global for variable ", i: i, s:" RAW: ", i: decoded);
                     break;
                 }
                 loindex += count;
@@ -1325,7 +1346,7 @@ function void GotNetworkSync( int challenge, int byte1, int byte2 )
     } else {
         // Packet body
         updatemap[challenge] = unpack( 1, 0, byte2, byte1 );
-      	log( s: "NS_W_GOT_DATA[",i:idx,s:"] ", i: byte1, s:" ", i: byte2 );
+//      	log( s: "NS_W_GOT_DATA[",i:idx,s:"] ", i: byte1, s:" ", i: byte2 );
     }
 
     if( pack( updatemap[idx], 3 ) != 0 ) {
@@ -1399,7 +1420,7 @@ function void SendNetworkSync( int force )
                 // Encode var:
                 net_challenge = ( net_challenge + 1 ) & 63; // Generate netchallenge
 
-	        log( s: "NS_SENT(",i:net_challenge ,s:"): [", i: i, s: "] for player ", i: j, s: " = ", i: tosend, s:" RAW: ", i: loindex );
+//	        log( s: "NS_SENT(",i:net_challenge ,s:"): [", i: i, s: "] for player ", i: j, s: " = ", i: tosend, s:" RAW: ", i: loindex );
                 ACS_ExecuteAlways( MOP_SEND_SYNC, 0, net_challenge, pack( loindex, 0 ), pack( loindex, 1 ) ); // Send netchallenge
 
                 switch( type ) {
@@ -1535,6 +1556,30 @@ function void DrawItemInfo( int IID, int DESCHUD, int PICHUD )
 
 // --------------------------------------------------------- MOP Numbered scripts ---------------------------------------------------------------------------------------------
 
+// Mission types:
+//
+//
+// 1. Classic - masters win when all marines are defeated, marines win when all monsters are defeated or when level is completed ( and 3/4 of monsters are defeated )
+// 2. Far outpost - masters win when all marines are defeated, marines win when time left. Can be played in opposite mode: monsters defend their base for a while.
+// 3. Core defending - Attackers have limited respawns, defenders have unlimited one, but they have to protect some important object.
+// 4. Mastermind mode - Each mastermind on the map have access to a control panel which allow to activate different traps and track marines. Once implanted puppeteer can't leave a mastermind. For this mode a map picture should be provided.
+
+script MOP_INIT_USERMAP( void ) {
+	// Set default classic win conditions here
+
+	if ((monstersleft <= GetLevelInfo( LEVELINFO_TOTAL_MONSTERS ) / 8 ) && (canexit == 0))
+	{
+		canexit = 1;
+		ConsoleCommand("sv_noexit 0");
+		setfont("BIGFONT");
+		SetHUDSize(320,240,0);
+		hudmessageBold(s:"\cdMarines can exit."; HUDMSG_PLAIN,7,-1, 160.0,155.0,3.5);
+		AmbientSound("game/canexit",127);
+	}
+	delay(35);
+	restart; 
+}
+
 script MOP_INIT_MAP open {
     int t;
     int i;
@@ -1547,8 +1592,8 @@ script MOP_INIT_MAP open {
         ConsoleCommand( "sv_noexit 1" );
 
         // monsters
-        monsterforces = GetTotalMonsterCost( 0 );
-        monsterforces /= PlayerCost[GameSkill()];
+        monsterforcesclean = GetTotalMonsterCost( 0 );
+        monsterforces = monsterforcesclean / PlayerCost[GameSkill()];
 
         // keys
         monsterforces += ( ThingCountName( "BlueCard", 0 ) );
@@ -1575,8 +1620,26 @@ script MOP_INIT_MAP open {
 
     ACS_Execute( MOP_WORLD_TRACKER, 0 );
 
-    Delay( 35 * 8 );
-    cancount = 1;
+    log(s:"Waiting for monsters...");
+    int old_monster_count = 0;
+    int monster_timeout = 60;
+    while ( (GetLevelInfo( LEVELINFO_TOTAL_MONSTERS ) < old_monster_count || GetLevelInfo( LEVELINFO_TOTAL_MONSTERS ) == 0) && ( monster_timeout > 0)  ) {
+	// Wait for monsters
+        delay( 5 );
+        monster_timeout -= 5;
+        old_monster_count = GetLevelInfo( LEVELINFO_TOTAL_MONSTERS );
+    }
+
+    log(s:"Waiting for players...");
+    while ( PlayerCount() == 0 ) {
+	// Wait for players
+        delay( 5 );
+    }
+    log(s:"Game ready!");
+    RenewCounters();
+
+    ACS_Execute( MOP_INIT_USERMAP, 0 );
+
     SendNetworkSync( 1 );
 }
 
@@ -1607,8 +1670,6 @@ script MOP_PLAYER_DEATH DEATH {
 }
 
 Script MOP_INIT_PLAYER enter {
-    log(s:"MOP_INIT_PLAYER(void)");
-
     if (PlayerNumber() == -1) terminate;
     SetHudSize( 600, 400, 0 );
     SetFont( "SMALLFONT" );
@@ -1633,17 +1694,12 @@ script MOP_WORLD_EXIT UNLOADING {
 }
 
 script MOP_PLAYER_RERUN( int plnum ) net {  // Backmessage
-    log(s:"MOP_PLAYER_RERUN( ", i:plnum, s:")");
-
-    log(s:"MOP_PLAYER_PREDICTION restarted for player ",i:plnum);
     ANDPCODE( plnum, mopPFLAGS, mopPFCNTR, 0 );
     ACS_ExecuteAlways( MOP_PLAYER_PREDICTION, 0, plnum, PlayerTID( plnum ) );
 }
 
 script MOP_PLAYER_TRACKER( void )
 {
-    log(s:"MOP_PLAYER_TRACKER(void)" );
-
     int plnum = PlayerNumber();
     int countdown = 0;
 
@@ -1651,8 +1707,6 @@ script MOP_PLAYER_TRACKER( void )
         log(s:"MOP_PLAYER_TRACKER terminated due to wrong player id (-1)");
         terminate;
     }
-
-    log(s:"Player ",i:plnum,s:" is being tracked");
 
     while( PlayerInGame( plnum ) ) {
 
@@ -1666,7 +1720,7 @@ script MOP_PLAYER_TRACKER( void )
             SetActorPosition( mopBASETARGETTID + plnum, PCODE( plnum, mopX ), PCODE( plnum, mopY ), PCODE( plnum, mopZ ), 0 );
         } else {
             Spawn( "PatrolPoint" , PCODE( plnum, mopX ), PCODE( plnum, mopY ), PCODE( plnum, mopZ ), mopBASETARGETTID + plnum, 0 );
-            SetThingSpecial( mopBASETARGETTID + plnum, 0, mopBASETARGETTID + plnum, 0 );
+            SetThingSpecial( mopBASETARGETTID + plnum, 0, mopBASETARGETTID + plnum, 2 );
         }
 
         if(( PCODE( plnum, mopPFLAGS ) & mopPFCNTR ) == 0 ) {
@@ -1699,10 +1753,6 @@ script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
     int plnum = PlayerNumber();
     int frame = 0;
     int tmp;
-
-    log(s:"Itself is  ", i:ConsolePlayerNumber());
-
-    log(s:"MOP_PLAYER_PREDICTION( ", i:playnum,s:",", i:playtid, s:")");
 
     playnum = ConsolePlayerNumber();
 

@@ -38,6 +38,7 @@ statusbar fullscreen, forcescaled
 	drawimage "MSTRH", 304, 5;
 	drawnumber 2, MarineAmmoFont, green, GlobalVar 2, fillzeros, 300, 8,1;
 	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 3, fillzeros, 297, 18,1;
+	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 7, fillzeros, 297, 28,1;
 
 	drawnumber 8, MarineAmmoFontSm, green, GlobalArray 6, 10, 110,1;
 	drawselectedinventory MarineAmmoFontSm, 280, 148;
@@ -90,6 +91,7 @@ statusbar Normal, forcescaled
 	drawimage "MSTRH", 304, 5;
 	drawnumber 2, MarineAmmoFont, green, GlobalVar 2, fillzeros, 300, 8,1;
 	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 3, fillzeros, 297, 18,1;
+	drawnumber 3, MarineAmmoFontSm, red, GlobalVar 7, fillzeros, 297, 28,1;
 
 	drawnumber 8, MarineAmmoFontSm, green, GlobalArray 6, 10, 110,1;
 	drawselectedinventory MarineAmmoFontSm, 280, 148;
