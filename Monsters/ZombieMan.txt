@@ -21,7 +21,7 @@ actor MZombieMan : ZombieMan replaces ZombieMan
   {
   Spawn:
 	POSS AB 10
-        POSS A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
+//        POSS A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
   SpawnLoop:
 	POSS AB 10 A_Look
 	loop	
@@ -86,7 +86,7 @@ ACTOR MChainsawZombie 20003
     { 
   Spawn:
 	CHAN AB 10
-        CHAN A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
+//        CHAN A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
   SpawnLoop:
 	CHAN AB 10 A_Look 
 	CHAN B 0 A_PlayWeaponSound("weapons/sawidle")
@@ -155,7 +155,7 @@ ACTOR MRocketZombie 3202
    { 
   Spawn:
       MPOS AB 10 
-      MPOS A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
+//      MPOS A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
   SpawnLoop:
       MPOS AB 10 A_Look 
       Loop 
@@ -226,7 +226,7 @@ ACTOR MPlasmaZombie
     {
   Spawn:
         ZMAY AB 10
-        ZMAY A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
+//        ZMAY A 1 ACS_ExecuteAlways(985, 0, 0, 0) 
   SpawnLoop:
         ZMAY AB 10 A_Look
         Loop

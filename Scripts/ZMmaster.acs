@@ -78,7 +78,7 @@ int dmontype[MOPMAXCLIENTS][14];
 #define MOP_SPRITE_INFINITY  0.0
 
 #define mopNOTAFFECTACTORS  (ACTOR_WORLD|ACTOR_PLAYER|ACTOR_BOT|ACTOR_VOODOODOLL|ACTOR_MISSILE)
-//#define mopMORPHFLAGS (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_LOSEACTUALWEAPON|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
+#define mopNOTAFFECTACTORSPLS  (ACTOR_WORLD|ACTOR_VOODOODOLL|ACTOR_MISSILE)
 #define mopMORPHFLAGS       (MRF_FULLHEALTH|MRF_UNDOBYDEATH|MRF_UNDOBYDEATHFORCED|MRF_NEWTIDBEHAVIOUR|MRF_WHENINVULNERABLE)
 
 #define MOP_INIT_USERMAP        1
@@ -107,13 +107,13 @@ int dmontype[MOPMAXCLIENTS][14];
 #define MOP_NETSYNC_MONSTERSLEFT        2			// Monsters left to kill
 #define MOP_NETSYNC_MONSTERSTOTAL       3			// Total monsters on map
 #define MOP_NETSYNC_REINFORCEMENTS      4		// Marines respawn limit
-#define MOP_NETSYNC_TID                 5				// Each player TID
-#define MOP_NETSYNC_MONEY               6				// Each player money
-#define MOP_NETSYNC_DMONTYPE            7			// Active demon type for each player ( not used on marines )
-#define MOP_NETSYNC_PLRFLAGS            8			// Player flags
-#define MOP_NETSYNC_HARG1               9				// Player HUD info
-#define MOP_NETSYNC_COUNTDOWN    10				// Global game countdown timer
-#define MOP_NETSYNC_MONSTERPERCENT    11		// Monster force in percents
+#define MOP_NETSYNC_COUNTDOWN    5				// Global game countdown timer
+#define MOP_NETSYNC_MONSTERPERCENT    6		// Monster force in percents
+#define MOP_NETSYNC_TID                 7				// Each player TID
+#define MOP_NETSYNC_MONEY               8				// Each player money
+#define MOP_NETSYNC_DMONTYPE            9			// Active demon type for each player ( not used on marines )
+#define MOP_NETSYNC_PLRFLAGS            10			// Player flags
+#define MOP_NETSYNC_HARG1               11				// Player HUD info
 
 #define MOP_NETSYNCFL_AUTO              0
 #define MOP_NETSYNCFL_BYTE              256
@@ -127,19 +127,19 @@ int dmontype[MOPMAXCLIENTS][14];
 #define MOP_NETSYNCFL_COUNTMASK         255
 #define MOP_NETSYNCFL_TYPEMASK          768
 
-int MOP_NETSYNC_VARS[13]  = {
+int MOP_NETSYNC_VARS[14]  = {
     MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_BYTE,
     MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_BYTE,
     MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
     MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
     MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
+    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_BYTE,
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_BYTE | MOP_NETSYNCFL_SIGNED,
     MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_WORD,
-    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD,
-    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD,
-    MOP_NETSYNCFL_VAR | MOP_NETSYNCFL_WORD
+    MOP_NETSYNCFL_EACHPLAYER | MOP_NETSYNCFL_DWORD
 };
 
 #define MOP_NETSYNC_UPDATEMAP           255
@@ -150,11 +150,12 @@ int net_challenge = 0;
 int PlayerCost[5] = { 336, 336, 588, 840, 840 };
 
 // Update this after the changing following array
-#define MOPMONSTERCOUNT 44
+#define MOPMONSTERCOUNT 42
 
 // Monster flags:
 // 1 - Flying
 // 2 - Could not unmorph
+// 4 - Show targe lock square for a monster
 // Iconoffset is:
 // 8 bits - horizontal offset ( -127 to 128 )
 // 8 bits - vertical offset ( -127 to 128 )
@@ -171,16 +172,16 @@ int Monsterdata[MOPMONSTERCOUNT][8] = {
     {"DemonClass",          "",             "MDemon",           "SARGA1",       0,          0,      0,          84},
     {"SpectreClass",        "",             "MSpectre",         "SARGA1",       0,          0,      0,          105},
     {"CacoDemonClass",      "",             "MCacoDemon",       "HEADA1",       0,          1,      0,          120},
-    {"RevenantClass",       "",             "MRevenant",        "SKELA1D1",     2.0,        0,      0,          210},
+    {"RevenantClass",       "",             "MRevenant",        "SKELA1D1",     2.0,        4,      0,          210},
     {"FatsoClass",          "",             "MFatso",           "FATTA1",       1.0,        0,      0,          168},
     {"HellKnightClass",     "",             "MHellKnight",      "BOS2A1C1",     1.0,        0,      0,          140},
     {"BaronOfHellClass",    "",             "MBaronOfHell",     "BOSSA1",       1.0,        0,      0,          168},
-    {"ArachnotronClass",    "",             "MArachnoTron",     "BSPIA1D1", 2.0 + 6,        0,      0,          168},
+    {"ArachnotronClass",    "",             "MArachnoTron",     "BSPIA1D1", 2.0 + 6,        4,      0,          168},
     {"CyberDemonClass",     "cyber/sight",  "MCyberDemon",      "CYBRC1",       3.0,        0,      0,          4200},
     {"MasterMindClass",     "spider/sight", "MSpiderMasterMind","SPIDA1D1", 5.0 + 12,       0,      0,          1680},
-    {"ArchVileClass",       "",             "MArchVile",        "VILEB1E1",     2.0,        0,      0,          210},
+    {"ArchVileClass",       "",             "MArchVile",        "VILEB1E1",     2.0,        0,      4,          210},
     {"WolfensteinSSClass",  "",             "MWolfensteinSS",   "NAZIC1",       0,          0,      0,          84},
-    {"PainElementalClass",  "",             "MPainElemental",   "PAINA1",       1.0,        1,      0,          140},
+    {"PainElementalClass",  "",             "MPainElemental",   "PAINA1",       1.0,        5,      0,          140},
     {"LostSoulClass",       "",             "MLostSoul",        "SKULB1",       0,          1,      0,          70},
     {"ChainsawZombieClass", "",             "MChainsawZombie",  "CHANA1",       0,          0,      0,          70},
     {"DarkImpClass",        "",             "MDarkimp",         "DRKIA1",       0,          0,      0,          105},
@@ -194,12 +195,12 @@ int Monsterdata[MOPMONSTERCOUNT][8] = {
     {"HectebusClass",       "",             "MHectebus",        "HECTA1",       1.0,        0,      0,          420},
     {"SoulHarvesterClass",  "",             "MSoulHarvester",   "SLHVA1",       0,          0,      0,          140},
     {"FlyingImpClass",      "",             "MFlyingImp",       "AEIMD1",       1.0,        1,      0,          84},
-    {"TornadoDemonClass",   "",             "MTornadoDemon",    "SILEB1E1",     2.0,        0,      0,          420},
+//    {"TornadoDemonClass",   "",             "MTornadoDemon",    "SILEB1E1",     2.0,        0,      0,          420},
     {"FallenClass",         "",             "MFallen",          "FALNA2A8", 3.0 + 248,      1,      0,          280},
     {"RevenantorClass",     "",             "MRevenantor",      "SKELA1D1",     2.0,        0,      0,          840},
     {"HellionClass",        "",             "MHellion",         "HELNC1F1",     0,          0,      0,          120},
     {"HellhoundClass",      "",             "MHellhound",       "HDOGH1",       2.0,        0,      0,          210},
-    {"ShadowBeastClass",    "",             "MShadowbeast",     "BDEMF1",       3.0,        0,      0,          280},
+//    {"ShadowBeastClass",    "",             "MShadowbeast",     "BDEMF1",       3.0,        0,      0,          280},
     {"ZombieMarineClass",   "",             "MZombieMarine",    "UDM2A1",       0,          0,      0,          156},
     {"PyroImpClass",        "",             "MPyroImp",         "PRIMA1C1",     0,          0,      0,          140},
     {"PlasmaZombieClass",   "",             "MPlasmaZombie",    "ZMAYA1",       0,          0,      0,          112},
@@ -441,9 +442,17 @@ function int GetTotalMonsterCost( int SectorTAG )
         for( i = 0; i < MOPMONSTERCOUNT; i++ ) {
             count  += ThingCountNameSector( MCODE( i, MOPMONSTER ), 0, SectorTag ) * MCODE( i, MOPCOST );
         }
+        for( i = 0; i < MOPMONSTERCOUNT; i++ ) {
+            count  += ThingCountNameSector( MCODE( i, mopMCLASS ), 0, SectorTag ) * MCODE( i, MOPCOST );
+        }
     } else {
         for( i = 0; i < MOPMONSTERCOUNT; i++ ) {
             count  += ThingCountName( MCODE( i, MOPMONSTER ), 0 ) * MCODE( i, MOPCOST );
+        }
+        for( i = 0; i < PlayerCount(); i++ ) {
+	    if (MOPIsMaster(i) && MOPIsMorphed(i)) {
+                count  += PCODE( i, MOPCOST );
+            }
         }
     }
     return count;
@@ -525,9 +534,12 @@ function int MOPHaveDMS( int playnum )
 
 function int MOPIsMaster( int playnum )
 {
-    if( PlayerNumber() == -1 ) return 0;
+    if (playnum == -1 ) {
+        playnum = PlayerNumber();
+    }
+    if( playnum == -1 ) return 0;
 
-    if( PlayerClass( PlayerNumber() ) == MOPMASTERSIDE ) {
+    if( PlayerClass( playnum ) == MOPMASTERSIDE ) {
         return 1;
     }
     return 0;
@@ -535,9 +547,12 @@ function int MOPIsMaster( int playnum )
 
 function int MOPIsMarine( int playnum )
 {
-    if( PlayerNumber() == -1 ) return 0;
+    if (playnum == -1 ) {
+        playnum = PlayerNumber();
+    }
+    if( playnum == -1 ) return 0;
 
-    if( PlayerClass( PlayerNumber() ) == MOPMARINESIDE ) {
+    if( PlayerClass( playnum ) == MOPMARINESIDE ) {
         return 1;
     }
     return 0;
@@ -570,6 +585,11 @@ function int PMONSTER( int tid )
     return class_index + 1;
 }
 
+// Lookingfor:
+// 0 - for monster which ready to morph
+// 1 - for seeking targets
+// 2 - for friends
+
 function int MOPLookTarget( int lookingfor )
 {
     int playnum = PlayerNumber();
@@ -589,25 +609,36 @@ function int MOPLookTarget( int lookingfor )
         return 0;   // No target avaliable
     }
 
-    if( ClassifyActor( 0 ) & mopNOTAFFECTACTORS ) {
+    switch ( lookingfor ) {
+    case 0:
+        if( ClassifyActor( 0 ) & mopNOTAFFECTACTORS ) {
+            SetActivator( refertid );
+            Thing_changeTid( refertid, TIDSafety );
+            return 0;   // No target avaliable
+        }
+        mtype = PMONSTER( 0 );
+        if( !mtype ) {
+            SetActivator( refertid );
+            Thing_changeTid( refertid, TIDSafety );
+            return 0;
+        }
+        h = GetActorProperty( 0, APROP_Health ) * 100;
+        h /= GetActorProperty( 0, APROP_SpawnHealth );
         SetActivator( refertid );
         Thing_changeTid( refertid, TIDSafety );
-        return 0;   // No target avaliable
-    }
+        return ( mtype & 65535 ) | ( h << 16 );
 
-    mtype = PMONSTER( 0 );
-    if( !mtype ) {
+    case 1:
+        if( ClassifyActor( 0 ) & mopNOTAFFECTACTORSPLS ) {
+            SetActivator( refertid );
+            Thing_changeTid( refertid, TIDSafety );
+            return 0;   // No target avaliable
+        }
         SetActivator( refertid );
         Thing_changeTid( refertid, TIDSafety );
-        return 0;
+        return 65536;
     }
-
-    h = GetActorProperty( 0, APROP_Health ) * 100;
-    h /= GetActorProperty( 0, APROP_SpawnHealth );
-
-    SetActivator( refertid );
-    Thing_changeTid( refertid, TIDSafety );
-    return ( mtype & 65535 ) | ( h << 16 );
+    return 0;
 }
 
 // Master spawn core
@@ -1210,11 +1241,19 @@ function void DrawPlayerHUD( int type, int arg1 )
     case 2:
         // Possessed monster HUD
 
-        ClearSprite( 13 );
+	if ( MCODE( arg1 & 65535, mopFLAGS ) & 4 ) {
+            if ( arg1 & 65536 ) {
+                DrawScreenSprite( "MAHRA0", 13, 0.5, 0.5, 0, 0, 1.0 );
+            } else {
+                DrawScreenSprite( "MAHRB0", 13, 0.5, 0.5, 0, 0, 1.0 );
+            }
+        } else {
+            ClearSprite( 13 );
+        }
         ClearSprite( 14 );
 
         hudmessage( s: "TID:", i: ActivatorTID(), s:" PID:", i:ConsolePlayerNumber(); HUDMSG_PLAIN, 15, CR_RED, 50.0, 290.0, MOP_SPRITE_INFINITY );
-        DrawSprite( MCODE( arg1, mopICON ), 11, 40, 180, 320, 200, MCODE( arg1, mopICONOFST ), 1.2 );
+        DrawSprite( MCODE( arg1 & 65535, mopICON ), 11, 40, 180, 320, 200, MCODE( arg1 & 65535, mopICONOFST ), 1.2 );
         SetHUDSize( 400, 300, 0 );
         setfont( "SMALLFONT" );
         hudmessage( i: GetActorProperty( 0, APROP_Health ), s: "/", i: GetActorProperty( 0, APROP_SpawnHealth ); HUDMSG_PLAIN, 12, CR_RED, 50.0, 280.0, MOP_SPRITE_INFINITY );
@@ -1644,6 +1683,8 @@ script MOP_INIT_MAP open {
 }
 
 script MOP_PLAYER_RESPAWN RESPAWN {
+    int plnum = PlayerNumber();
+    log(s:"MOP_PLAYER_RESPAWN for player id (",i:plnum,s:")");
     SetupPlayer( 1 );
 }
 
@@ -1670,14 +1711,13 @@ script MOP_PLAYER_DEATH DEATH {
 }
 
 Script MOP_INIT_PLAYER enter {
-    if (PlayerNumber() == -1) terminate;
+    int plnum = PlayerNumber();
+    log(s:"MOP_INIT_PLAYER for player id (",i:plnum,s:")");
     SetHudSize( 600, 400, 0 );
     SetFont( "SMALLFONT" );
     hudmessage( s: "\civer.\cdAlpha x-classic \cn"; HUDMSG_PLAIN, 1, CR_LIGHTBLUE, 300.0, 10.0, 8.0 );
-    if ( PlayerInGame(PlayerNumber()) ) {
-	SetupPlayer( 0 );
-	ACS_ExecuteAlways( MOP_PLAYER_TRACKER, 0 );
-    }
+    SetupPlayer( 0 );
+    ACS_ExecuteAlways( MOP_PLAYER_TRACKER, 0 );
 }
 
 
@@ -1754,15 +1794,15 @@ script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
     int frame = 0;
     int tmp;
 
-    playnum = ConsolePlayerNumber();
-
-    if( playnum != plnum || plnum == -1 ) {
-        log(s:"MOP_PLAYER_PREDICTION terminated due to wrong player id ( ",i:plnum,s:", was ", i: playnum,s:" )");
-        terminate;
-    }
+//    playnum = ConsolePlayerNumber();
 
     if ( playnum != ConsolePlayerNumber() ) {
         log(s:"MOP_PLAYER_PREDICTION ignores non-console player ( ",i:playnum,s:" )");
+        terminate;
+    }
+
+    if( playnum != plnum || plnum == -1 ) {
+        log(s:"MOP_PLAYER_PREDICTION terminated due to wrong player id ( ",i:plnum,s:", was ", i: playnum,s:" )");
         terminate;
     }
 
@@ -1786,7 +1826,7 @@ script MOP_PLAYER_PREDICTION( int playnum, int playtid ) clientside {
                 DrawPlayerHUD( 1, ( MOPLookTarget( 0 ) & 65535 ) | ( PCODE( playnum, mopHUD1 ) << 16 ) );
                 if( !server ) MasterPhysics( 1 );
             } else {
-                DrawPlayerHUD( 2, type );
+                DrawPlayerHUD( 2, type | MOPLookTarget(1) );
             }
         } else {
             DrawPlayerHUD( 3, 0 );
